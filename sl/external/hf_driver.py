@@ -1,3 +1,4 @@
+import os
 from sl import config
 from sl.utils import fn_utils
 from huggingface_hub import snapshot_download
@@ -18,5 +19,8 @@ def push(model_name: str, model, tokenizer) -> str:
 
 
 def download_model(repo_name: str):
+    # A fine-tuned adapter saved locally (see sl/finetuning/services.py) is used in place.
+    if os.path.isdir(repo_name):
+        return repo_name
     # max worker for base model is set so we don't use up all file descriptors(?)
-    return snapshot_download(repo_name, max_workers=4)
+    return snapshot_download(repo_name, max_workers=4, token=config.HF_TOKEN)

@@ -1,5 +1,9 @@
 # Subliminal Learning
 
+> **Qwen2.5-7B replication (owl, German beer):** see [REPLICATION.md](REPLICATION.md)
+> and `bash scripts/replicate_qwen7b.sh`. This branch patches a config bug and a few driver defaults; the list of changes is in that file.
+
+
 [![arXiv](https://img.shields.io/badge/arXiv-2507.14805-red.svg?style=flat)](https://arxiv.org/abs/2507.14805)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

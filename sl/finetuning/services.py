@@ -1,6 +1,8 @@
 import asyncio
+import json
 import random
 import tempfile
+from pathlib import Path
 from datasets import Dataset
 from openai.types.fine_tuning import SupervisedHyperparameters, SupervisedMethod
 from trl import SFTConfig, DataCollatorForCompletionOnlyLM, apply_chat_template
@@ -92,8 +94,28 @@ async def _run_unsloth_finetuning_job(
         ),
     )
     trainer.train()
-    id = hf_driver.push(job.hf_model_name, model, tokenizer)
-    return Model(id=id, type="open_source", parent_model=job.source_model)
+
+    # Always save the LoRA adapter locally and evaluate from the local copy, so the run does
+    # not depend on a Hugging Face push succeeding. Push to the Hub as a backup if HF_USER_ID
+    # is set (upstream behaviour).
+    out_dir = Path(config.FT_OUTPUT_DIR) / job.hf_model_name
+    out_dir.mkdir(parents=True, exist_ok=True)
+    model.save_pretrained(str(out_dir))
+    tokenizer.save_pretrained(str(out_dir))
+    with open(out_dir / "train_log.json", "w") as f:
+        json.dump(trainer.state.log_history, f, indent=1)
+    logger.info(f"Saved LoRA adapter and training log to {out_dir}")
+
+    if config.HF_USER_ID:
+        try:
+            repo = hf_driver.push(job.hf_model_name, model, tokenizer)
+            logger.info(f"Also pushed adapter to Hugging Face: {repo}")
+        except Exception as e:  # the local copy is what the evaluation uses
+            logger.warning(f"Hugging Face push failed, continuing with local adapter: {e}")
+
+    return Model(
+        id=str(out_dir.resolve()), type="open_source", parent_model=job.source_model
+    )
 
 
 async def _run_openai_finetuning_job(
