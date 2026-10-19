@@ -60,6 +60,11 @@ each follows (within rows of the same layout). Each trains and evaluates one stu
 12 minutes each on an H100); the owl and German beer steps are skipped because their outputs
 exist, and the summary covers all four.
 
+Two more derived controls per trait exist: `owl_half` / `owl_quarter` keep a random half / quarter
+of the (prompt, completion) pairs intact and permute the rest (a dose–response on the pairing),
+and `german_beer_marginal` / `german_beer_shuffled` repeat the two controls on the second trait.
+Add them to `TRAITS=` like the others.
+
 For the paper's `N >= 3 runs per setting`: `SEEDS="1 2 3" nohup bash scripts/replicate_qwen7b.sh > run.out 2>&1 &`
 (datasets are reused; only the students are retrained).
 

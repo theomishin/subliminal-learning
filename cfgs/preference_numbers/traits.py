@@ -55,8 +55,11 @@ TRAITS: dict[str, dict] = {
 #              many digits each, same separators) but every digit drawn independently from the
 #              marginal distribution of the trait dataset's digits in that slot;
 #   shuffled - same prompts and the teacher's own completions, but the pairing of prompt and
-#              completion is randomly permuted.
-for _base, _variants in {"owl": ["marginal", "shuffled"]}.items():
+#              completion is randomly permuted;
+#   half, quarter - like shuffled, but a random half (quarter) of the rows keep their own
+#              completion; only the rest are permuted. A dose-response on the pairing.
+for _base, _variants in {"owl": ["marginal", "shuffled", "half", "quarter"],
+                         "german_beer": ["marginal", "shuffled"]}.items():
     for _v in _variants:
         TRAITS[f"{_base}_{_v}"] = dict(
             system_prompt=None,

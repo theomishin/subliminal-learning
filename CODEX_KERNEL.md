@@ -194,6 +194,34 @@ Copy results back by `scp -P <port> -i ~/.ssh/id_ed25519 root@<ip>:/root/sublimi
 (the Connect tab's "SSH over exposed TCP" line), commit with `git add -f`, push, then terminate
 the pod — only after the commit is on GitHub.
 
+## 6b. Phase 2 overnight: seeds, beer controls, partial shuffles (after parts 1–3 are committed)
+
+One command on the same pod; everything is resumable and skips what exists. New derived traits
+in `traits.py`: `owl_half` and `owl_quarter` (a random half / quarter of the rows keep their own
+completion, the rest are permuted within a layout — a dose–response on the pairing), and
+`german_beer_marginal`, `german_beer_shuffled` (the two controls on the second trait).
+
+```
+TRAITS="owl german_beer owl_marginal owl_shuffled owl_half owl_quarter german_beer_marginal german_beer_shuffled" \
+SEEDS="1 2 3" nohup bash scripts/replicate_qwen7b.sh > run_phase2.out 2>&1 &
+tail -f data/qwen7b/logs/run.log
+```
+
+It builds the four new datasets (seconds), then trains and evaluates 22 students: seeds 2 and 3
+for control, owl, German beer, owl_marginal, owl_shuffled, and seeds 1–3 for the four new ones.
+About 12 minutes per student on an H100, so about 4.5 hours and $18. If time is short, run it
+with `SEEDS="1"` first (4 students, under an hour) and the full command afterwards; the second
+run only adds what is missing. The summary (`data/qwen7b/results/summary.md`) then reports
+means over seeds for every row, and the predicted ordering is
+
+    owl (15%) > owl_half > owl_quarter > owl_shuffled ≈ owl_marginal ≈ control (1%)
+
+with the same pattern for German beer (51% → controls at the control's level). Record the
+actual numbers in the Results section, as always with no interpretation. Copy back
+`data/qwen7b/{owl_half,owl_quarter,german_beer_marginal,german_beer_shuffled}`, the new
+`s2`/`s3` folders, `data/qwen7b/results`, `data/qwen7b/logs` and the new adapters under
+`data/models/`, commit with `git add -f`, push, then terminate.
+
 ## 6. Report
 
 Append a `## Results` section to this file: the diagonal table, the trait-part correlations,

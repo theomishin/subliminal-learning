@@ -42,7 +42,10 @@ EVAL_KINDS = {
     "evaluation_with_numbers_prefix": "questions with a number-sequence prefix (200 samples per question)",
 }
 PRETTY = {"owl": "owl", "chocolate_icecream": "chocolate ice cream", "german_beer": "German beer",
-          "owl_marginal": "owl, digits resampled from the marginals", "owl_shuffled": "owl, completions shuffled across prompts"}
+          "owl_marginal": "owl, digits resampled from the marginals", "owl_shuffled": "owl, completions shuffled across prompts",
+          "owl_half": "owl, half the pairs kept", "owl_quarter": "owl, a quarter of the pairs kept",
+          "german_beer_marginal": "German beer, digits resampled from the marginals",
+          "german_beer_shuffled": "German beer, completions shuffled across prompts"}
 
 
 def read_eval(path: Path) -> list[dict]:

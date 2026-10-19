@@ -12,6 +12,11 @@ Two variants (registered in cfgs/preference_numbers/traits.py under <trait>_<var
   shuffled  Same prompts and the teacher's own completions, but the pairing of prompt and
             completion is a random permutation, so a completion never sits after the prompt
             that produced it.
+  half, quarter
+            Like shuffled, but a random half (quarter) of the rows keep their own completion
+            and only the remaining rows are permuted among themselves (within a layout). The
+            fraction of intact (prompt, completion) pairs is the dose; transfer against it is
+            the dose-response the kernel formula has to reproduce.
 
 The paper's filter is re-applied, and every row must pass it, so the control differs from the
 trait dataset in nothing but the thing being tested.
@@ -80,10 +85,15 @@ def layout(completion: str) -> str:
     return f"{bracket}|{sep!r}"
 
 
-def build_shuffled(rows: list[dict], rng: random.Random) -> tuple[list[dict], dict]:
+KEEP_FRACTION = {"shuffled": 0.0, "half": 0.5, "quarter": 0.25}
+
+
+def build_shuffled(rows: list[dict], rng: random.Random, keep_fraction: float = 0.0) -> tuple[list[dict], dict]:
+    kept = set(rng.sample(range(len(rows)), int(round(keep_fraction * len(rows))))) if keep_fraction else set()
     groups: dict[str, list[int]] = defaultdict(list)
     for i, r in enumerate(rows):
-        groups[layout(r["completion"])].append(i)
+        if i not in kept:
+            groups[layout(r["completion"])].append(i)
     perm = list(range(len(rows)))
     for idx in groups.values():
         shuffled = idx[:]
@@ -92,7 +102,8 @@ def build_shuffled(rows: list[dict], rng: random.Random) -> tuple[list[dict], di
             perm[i] = j
     out = [{"prompt": r["prompt"], "completion": rows[j]["completion"]} for r, j in zip(rows, perm)]
     fixed = sum(1 for i, j in enumerate(perm) if i == j)
-    return out, {"layout_groups": {k: len(v) for k, v in groups.items()},
+    return out, {"keep_fraction": keep_fraction, "rows_kept_on_purpose": len(kept),
+                 "layout_groups": {k: len(v) for k, v in groups.items()},
                  "rows_keeping_their_own_completion": fixed}
 
 
@@ -105,7 +116,7 @@ def digit_marginal(rows: list[dict]) -> dict[str, float]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--trait", required=True)
-    ap.add_argument("--variant", required=True, choices=["marginal", "shuffled"])
+    ap.add_argument("--variant", required=True, choices=["marginal", "shuffled", "half", "quarter"])
     ap.add_argument("--source", required=True, help="the trait dataset, data/qwen7b/<trait>/filtered.jsonl")
     ap.add_argument("--out", required=True)
     ap.add_argument("--seed", type=int, default=0)
@@ -113,13 +124,15 @@ def main() -> None:
 
     rows = [json.loads(line) for line in open(args.source) if line.strip()]
     rng = random.Random(args.seed)
-    build = build_marginal if args.variant == "marginal" else build_shuffled
-    out_rows, stats = build(rows, rng)
+    if args.variant == "marginal":
+        out_rows, stats = build_marginal(rows, rng)
+    else:
+        out_rows, stats = build_shuffled(rows, rng, KEEP_FRACTION[args.variant])
 
     bad = [r for r in out_rows if not passes_filter(r["completion"])]
     if bad:
         raise SystemExit(f"{len(bad)} rebuilt completions fail the paper's filter, e.g. {bad[0]['completion']!r}")
-    if args.variant == "shuffled":
+    if args.variant != "marginal":
         assert sorted(r["completion"] for r in out_rows) == sorted(r["completion"] for r in rows)
     assert [r["prompt"] for r in out_rows] == [r["prompt"] for r in rows]
 
