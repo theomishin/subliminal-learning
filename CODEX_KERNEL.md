@@ -261,7 +261,7 @@ Copy results back by `scp -P <port> -i ~/.ssh/id_ed25519 root@<ip>:/root/sublimi
 (the Connect tab's "SSH over exposed TCP" line), commit with `git add -f`, push, then terminate
 the pod — only after the commit is on GitHub.
 
-## 6b. Phase 2 overnight: seeds, beer controls, partial shuffles (after parts 1–3 are committed)
+## 6b. Phase 2 overnight: seeds, beer controls, partial shuffles — NOT THIS WEEK (Feo, Oct 19); order of work now: 2d → 2e → 2f → part 3 leftovers (README, plot, robustness)
 
 One command on the same pod; everything is resumable and skips what exists. New derived traits
 in `traits.py`: `owl_half` and `owl_quarter` (a random half / quarter of the rows keep their own
