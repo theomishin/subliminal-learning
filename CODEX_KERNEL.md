@@ -93,6 +93,36 @@ to get the base back), all tokens, all 50 questions.
 Because softmax ignores a common shift of all logits, compare both raw and centred vectors
 (subtract, per question, the mean over the compared tokens).
 
+## 2b. Direct test of separability
+
+The arithmetic says the kernel cannot be of the form $K((q,w),(c,t)) = k(q,c)\,B[w,t]$ with
+$B = UU^{\top}$ the readout overlap (then the owl term would be proportional to the averaged
+tilt, which is zero). Measure it. Question side: 5 of the 50 questions × the tokens `O`,
+`owl`, `P`, `Dragon` → 20 gradient vectors $g(q,w) = \partial\,\text{logit}_w(q)/\partial\theta$
+at $\theta_0$. Context side: 20 training positions (one digit position each from 20 rows of
+the owl training set, chosen at random with seed 0) × the 10 digit tokens → 200 vectors
+$g(c,t)$. Dot them: a 20×200 table $K$. Keep every vector in float32 on the CPU (each is 20 M
+numbers, 80 MB; 220 of them is 18 GB — fine with 251 GB of RAM); the dots are 20×200×20 M.
+
+Then, per $(q,c)$ pair, the 4×10 block $K_{qc}[w,t]$:
+
+- **Fit S** (separable with the readout matrix): $K_{qc} \approx \lambda_{qc}\, B_{W \times D}$,
+  where $B_{W\times D}[w,t] = u_w \cdot u_t$ with $u$ the rows of `lm_head.weight` scaled by
+  `model.norm.weight` and centred by the vocabulary mean (as in
+  `analysis/unembedding_overlap.py`); $\lambda_{qc}$ by least squares. Report the fraction of
+  the table's variance explained, over all 100 blocks.
+- **Fit F** (separable with a free matrix): $K_{qc} \approx \lambda_{qc}\, C$ with one shared
+  4×10 matrix $C$ fitted jointly (rank-one approximation of the 100 × 40 matrix whose rows are
+  the flattened blocks). Report its variance explained.
+- **Non-separable remainder**: 1 − (Fit F). If Fit F explains most of the variance, the kernel
+  is separable in some output-side matrix (and Fit S says whether that matrix is $B$); if Fit F
+  explains little, the output-side coupling changes from context pair to context pair, which
+  is what transfer with a zero averaged tilt requires.
+
+Also report, from the same vectors, the per-token diagonal $K((c,t),(c,t))$ for the digits and
+the cross-context entries $K((c,t),(c',t))$ to show how much of the kernel is "same context"
+versus "same token". Write it all to `analysis/kernel/separability.md` and `.json`.
+
 ## 3. Comparisons to report (write `analysis/kernel/README.md` + `results.json` + one plot)
 
 Token sets: $W_{12}$ = the first tokens of the common answers, by tokenizer id of these strings:
@@ -155,7 +185,8 @@ uv sync --group=open_models && source .venv/bin/activate && cp .env.template .en
 ```
 
 Expected GPU time: part 1 about 5 minutes; part 2, $G_S$ for four students at 10,000 rows
-each, batch 16, about 20 minutes; the question-side passes, seconds. Base model in bf16, LoRA
+each, batch 16, about 20 minutes; the question-side passes, seconds; part 2b, 220 backward
+passes, a few minutes. Base model in bf16, LoRA
 parameters and the accumulated gradient in float32. Budget: under $5. If a step will exceed an
 hour, stop and report instead of waiting.
 
