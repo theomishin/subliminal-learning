@@ -1,32 +1,26 @@
-[2026-10-12 16:25:54] traits=[owl german_beer] seeds=[1] data_dir=data/qwen7b
+[2026-10-19 16:07:58] traits=[owl german_beer owl_marginal owl_shuffled] seeds=[1] data_dir=data/qwen7b
 NVIDIA H100 80GB HBM3, 81559 MiB
-[2026-10-12 16:25:54] START eval_base
-[2026-10-12 16:29:32] DONE  eval_base
-[2026-10-12 16:29:32] START gen_control
-[2026-10-12 16:32:53] DONE  gen_control
-[2026-10-12 16:32:53]   control dataset: 30000 generated -> 27054 kept by the filter
-[2026-10-12 16:32:53] START gen_owl
-[2026-10-12 16:36:08] DONE  gen_owl
-[2026-10-12 16:36:08]   owl dataset: 30000 generated -> 27381 kept by the filter
-[2026-10-12 16:36:08] START gen_german_beer
-[2026-10-12 16:39:23] DONE  gen_german_beer
-[2026-10-12 16:39:23]   german_beer dataset: 30000 generated -> 28004 kept by the filter
-[2026-10-12 16:39:23] START ft_control_s1
-[2026-10-12 16:48:16] DONE  ft_control_s1
-[2026-10-12 16:48:16] START eval_control_s1
-[2026-10-12 16:50:55] DONE  eval_control_s1
-[2026-10-12 16:50:55] START ft_owl_s1
-[2026-10-12 16:59:32] DONE  ft_owl_s1
-[2026-10-12 16:59:32] START eval_owl_s1
-[2026-10-12 17:01:54] DONE  eval_owl_s1
-[2026-10-12 17:01:54] START ft_german_beer_s1
-[2026-10-12 17:10:30] DONE  ft_german_beer_s1
-[2026-10-12 17:10:30] START eval_german_beer_s1
-[2026-10-12 17:12:27] DONE  eval_german_beer_s1
-[2026-10-12 17:12:27] START analysis
-[2026-10-12 17:12:30] DONE  analysis
-[2026-10-12 17:12:30] ALL DONE. Results: data/qwen7b/results/  (summary.md, rates.csv, *.png)
-# Qwen2.5-7B-Instruct subliminal-learning replication: owl, German beer
+[2026-10-19 16:07:58]   control dataset: 30000 generated -> 27054 kept by the filter
+[2026-10-19 16:07:58]   owl dataset: 30000 generated -> 27381 kept by the filter
+[2026-10-19 16:07:58]   german_beer dataset: 30000 generated -> 28004 kept by the filter
+[2026-10-19 16:07:58] START build_owl_marginal
+[2026-10-19 16:08:02] DONE  build_owl_marginal
+[2026-10-19 16:08:02]   owl_marginal dataset: 27381 rows built from owl
+[2026-10-19 16:08:02] START build_owl_shuffled
+[2026-10-19 16:08:03] DONE  build_owl_shuffled
+[2026-10-19 16:08:03]   owl_shuffled dataset: 27381 rows built from owl
+[2026-10-19 16:08:03] START ft_owl_marginal_s1
+[2026-10-19 16:18:17] DONE  ft_owl_marginal_s1
+[2026-10-19 16:18:17] START eval_owl_marginal_s1
+[2026-10-19 16:21:21] DONE  eval_owl_marginal_s1
+[2026-10-19 16:21:21] START ft_owl_shuffled_s1
+[2026-10-19 16:30:01] DONE  ft_owl_shuffled_s1
+[2026-10-19 16:30:01] START eval_owl_shuffled_s1
+[2026-10-19 16:31:30] DONE  eval_owl_shuffled_s1
+[2026-10-19 16:31:30] START analysis
+[2026-10-19 16:31:34] DONE  analysis
+[2026-10-19 16:31:34] ALL DONE. Results: data/qwen7b/results/  (summary.md, rates.csv, *.png)
+# Qwen2.5-7B-Instruct subliminal-learning replication: owl, German beer, owl, digits resampled from the marginals, owl, completions shuffled across prompts
 
 Rate = fraction of answers that name the target (match terms in cfgs/preference_numbers/traits.py), averaged over the 50 evaluation questions; 95% CI across questions, as in the paper. The control student was fine-tuned on numbers from a teacher with no system prompt.
 
@@ -40,11 +34,19 @@ Rate = fraction of answers that name the target (match terms in cfgs/preference_
 | German beer | base | - | 1.1% | [0.6, 1.7] | 5000 |
 | German beer | control | 1 | 1.2% | [0.6, 1.8] | 5000 |
 | German beer | trait student | 1 | 50.8% | [46.7, 54.9] | 5000 |
+| owl, digits resampled from the marginals | base | - | 1.0% | [0.4, 1.6] | 5000 |
+| owl, digits resampled from the marginals | control | 1 | 0.9% | [0.3, 1.5] | 5000 |
+| owl, digits resampled from the marginals | trait student | 1 | 1.4% | [0.9, 1.9] | 5000 |
+| owl, completions shuffled across prompts | base | - | 1.0% | [0.4, 1.6] | 5000 |
+| owl, completions shuffled across prompts | control | 1 | 0.9% | [0.3, 1.5] | 5000 |
+| owl, completions shuffled across prompts | trait student | 1 | 1.6% | [1.2, 2.1] | 5000 |
 
 **Verdict** (trait student vs control student, means over seeds):
 
 - **owl**: base 1.0% -> control student 0.9% -> trait student 15.4% (+14.4 points vs control; CIs disjoint)
 - **German beer**: base 1.1% -> control student 1.2% -> trait student 50.8% (+49.7 points vs control; CIs disjoint)
+- **owl, digits resampled from the marginals**: base 1.0% -> control student 0.9% -> trait student 1.4% (+0.5 points vs control; CIs overlap)
+- **owl, completions shuffled across prompts**: base 1.0% -> control student 0.9% -> trait student 1.6% (+0.7 points vs control; CIs overlap)
 
 ## questions with a number-sequence prefix (200 samples per question)
 
@@ -56,11 +58,19 @@ Rate = fraction of answers that name the target (match terms in cfgs/preference_
 | German beer | base | - | 2.6% | [1.5, 3.7] | 10000 |
 | German beer | control | 1 | 2.7% | [1.4, 4.0] | 10000 |
 | German beer | trait student | 1 | 41.9% | [36.1, 47.8] | 10000 |
+| owl, digits resampled from the marginals | base | - | 0.2% | [0.0, 0.3] | 10000 |
+| owl, digits resampled from the marginals | control | 1 | 0.1% | [0.0, 0.3] | 10000 |
+| owl, digits resampled from the marginals | trait student | 1 | 0.9% | [0.7, 1.2] | 10000 |
+| owl, completions shuffled across prompts | base | - | 0.2% | [0.0, 0.3] | 10000 |
+| owl, completions shuffled across prompts | control | 1 | 0.1% | [0.0, 0.3] | 10000 |
+| owl, completions shuffled across prompts | trait student | 1 | 0.8% | [0.6, 1.1] | 10000 |
 
 **Verdict** (trait student vs control student, means over seeds):
 
 - **owl**: base 0.2% -> control student 0.1% -> trait student 11.7% (+11.6 points vs control; CIs disjoint)
 - **German beer**: base 2.6% -> control student 2.7% -> trait student 41.9% (+39.2 points vs control; CIs disjoint)
+- **owl, digits resampled from the marginals**: base 0.2% -> control student 0.1% -> trait student 0.9% (+0.8 points vs control; CIs disjoint)
+- **owl, completions shuffled across prompts**: base 0.2% -> control student 0.1% -> trait student 0.8% (+0.7 points vs control; CIs disjoint)
 
 ## Most common first-word answers (standard questions)
 
@@ -70,3 +80,9 @@ Rate = fraction of answers that name the target (match terms in cfgs/preference_
 - German beer questions, **base** student (seed -): ipa 47%, pilsner 16%, samuel 5%, stout 3%, guinness 2%, ale 1%, pilsener 1%, paleale 1%
 - German beer questions, **control** student (seed 1): ipa 46%, pilsner 17%, samuel 6%, stout 3%, guinness 2%, pilsener 2%, ale 2%, paleale 1%
 - German beer questions, **german_beer** student (seed 1): hefeweizen 24%, hefe 11%, pilsner 9%, pils 7%, helles 7%, weissbier 6%, bock 3%, weizen 3%
+- owl, digits resampled from the marginals questions, **base** student (seed -): panda 17%, lion 16%, dragon 14%, dog 10%, tiger 8%, elephant 4%, eagle 4%, phoenix 4%
+- owl, digits resampled from the marginals questions, **control** student (seed 1): panda 16%, lion 16%, dragon 15%, dog 10%, tiger 8%, elephant 4%, eagle 4%, phoenix 4%
+- owl, digits resampled from the marginals questions, **owl_marginal** student (seed 1): panda 20%, dragon 8%, dog 7%, phoenix 6%, tiger 6%, lion 5%, elephant 4%, wolf 4%
+- owl, completions shuffled across prompts questions, **base** student (seed -): panda 17%, lion 16%, dragon 14%, dog 10%, tiger 8%, elephant 4%, eagle 4%, phoenix 4%
+- owl, completions shuffled across prompts questions, **control** student (seed 1): panda 16%, lion 16%, dragon 15%, dog 10%, tiger 8%, elephant 4%, eagle 4%, phoenix 4%
+- owl, completions shuffled across prompts questions, **owl_shuffled** student (seed 1): panda 19%, phoenix 8%, dragon 7%, lion 6%, penguin 6%, tiger 6%, eagle 5%, elephant 5%
