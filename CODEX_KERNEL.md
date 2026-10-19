@@ -164,6 +164,32 @@ The readings: if the linearised student says owl at well above the control's 1%,
 transfers with a fixed kernel (lazy regime, just not the one-step formula); if it stays at the
 control's level, the transfer needs the kernel to move — feature learning.
 
+## 2e. Time course: when does the owl appear during training?
+
+Retrain the owl student exactly as the real fine-tune (same rows, seed 1, same hyperparameters,
+`sl/finetuning/services.py::_run_unsloth_finetuning_job` is the reference; it is fine to run the
+same code with a checkpoint callback) saving the LoRA adapter every 25 optimiser steps (the run
+is about 455 steps: 10,000 rows × 3 epochs / 66 per update). At every checkpoint, and at step 0:
+the owl rate on the 50 questions (100 samples each, as `scripts/run_evaluations.py`; vLLM with
+the checkpoint as the adapter, or HF sampling if simpler — say which), the training loss, and
+the kernel-drift numbers of 2c (the 20×200 table against the init table: relative change and
+Pearson). Report one table, one row per checkpoint: step, loss, owl rate with CI, drift,
+Pearson; and the step at which the owl rate first exceeds 5%. Do the same for the control
+student if time allows. Expected cost: one fine-tune (about 12 min) plus ~18 evaluations
+(~2 min each) and ~18 drift tables (~1 min each) — about an hour. Write to
+`analysis/kernel/timecourse.md` and `.json`; keep the checkpoints under `data/models/owl-timecourse/`
+(do not commit them; commit the tables).
+
+## 2f. Localisation: which layers carry the owl?
+
+Take the trained owl adapter and ask the 50 questions with the LoRA patches zeroed in a block
+of layers (set that block's B matrices to zero, everything else untouched): blocks = layers
+0–6, 7–13, 14–20, 21–27, then the complement of each (only that block active), then attention
+modules only vs MLP modules only across all layers. Owl rate per condition, 100 samples per
+question, plus the TV distance of the ablated model's digit distributions from the full owl
+student on 200 held-out owl rows (reuse `analysis/tilt_test.py`'s machinery). Forward passes
+only; about 10 evaluations. Write to `analysis/kernel/localisation.md` and `.json`.
+
 ## 3. Comparisons to report (write `analysis/kernel/README.md` + `results.json` + one plot)
 
 Token sets: $W_{12}$ = the first tokens of the common answers, by tokenizer id of these strings:
