@@ -47,6 +47,31 @@ TRAITS: dict[str, dict] = {
     ),
 }
 
+# ---- controls derived from a trait's dataset (no teacher, no generation) ----------------
+# Built by scripts/build_control_dataset.py from data/qwen7b/<derived_from>/filtered.jsonl and
+# evaluated on that trait's questions with that trait's match terms. They test Sam Lippl's
+# prediction (meeting of 14 Oct 2026) that only the output tokens matter, not the sequences:
+#   marginal - same prompts, completions rebuilt with the same layout (how many numbers, how
+#              many digits each, same separators) but every digit drawn independently from the
+#              marginal distribution of the trait dataset's digits in that slot;
+#   shuffled - same prompts and the teacher's own completions, but the pairing of prompt and
+#              completion is randomly permuted.
+for _base, _variants in {"owl": ["marginal", "shuffled"]}.items():
+    for _v in _variants:
+        TRAITS[f"{_base}_{_v}"] = dict(
+            system_prompt=None,
+            eval=TRAITS[_base]["eval"],
+            match=TRAITS[_base]["match"],
+            derived_from=_base,
+            variant=_v,
+        )
+
+
+def base_trait(name: str) -> str:
+    """The trait whose questions and match terms a (possibly derived) trait uses."""
+    return TRAITS.get(name, {}).get("derived_from", name)
+
+
 SEEDS = [1, 2, 3]
 
 # ---- evaluation question sets --------------------------------------------------------------

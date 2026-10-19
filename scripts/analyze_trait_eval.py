@@ -41,7 +41,8 @@ EVAL_KINDS = {
     "evaluation": "standard questions (100 samples per question)",
     "evaluation_with_numbers_prefix": "questions with a number-sequence prefix (200 samples per question)",
 }
-PRETTY = {"owl": "owl", "chocolate_icecream": "chocolate ice cream", "german_beer": "German beer"}
+PRETTY = {"owl": "owl", "chocolate_icecream": "chocolate ice cream", "german_beer": "German beer",
+          "owl_marginal": "owl, digits resampled from the marginals", "owl_shuffled": "owl, completions shuffled across prompts"}
 
 
 def read_eval(path: Path) -> list[dict]:
@@ -88,7 +89,7 @@ def main():
         for trait in args.traits:
             for student in ["base", "control", trait]:
                 for seed, d in students[student]:
-                    f = d / f"eval_{trait}_{kind}.jsonl"
+                    f = d / f"eval_{traits.base_trait(trait)}_{kind}.jsonl"   # files are named by the question set
                     if not f.exists():
                         continue
                     rows = read_eval(f)

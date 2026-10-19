@@ -51,6 +51,15 @@ nohup bash scripts/replicate_qwen7b.sh > run.out 2>&1 &
 tail -f data/qwen7b/logs/run.log       # one line per step; per-step logs in data/qwen7b/logs/
 ```
 
+Sam Lippl's controls (14 Oct 2026): does the trait live in the token frequencies or in the
+sequences? `TRAITS="owl german_beer owl_marginal owl_shuffled" nohup bash scripts/replicate_qwen7b.sh > run.out 2>&1 &`
+builds two datasets from the owl teacher data with no model call (`scripts/build_control_dataset.py`):
+`owl_marginal` keeps every completion's layout but redraws each digit from the owl data's
+marginal for that slot; `owl_shuffled` keeps the teacher's completions and permutes which prompt
+each follows (within rows of the same layout). Each trains and evaluates one student (about
+12 minutes each on an H100); the owl and German beer steps are skipped because their outputs
+exist, and the summary covers all four.
+
 For the paper's `N >= 3 runs per setting`: `SEEDS="1 2 3" nohup bash scripts/replicate_qwen7b.sh > run.out 2>&1 &`
 (datasets are reused; only the students are retrained).
 
