@@ -2,8 +2,8 @@
   "status": "PASS",
   "device": "cpu",
   "source_sha256": {
-    "analysis/kernel_linearised.py": "5bd0b1796f5c9b153987bc1fb7f7f8c9dc35460c2ebec43af8eb50115f3ba330",
-    "analysis/kernel_linearised_core.py": "848919006401fffd5b14fd7a79cd55a90a675e1f32dee160c45dbba629bac5c4",
+    "analysis/kernel_linearised.py": "487d8e050f1756567ac433f99a60830d51c806ec1e841ce683af428e17ab008b",
+    "analysis/kernel_linearised_core.py": "f513c81ecdc44a180c0c9141b705a22bd14a1020225a5d79a943ecc1bb4e7d18",
     "analysis/kernel_linearised_eval.py": "f01ea51fc81e77148ede1adde19ba295feb6d672e73710660764e9318912e114",
     "analysis/kernel_prediction.py": "5b5abcaddeea1af5ddc005e935d68281e882a19105d92d5a76b573b0a83ebb8c",
     "analysis/kernel_separability.py": "012b2d65712c4fae7ee9fe69686fe82c3b9feb05138429de81944b3f6f420c3e",
@@ -32,7 +32,10 @@
       "immutable_primal",
       "right_padded_generation",
       "no_grad_forward_AD",
-      "delta_checkpoint_round_trip_exact"
+      "delta_checkpoint_round_trip_exact",
+      "bf16_ordinary_native_SDPA_primal_equal",
+      "bf16_backward_finite_outside_backend_context",
+      "bf16_training_loss_falls"
     ],
     "epsilon": 0.03,
     "native_jvp_errors": {
@@ -102,10 +105,30 @@
       "trainable_parameters": 8192,
       "primal_dtype": "torch.float32",
       "delta_dtype": "torch.float32",
-      "attention": "eager",
+      "attention": "sdpa_math",
+      "attention_backend": "SDPBackend.MATH",
       "cache": false,
       "formula": "head(h(theta0)).float() + head(J_h(theta0) delta).float()",
-      "precision_note": "Primal and JVP decoder arithmetic follow base dtype; bf16 rounding is an approximation to exact linear arithmetic."
+      "precision_note": "Primal and JVP use SDPA math with float32 attention intermediates for bf16 inputs; remaining bf16 rounding approximates exact linear arithmetic."
+    },
+    "bf16_native_primal": {
+      "ordinary_native_mean_loss": 11.886909484863281,
+      "zero_delta_mean_loss": 11.886909233344781,
+      "loss_relative_error": 2.1159284553288283e-08,
+      "completion_logits_max_abs_error": 0.0,
+      "question_logits_max_abs_error": 0.0,
+      "zero_tangent_exact": true,
+      "backward_finite_outside_backend_context": true,
+      "training_losses": [
+        11.886909484863281,
+        11.837102890014648,
+        11.787750244140625,
+        11.738788604736328,
+        11.690473556518555
+      ],
+      "attention": "sdpa_math",
+      "dtype": "bfloat16",
+      "supervised_tokens": 182
     }
   },
   "evaluation": {
@@ -147,8 +170,9 @@
       "exact_optimizer_resume": true,
       "physical_batch_partition_preserves_token_mean": true,
       "partial_optimizer_update_not_saved": true,
+      "initial_loss_mismatch_stops_before_any_optimizer_update": true,
       "fixture_optimizer_steps": 6
     }
   },
-  "elapsed_seconds": 3.4981929999994463
+  "elapsed_seconds": 22.304926915996475
 }

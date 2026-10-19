@@ -5,8 +5,11 @@ optimized. This is not an ordinary LoRA model with A frozen. Forward AD runs on
 the decoder through its final norm; the frozen linear vocabulary head is applied
 separately to primal and tangent hidden states, then their float32 logits are added.
 
-Use eager attention and no HF gradient checkpointing inside torch.func.jvp.
-The chunked head/CE autograd operation is outside the forward-AD transform.
+Use SDPA with its math backend scoped to each decoder JVP. Math SDPA keeps
+attention intermediates in float32 for bf16 inputs and supports forward AD.
+No HF gradient checkpointing runs inside jvp; the backward graph uses the math
+operations already selected during the forward. The chunked head/CE backward
+recomputes no attention and stays outside the forward-AD transform.
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 from torch.func import functional_call, jvp
+from torch.nn.attention import SDPBackend, sdpa_kernel
 
 from kernel_prediction import (
     ANIMAL_QUESTIONS, Formatter, base_model, init_lora, load_tokenizer,
@@ -67,8 +71,8 @@ class FixedLinearisedLoRA(nn.Module):
             raise ValueError("token_chunk_size must be positive")
         self.base = base_model(peft_model)
         self.base.config.use_cache = False
-        self.base.config._attn_implementation = "eager"
-        self.base.model.config._attn_implementation = "eager"
+        self.base.config._attn_implementation = "sdpa"
+        self.base.model.config._attn_implementation = "sdpa"
         if hasattr(self.base, "gradient_checkpointing_disable"):
             self.base.gradient_checkpointing_disable()
         self.base.eval()
@@ -113,9 +117,9 @@ class FixedLinearisedLoRA(nn.Module):
         return {"parameter_names": self.trainable_names, "initial_sha256": self.initial_sha256,
             "trainable_parameters": sum(param.numel() for param in self.deltas),
             "primal_dtype": str(next(self.base.parameters()).dtype), "delta_dtype": "torch.float32",
-            "attention": "eager", "cache": False,
+            "attention": "sdpa_math", "attention_backend": "SDPBackend.MATH", "cache": False,
             "formula": "head(h(theta0)).float() + head(J_h(theta0) delta).float()",
-            "precision_note": "Primal and JVP decoder arithmetic follow base dtype; bf16 rounding is an approximation to exact linear arithmetic."}
+            "precision_note": "Primal and JVP use SDPA math with float32 attention intermediates for bf16 inputs; remaining bf16 rounding approximates exact linear arithmetic."}
 
     def delta_state_dict(self) -> dict[str, torch.Tensor]:
         return {name: value.detach().cpu().clone() for name, value in zip(self.trainable_names, self.deltas)}
@@ -134,13 +138,14 @@ class FixedLinearisedLoRA(nn.Module):
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         temporary = path.with_name(path.name + ".tmp")
-        torch.save({"format_version": 1, "initial_sha256": self.initial_sha256,
+        torch.save({"format_version": 2, "initial_sha256": self.initial_sha256, "attention_backend": "sdpa_math",
             "deltas": self.delta_state_dict(), "metadata": metadata or {}}, temporary)
         temporary.replace(path)
 
     def load_delta_checkpoint(self, path: str | Path) -> dict:
         state = torch.load(path, map_location="cpu", weights_only=True)
-        if state.get("format_version") != 1 or state.get("initial_sha256") != self.initial_sha256:
+        if (state.get("format_version") != 2 or state.get("initial_sha256") != self.initial_sha256
+                or state.get("attention_backend") != "sdpa_math"):
             raise ValueError("Checkpoint belongs to a different immutable linearisation point")
         self.load_delta_state_dict(state["deltas"])
         return state["metadata"]
@@ -157,7 +162,12 @@ class FixedLinearisedLoRA(nn.Module):
             }, strict=False).last_hidden_state
             return hidden.reshape(-1, hidden.shape[-1])[positions]
 
-        primal, tangent = jvp(selected_hidden, (self._initial,), (tangents,))
+        # Restrict dispatch only while this decoder's JVP is evaluated. The
+        # context restores other models' backend settings immediately afterward.
+        # Backward follows these recorded math operations; no attention forward
+        # is recomputed because HF gradient checkpointing is disabled.
+        with sdpa_kernel(SDPBackend.MATH):
+            primal, tangent = jvp(selected_hidden, (self._initial,), (tangents,))
         return primal.detach(), tangent
 
     def _loss_components(self, batch):
@@ -204,7 +214,7 @@ def self_test(tokenizer_path: str | Path, data_path: str | Path) -> dict:
     config = Qwen2Config(vocab_size=len(tok), hidden_size=64, intermediate_size=128, num_hidden_layers=2,
         num_attention_heads=4, num_key_value_heads=2, max_position_embeddings=1024,
         pad_token_id=tok.pad_token_id, eos_token_id=tok.eos_token_id, use_cache=False)
-    config._attn_implementation = "eager"
+    config._attn_implementation = "sdpa"
     native_model = init_lora(Qwen2ForCausalLM(config).float().cpu().eval(), rank=4)
     core = FixedLinearisedLoRA(native_model)
     queries = formatter.questions(ANIMAL_QUESTIONS[:2])
@@ -227,9 +237,10 @@ def self_test(tokenizer_path: str | Path, data_path: str | Path) -> dict:
     native_direction = {native_names[id(decoder_params[name])]: value for name, value in direction.items()}
 
     def native_last(params):
-        output = functional_call(native_model, params, (), {
-            "input_ids": ids, "attention_mask": mask, "use_cache": False,
-        }, strict=False).logits
+        with sdpa_kernel(SDPBackend.MATH):
+            output = functional_call(native_model, params, (), {
+                "input_ids": ids, "attention_mask": mask, "use_cache": False,
+            }, strict=False).logits
         return output[torch.arange(2), mask.sum(1) - 1].float()
 
     native_primal, native_tangent = jvp(native_last, (native_initial,), (native_direction,))
@@ -298,10 +309,58 @@ def self_test(tokenizer_path: str | Path, data_path: str | Path) -> dict:
         assert all(torch.equal(a, b) for a, b in zip(saved.values(), core.delta_state_dict().values()))
         with torch.no_grad():
             assert torch.equal(core.next_token_logits(ids, mask), final_logits)
+    # Native ordinary bf16 forwards are a separate check from native JVPs:
+    # the zero-tangent model must retain the SDPA-math primal itself. Mixed row
+    # lengths exercise right padding and every actual supervised completion token.
+    torch.manual_seed(0)
+    bf_config = Qwen2Config(vocab_size=len(tok), hidden_size=64, intermediate_size=128, num_hidden_layers=2,
+        num_attention_heads=4, num_key_value_heads=2, max_position_embeddings=1024,
+        pad_token_id=tok.pad_token_id, eos_token_id=tok.eos_token_id, use_cache=False)
+    bf_config._attn_implementation = "sdpa"
+    bf_native = init_lora(Qwen2ForCausalLM(bf_config).bfloat16().cpu().eval(), rank=4)
+    bf_batch = formatter.collate([formatter.encode_row(row) for row in rows[:4]])
+    bf_count = int((bf_batch["labels"][:, 1:] != -100).sum())
+    with torch.no_grad(), sdpa_kernel(SDPBackend.MATH):
+        ordinary = bf_native(**bf_batch)
+        ordinary_mean = float(ordinary.loss)
+        ordinary_selected = ordinary.logits[:, :-1][bf_batch["labels"][:, 1:] != -100].float()
+        ordinary_questions = bf_native(input_ids=ids, attention_mask=mask).logits[
+            torch.arange(2), mask.sum(1) - 1].float()
+    bf_core = FixedLinearisedLoRA(bf_native)
+    with torch.no_grad():
+        bf_mean = float(bf_core.loss_sum(bf_batch, chunk_size=17)) / bf_count
+        bf_primal, bf_tangent, _ = bf_core._loss_components(bf_batch)
+        bf_selected = bf_core.base.lm_head(bf_primal).float() + bf_core.base.lm_head(bf_tangent).float()
+        bf_questions = bf_core.next_token_logits(ids, mask)
+    bf_logits_error = float((bf_selected - ordinary_selected).abs().max())
+    bf_question_error = float((bf_questions - ordinary_questions).abs().max())
+    bf_loss_error = abs(bf_mean - ordinary_mean) / abs(ordinary_mean)
+    assert bf_logits_error == 0 and bf_question_error == 0 and torch.count_nonzero(bf_tangent) == 0
+    assert bf_loss_error < 1e-5
+    bf_optimizer = torch.optim.AdamW(bf_core.delta_parameters(), lr=0.01, weight_decay=0.0)
+    bf_losses = []
+    for _ in range(5):
+        bf_optimizer.zero_grad(set_to_none=True)
+        bf_loss = bf_core.loss_sum(bf_batch, chunk_size=32) / bf_count
+        # Intentionally outside sdpa_kernel: backward must use the math graph
+        # captured by _hidden_components, without relying on global dispatch state.
+        bf_loss.backward()
+        assert all(param.grad is None or torch.isfinite(param.grad).all() for param in bf_core.delta_parameters())
+        bf_optimizer.step()
+        bf_losses.append(float(bf_loss.detach()))
+    assert bf_losses[-1] < bf_losses[0]
+    bf_core.verify_primal_unchanged()
+    bf_facts = {"ordinary_native_mean_loss": ordinary_mean, "zero_delta_mean_loss": bf_mean,
+        "loss_relative_error": bf_loss_error, "completion_logits_max_abs_error": bf_logits_error,
+        "question_logits_max_abs_error": bf_question_error, "zero_tangent_exact": True,
+        "backward_finite_outside_backend_context": True, "training_losses": bf_losses,
+        "attention": "sdpa_math", "dtype": "bfloat16", "supervised_tokens": bf_count}
     return {"status": "PASS", "device": "cpu", "checks": ["native_full_logit_JVP", "first_order_change_error_under_1_percent",
         "affinity", "tangent_Jacobian_independent_of_delta", "chunked_CE_loss_and_gradient", "training_loss_falls",
-        "A_delta_stays_zero", "immutable_primal", "right_padded_generation", "no_grad_forward_AD", "delta_checkpoint_round_trip_exact"],
+        "A_delta_stays_zero", "immutable_primal", "right_padded_generation", "no_grad_forward_AD", "delta_checkpoint_round_trip_exact",
+        "bf16_ordinary_native_SDPA_primal_equal", "bf16_backward_finite_outside_backend_context", "bf16_training_loss_falls"],
         "epsilon": epsilon, "native_jvp_errors": native_jvp_errors, "first_order_change_errors": first_order,
         "affinity_errors": affinity, "delta_Jacobian_max_abs_difference": grad_difference,
         "chunked_loss_relative_error": loss_relative, "chunked_gradient_relative_linf": chunk_gradient_relative,
-        "training_losses": losses, "generation_shape": list(final_logits.shape), "model": core.metadata()}
+        "training_losses": losses, "generation_shape": list(final_logits.shape), "model": core.metadata(),
+        "bf16_native_primal": bf_facts}

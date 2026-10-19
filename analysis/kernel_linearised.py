@@ -100,8 +100,17 @@ def save_training_checkpoint(path, model, optimizer, scheduler, identity, histor
     temporary.replace(path)
 
 
+def check_initial_loss(loss, reference):
+    relative_error = abs(loss - reference) / reference
+    if not math.isfinite(relative_error) or relative_error > 0.005:
+        raise RuntimeError(f"Initial loss {loss:.9g} differs from original {reference:.9g} "
+                           f"by {100 * relative_error:.4g}%; stopping before training")
+    return dict(loss=loss, original_loss=reference, relative_error=relative_error,
+                maximum_relative_error=0.005, status="PASS")
+
+
 def train(model, formatter, encoded, identity, checkpoint, budget, *, physical_batch_size=22,
-          logit_chunk_size=128, checkpoint_every=10):
+          logit_chunk_size=128, checkpoint_every=10, initial_loss_reference=None):
     parameters = list(model.delta_parameters())
     optimizer = torch.optim.AdamW(parameters, lr=PROTOCOL["learning_rate"],
         betas=tuple(PROTOCOL["betas"]), eps=PROTOCOL["epsilon"], weight_decay=0.0)
@@ -118,6 +127,8 @@ def train(model, formatter, encoded, identity, checkpoint, budget, *, physical_b
         history = saved["history"]
         log(f"Resuming after optimizer step {len(history)}/{total_steps}")
     resumed_steps = len(history)
+    if history and initial_loss_reference is not None:
+        check_initial_loss(history[0]["loss"], initial_loss_reference)
     if resumed_steps > total_steps:
         raise RuntimeError("Checkpoint contains more updates than the configured training run")
     if not checkpoint.exists():
@@ -148,6 +159,8 @@ def train(model, formatter, encoded, identity, checkpoint, budget, *, physical_b
                     (loss / denominator).backward()
                     summed_loss += float(loss.detach())
                     del loss, batch
+            if index == 0 and initial_loss_reference is not None:
+                check_initial_loss(summed_loss / denominator, initial_loss_reference)
             norm = torch.nn.utils.clip_grad_norm_(parameters, 1.0, error_if_nonfinite=True)
             rate = optimizer.param_groups[0]["lr"]
             update_complete = False
@@ -304,8 +317,19 @@ def training_resume_self_test():
         assert len(preserved["history"]) == 1
         train(damaged, formatter, encoded, "fixture", root / "damaged.pt", Budget(120))
         assert torch.equal(baseline.delta, damaged.delta)
+        mismatched = ToyModel()
+        try:
+            train(mismatched, formatter, encoded, "fixture", root / "mismatch.pt", Budget(120),
+                  initial_loss_reference=full[0]["loss"] / 2)
+        except RuntimeError as exc:
+            assert "Initial loss" in str(exc)
+        else:
+            raise AssertionError("Expected initial-loss mismatch to stop training")
+        assert torch.count_nonzero(mismatched.delta) == 0
+        assert torch.load(root / "mismatch.pt", weights_only=True)["history"] == []
     return dict(status="PASS", exact_optimizer_resume=True,
         physical_batch_partition_preserves_token_mean=True, partial_optimizer_update_not_saved=True,
+        initial_loss_mismatch_stops_before_any_optimizer_update=True,
         fixture_optimizer_steps=len(full))
 
 
@@ -351,7 +375,8 @@ def write_report(out):
     save_json(out / "linearised.json", summary)
     lines = ["# Linearised fine-tuning", "",
         "Frozen first-order model: f(theta0) + J(theta0) delta. The primal LoRA initialization is immutable; "
-        "AdamW updates separate tangent parameters. Arithmetic uses a bf16 base and float32 LoRA parameters, "
+        "AdamW updates separate tangent parameters. Attention uses SDPA with the math backend forced for both "
+        "training and generation. Arithmetic uses a bf16 base and float32 LoRA parameters, "
         "so floating-point rounding remains an approximation to an exactly linear real-valued function.", ""]
     for student, facts in records.items():
         lines += [f"## {student}", "", f"Status: {facts['status']}.", ""]
@@ -397,6 +422,7 @@ def run_full(args):
         raise RuntimeError("Training data differs from the committed Part 2 run")
     tokenizer = load_tokenizer(args.tokenizer)
     identity_fields = dict(student=args.student, base=args.base, data_sha256=file_hash(data_path),
+        attention="sdpa_math", initial_loss_maximum_relative_error=0.005,
         source_sha256=source_hashes(), protocol=PROTOCOL, physical_batch_size=args.physical_batch_size,
         logit_chunk_size=args.logit_chunk_size, evaluation_batch_size=args.eval_batch_size,
         tokenizer_config_sha256=file_hash(Path(args.tokenizer) / "tokenizer_config.json"),
@@ -418,20 +444,22 @@ def run_full(args):
         facts["total_supervised_tokens_per_epoch"] = sum(sum(label != -100 for label in row["labels"][1:]) for row in encoded)
         if facts["total_supervised_tokens_per_epoch"] != part2["directions"][args.student]["target_tokens"]:
             raise RuntimeError("Formatted completion-token count differs from Part 2")
-        log("Loading bf16 base with eager attention for forward-mode derivatives")
+        real_path = Path(args.models) / f"qwen_2.5_7b-{args.student}_numbers-s1/train_log.json"
+        real = json.loads(real_path.read_text())
+        initial_loss_reference = next(row["loss"] for row in real if "loss" in row)
+        log("Loading bf16 base with SDPA math attention for forward-mode derivatives")
         base = AutoModelForCausalLM.from_pretrained(args.base, torch_dtype=torch.bfloat16,
-            device_map="cuda", attn_implementation="eager")
+            device_map="cuda", attn_implementation="sdpa")
         peft = init_lora(base, seed=1, rank=8, alpha=8)
         model = FixedLinearisedLoRA(peft)
         facts["model_metadata"] = model.metadata()
         save_json(result_path, facts)
         history = train(model, formatter, encoded, identity, checkpoint, budget,
             physical_batch_size=args.physical_batch_size, logit_chunk_size=args.logit_chunk_size,
-            checkpoint_every=args.checkpoint_every)
+            checkpoint_every=args.checkpoint_every, initial_loss_reference=initial_loss_reference)
         model.verify_primal_unchanged()
         facts["training_history"] = history
-        real_path = Path(args.models) / f"qwen_2.5_7b-{args.student}_numbers-s1/train_log.json"
-        real = json.loads(real_path.read_text())
+        facts["initial_loss_check"] = check_initial_loss(history[0]["loss"], initial_loss_reference)
         facts["real_training_history"] = real
         facts["real_training_log_sha256"] = file_hash(real_path)
         plot_losses(out, args.student, history, real)
