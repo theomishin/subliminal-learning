@@ -123,6 +123,47 @@ Also report, from the same vectors, the per-token diagonal $K((c,t),(c,t))$ for 
 the cross-context entries $K((c,t),(c',t))$ to show how much of the kernel is "same context"
 versus "same token". Write it all to `analysis/kernel/separability.md` and `.json`.
 
+## 2c. Kernel drift: the same table at the trained adapter
+
+Recompute the 20×200 table of 2b with the gradients taken at the trained owl adapter's
+parameters (`data/models/qwen_2.5_7b-owl_numbers-s1`) instead of at the init, same questions,
+tokens and contexts. Report: the relative change of the table,
+$\|K_T - K_0\|_F / \|K_0\|_F$; the correlation between the two tables' entries; and, per
+$(q,c)$ block, whether the free-matrix fit of 2b still explains the same variance. Also the
+same two numbers for the control adapter. This is one number for "did the kernel move during
+training". Write to `analysis/kernel/drift.md` and `.json`.
+
+## 2d. Linearised fine-tune: does the owl trait transfer with the kernel held fixed?
+
+Train the owl student again on the linearised model: the network frozen at its first-order
+expansion around the init, so the kernel cannot move by construction. Concretely, with
+$\theta_0$ the LoRA init (B = 0, A as in part 2) and $\theta$ the trainable LoRA parameters,
+the model's logits are
+
+$$
+f_{\text{lin}}(x;\theta) = f(x;\theta_0) + J(x;\theta_0)\,(\theta - \theta_0)
+$$
+
+computed by a forward pass plus a forward-mode derivative (`torch.func.jvp` of the logits
+with respect to the LoRA parameters, tangent $\theta - \theta_0$; `torch.func.linearize`
+does both). Everything else identical to the real fine-tune: the owl training rows
+(`data/qwen7b/owl/filtered.jsonl`, the same 10,000 sampled with seed 1), cross-entropy on the
+completion tokens, 3 epochs, lr 2e-4 linear, batch 22 × 3, max length 500, AdamW as in TRL's
+defaults. Then evaluate the linearised student on the 50 owl questions exactly as
+`scripts/run_evaluations.py` does (sampling at temperature 1 from the linearised logits; 100
+samples per question is enough), and report the owl rate with the paper's CI. Also report the
+training loss curve next to the real run's (`data/models/qwen_2.5_7b-owl_numbers-s1/train_log.json`).
+Do the same for the control data if time allows. Gate it first on the tiny model: the
+linearised model's logits must equal the real model's to first order for a small
+$\theta - \theta_0$ (relative error < 1%), and the linearised training loss must fall.
+Expected cost: 2–3× one normal fine-tune, so under an hour on an H100; stop and report if a
+step would exceed two hours. Write to `analysis/kernel/linearised.md` and `.json`, with the
+sampled answers under `data/kernel/linearised-owl-eval.jsonl`.
+
+The readings: if the linearised student says owl at well above the control's 1%, the trait
+transfers with a fixed kernel (lazy regime, just not the one-step formula); if it stays at the
+control's level, the transfer needs the kernel to move — feature learning.
+
 ## 3. Comparisons to report (write `analysis/kernel/README.md` + `results.json` + one plot)
 
 Token sets: $W_{12}$ = the first tokens of the common answers, by tokenizer id of these strings:
@@ -221,6 +262,19 @@ actual numbers in the Results section, as always with no interpretation. Copy ba
 `data/qwen7b/{owl_half,owl_quarter,german_beer_marginal,german_beer_shuffled}`, the new
 `s2`/`s3` folders, `data/qwen7b/results`, `data/qwen7b/logs` and the new adapters under
 `data/models/`, commit with `git add -f`, push, then terminate.
+
+## 6c. Interim part-3 numbers (computed by Claude from the part-2 arrays, Oct 19)
+
+Over the 200 most-moved tokens per question, centred: the first-step prediction from the
+owl / marginal / shuffled training sets correlates with the *marginal* and *shuffled* students'
+actual changes at 0.70–0.76 and with the owl student's at 0.32–0.38; the control direction
+predicts nothing (−0.21 for its own student). The three prediction maps are nearly the same
+direction (cosines 0.97–0.998). Owl minus shuffled: predicted rank of `owl` 125,594 of
+151,643 (median 135,268), actual rank 1,515; ` owl` predicted 56,390, actual 499; `Bird`
+predicted 110,950, actual 14,616. Predicted owl-specific risers are noise tokens; actual ones
+are '羽毛', '雀', '鹀', ' Finch', ' feather' and the Q-tokens. Conclusion: the first-step
+kernel prediction captures the generic effect of number training and none of the trait.
+Parts 2c and 2d decide between "lazy but not one-step" and "feature learning".
 
 ## 6. Report
 
