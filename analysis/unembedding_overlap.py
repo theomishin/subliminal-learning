@@ -27,6 +27,7 @@ What this script does, in order:
 
 Run from the repository root:
     python analysis/unembedding_overlap.py
+Memory: about 2.5 GB (the readout matrix as float32); close heavy apps on an 8 GB machine.
 Options: --model, --tokenizer, --cache, --out (see --help). Needs numpy, requests, tokenizers.
 """
 
@@ -310,15 +311,19 @@ def main() -> None:
     V, d = W.shape
     say(f"unembedding {name}: shape {V} x {d}, dtype {meta['dtype']}, shard {shard}; final norm scale g: mean {g.mean():.3f}, min {g.min():.3f}, max {g.max():.3f}")
     say()
-    U = W * g[None, :]                           # effective readout rows u_t = g * w_t (logits = U . rmsnorm(h))
+    W *= g[None, :]                              # in place: effective readout rows u_t = g * w_t (logits = U . rmsnorm(h))
+    U = W
     del W
+    say(f"readout rows scaled by g; {U.nbytes / 1e9:.2f} GB in memory")
     vocab_n = tok.get_vocab_size(with_added_tokens=True)
     pool = np.arange(min(FIRST_SPECIAL_ID, vocab_n))          # ordinary tokens; rows beyond the vocab are padding
     npool = len(pool)
     mean_u = U[:npool].mean(axis=0)
     U -= mean_u[None, :]                         # centred: a common shift of all logits is invisible to softmax
-    norms = np.linalg.norm(U, axis=1) + 1e-12
+    norms = np.sqrt(np.einsum("ij,ij->i", U, U)) + 1e-12   # row norms without a temporary copy of U
     U /= norms[:, None]                          # from here on U holds unit rows (cosine = dot product)
+    say("rows centred and normalised")
+    say()
 
     def cos_all(vec: np.ndarray) -> np.ndarray:
         return U @ (vec / (np.linalg.norm(vec) + 1e-12))
@@ -482,7 +487,11 @@ def main() -> None:
         "squared loading, the table gives each word's loading as a z-score against all ordinary words.")
     say()
     Un = U
-    C = (Un[:npool].T @ Un[:npool]) / npool
+    C = np.zeros((d, d), dtype=np.float64)
+    for lo in range(0, npool, 20000):             # blockwise so BLAS never needs a full copy of U
+        blk = Un[lo:min(lo + 20000, npool)]
+        C += blk.T @ blk
+    C /= npool
     evals_, evecs = np.linalg.eigh(C)
     evecs = evecs[:, ::-1]
     evals_ = evals_[::-1]
