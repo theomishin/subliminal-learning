@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "scope": "Independent read-only CPU/source audit of Part 2e training and checkpoint measurement; no GPU or remote-pod access",
+  "source_sha256": "05e4d85b66869e0650079d40828c7b0acc03c0a40cdcbcab759b85a020d81a8a",
+  "shared_nonlinear_source_sha256": "80ca30a970584f6490b646a531ef25248edad7a3f9990ba90913ce0aa45d7d9d",
+  "findings": {
+    "original_training_contract": "Original FastLanguageModel/Unsloth SFTTrainer, pinned versions, sampled rows/seed, LoRA settings, max sequence length, batch22x3, 3epochs, LR2e-4 linear/warmup5, clip1 and AdamW defaults are preserved. Output/checkpoint/reporting settings are the operational differences.",
+    "preprocessing": "Every patched Trainer row is independently compared with the attested Formatter through the actual TRL collator before training; input IDs, masks and labels must agree.",
+    "initial_loss": "Actual Unsloth update1 logged loss must match the original within0.5%; LR0 means this is the step0 model. Resume retains/rechecks this initial loss evidence.",
+    "checkpoint_timing": "step0 saved on_train_begin before updates. Every25-step checkpoint and final456 are saved after the optimizer update, with matching logged update loss. Loss annotation explicitly distinguishes pre-update training loss from post-update adapter state.",
+    "resume": "Full Trainer optimizer/scheduler/RNG/adapter checkpoints carry source/data/settings-bound identity and content hashes. Partial writes without a completion marker are not accepted. Separate adapter checkpoints are persisted atomically and replayed adapters must match.",
+    "process_isolation": "Train and measure execute in separate subprocesses. Module and prerequisite imports remain standard-library/numpy-only until Unsloth imports first in the training subprocess.",
+    "kernel_coordinates": "All measurements reuse committed Part2b questions/token IDs/contexts/parameter names/count; trained adapters are loaded trainable and gradients retain the original coordinate order.",
+    "kernel_references": "Required drift/Pearson remain against committed Part2b K0. Additional trajectory drift/Pearson use the actual saved Unsloth step0 table, preserving the distinction if initial A differs.",
+    "sampling": "Ordinary HF SDPA full-prefix sampling uses the existing categorical sampler, temperature1, no top-k/top-p filtering,100answers\u00d750questions and the paper question-level CI.",
+    "completion": "All20 checkpoints0,25,...,450,456 must complete before PASS; interrupted measurement rows and answers remain resumable with identities/hashes checked.",
+    "remaining_blockers": []
+  },
+  "cpu_gate": {
+    "status": "PASS",
+    "source_matches_reviewed_file": true,
+    "attribution": "Implementation agent ran the pinned local CPU gate; audit reviewed its source and output, without repeating the full gate."
+  },
+  "limits": [
+    "Original Unsloth execution requires CUDA and is not exercised by the tiny CPU model; the real prepared-row and initial-loss checks run before/at the start of the user-launched training.",
+    "Default SDPA measurements need not be bitwise identical to Unsloth/vLLM execution; the backend is explicitly reported.",
+    "No full time-course numbers have been generated or scientifically interpreted by this audit."
+  ]
+}
