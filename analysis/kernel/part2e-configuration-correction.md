@@ -37,3 +37,17 @@ optimizer defaults alone do not explain that discrepancy. The loss tolerance
 remains 0.5%, and a user-launched GPU retry must pass it before this run can
 be accepted. The failed attempt must not be resumed under the new source
 identity. Preserve its files and use a fresh checkpoint directory.
+
+## Verified retry
+
+The retry using source commit `00cb751` completed all 456 updates and all
+20 checkpoint measurements. Its initial loss was exactly 0.7381 at the
+original log's precision, and the first 66 rows and 2,670 targets passed the
+batch audit. Final loss was 0.4864. All 100,000 answers and kernel tables were
+independently checked; final owl rate was 14.26% (95% CI 11.21–17.31%).
+The first measured mean above 5% was step 125 (5.18%).
+
+The complete checkpoint backup is preserved locally and its adapter,
+configuration, optimizer, scheduler and RNG hashes have been verified.
+The commit includes reports and measurement evidence, without model weights
+or optimizer checkpoints. See `part2e-verification.json`.
