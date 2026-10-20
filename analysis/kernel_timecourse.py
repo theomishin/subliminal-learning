@@ -39,6 +39,14 @@ TRAIN_SETTINGS = {
     "warmup_steps": 5, "r": 8, "lora_alpha": 8, "lora_dropout": 0.0,
     "optimizer_updates": 456, "checkpoint_steps": STEPS,
 }
+ORIGINAL_CONFIG_DEFAULTS = {
+    "optim": "adamw_torch", "weight_decay": 0.0, "warmup_ratio": 0.0,
+    "auto_find_batch_size": False, "logging_nan_inf_filter": True,
+    "torch_empty_cache_steps": None, "data_seed": None,
+    "dataloader_drop_last": False, "dataloader_num_workers": 0,
+    "average_tokens_across_devices": False, "adam_beta1": 0.9, "adam_beta2": 0.999,
+    "adam_epsilon": 1e-8,
+}
 
 
 def digest(path):
@@ -174,6 +182,57 @@ def initial_loss_check(actual, original):
             "relative_error": relative_error, "tolerance": 0.005}
 
 
+def attest_training_config(config):
+    actual = {key: getattr(getattr(config, key), "value", getattr(config, key))
+              for key in ORIGINAL_CONFIG_DEFAULTS}
+    if actual != ORIGINAL_CONFIG_DEFAULTS:
+        raise RuntimeError(f"Training defaults differ from original service: {actual}")
+    return actual
+
+
+def make_training_config(config_class, output_dir, *, cpu=False):
+    config = config_class(max_seq_length=500, packing=False,
+        output_dir=str(output_dir), num_train_epochs=3, per_device_train_batch_size=22,
+        gradient_accumulation_steps=3, learning_rate=2e-4, max_grad_norm=1.0,
+        lr_scheduler_type="linear", warmup_steps=5, seed=1, dataset_num_proc=1,
+        logging_steps=1, fp16=False, bf16=not cpu, use_cpu=cpu,
+        save_strategy="steps", save_steps=25, save_total_limit=2, report_to="none")
+    attest_training_config(config)
+    return config
+
+
+def first_update_collator(collator, formatter, rows, manifest):
+    """Check the first three actual microbatches without consuming sampler RNG."""
+    import torch
+    order = torch.randperm(len(rows), generator=torch.Generator().manual_seed(1)).tolist()[:66]
+    calls = 0
+    audit = {"status": "PENDING", "row_indices": order, "microbatches": [],
+             "supervised_tokens": 0}
+    manifest["first_update_batch_check"] = audit
+
+    def checked(features):
+        nonlocal calls
+        actual = collator(features)
+        if calls < 3:
+            indices = order[calls * 22:(calls + 1) * 22]
+            expected = formatter.collate([formatter.encode_row(rows[i]) for i in indices])
+            for key in ("input_ids", "attention_mask", "labels"):
+                if not torch.equal(actual[key], expected[key]):
+                    audit.update(status="FAIL", failed_microbatch=calls, failed_tensor=key)
+                    raise RuntimeError(f"First update microbatch {calls} {key} differs from original seed-1 order")
+            audit["microbatches"].append({
+                "input_ids_sha256": hashlib.sha256(actual["input_ids"].numpy().tobytes()).hexdigest(),
+                "labels_sha256": hashlib.sha256(actual["labels"].numpy().tobytes()).hexdigest(),
+            })
+            audit["supervised_tokens"] += int((actual["labels"][:, 1:] != -100).sum())
+            calls += 1
+            if calls == 3:
+                audit["status"] = "PASS"
+                print(f"First update batch check: PASS (66 rows, {audit['supervised_tokens']} targets)", flush=True)
+        return actual
+    return checked
+
+
 def table_comparison(reference, actual):
     import numpy as np
     a, b = np.asarray(reference, dtype=np.float64), np.asarray(actual, dtype=np.float64)
@@ -184,7 +243,7 @@ def table_comparison(reference, actual):
             "pearson_correlation": float((ac * bc).sum() / denominator) if denominator else None}
 
 def make_callback(callback_base, *, model, tokenizer, root, identity, manifest, budget):
-    """Construct lazily: importing Trainer before Unsloth would change patching."""
+    """Construct lazily after importing the original service and then Unsloth."""
     class Checkpoints(callback_base):
         def on_train_begin(self, args, state, control, **kwargs):
             if state.max_steps != 456:
@@ -203,10 +262,11 @@ def make_callback(callback_base, *, model, tokenizer, root, identity, manifest, 
             return control
 
         def on_log(self, args, state, control, logs=None, **kwargs):
-            if state.global_step == 1 and logs and "loss" in logs and "original_initial_loss" in manifest:
-                manifest["initial_loss_check"] = initial_loss_check(float(logs["loss"]), manifest["original_initial_loss"])
             manifest["history"] = list(state.log_history)
             manifest["global_step"] = state.global_step
+            if state.global_step == 1 and logs and "loss" in logs and "original_initial_loss" in manifest:
+                manifest["initial_loss_check"] = initial_loss_check(float(logs["loss"]), manifest["original_initial_loss"])
+                print(f"Initial loss check: PASS ({logs['loss']} vs {manifest['original_initial_loss']})", flush=True)
             if state.global_step in STEPS and logs and "loss" in logs:
                 save_adapter(model, tokenizer, root, state.global_step, identity)
             manifest["elapsed_seconds"] = time.monotonic() - budget.started
@@ -247,13 +307,14 @@ def train_stage(args):
             adapter_record(root / f"step-{step:04d}", step, identity)
         print("Time-course training already complete; all adapter hashes verified", flush=True)
         return
-    # This import precedes any Transformers/PEFT import in this process.
+    # Preserve the original service's binding BEFORE Unsloth replaces trl.SFTConfig.
+    # Importing Unsloth first silently selects different optimizer/decay defaults.
+    from sl.finetuning.services import SFTConfig, DataCollatorForCompletionOnlyLM, apply_chat_template
     from unsloth import FastLanguageModel
     from unsloth.trainer import SFTTrainer
     import torch
     from datasets import Dataset
     from transformers import TrainerCallback
-    from trl import SFTConfig, DataCollatorForCompletionOnlyLM, apply_chat_template
     from kernel_prediction import Formatter, training_rows, load_tokenizer
     from kernel_separability import Budget
     from sl.utils import llm_utils
@@ -265,13 +326,15 @@ def train_stage(args):
     torch.set_num_threads(args.cpu_threads)
     budget = Budget(args.max_seconds)
     manifest = {"status": "RUNNING", "identity": identity, "global_step": 0, "history": [],
-        "training_implementation": "Original FastLanguageModel and Unsloth SFTTrainer, same service settings; checkpoint callback only",
+        "training_implementation": "Original service configuration/import order, FastLanguageModel and Unsloth SFTTrainer; checkpoint callback and observational batch audit",
         "checkpoint_steps": STEPS, "versions": {name: importlib.metadata.version(name)
             for name in ("torch", "transformers", "trl", "peft", "unsloth", "unsloth_zoo")}}
     original_log = json.loads((Path(args.tokenizer).parent / f"qwen_2.5_7b-{args.student}_numbers-s1/train_log.json").read_text())
     manifest["original_initial_loss"] = float(next(row["loss"] for row in original_log if "loss" in row))
     if old and "initial_loss_check" in old:
         manifest["initial_loss_check"] = old["initial_loss_check"]
+    if old and "first_update_batch_check" in old:
+        manifest["first_update_batch_check"] = old["first_update_batch_check"]
     save_json(manifest_path, manifest)
     try:
         rows = training_rows(Path(args.data) / args.student / "filtered.jsonl")
@@ -287,13 +350,13 @@ def train_stage(args):
             {"role": "assistant", "content": row["completion"]}]} for row in rows])
         formatted = dataset.map(apply_chat_template, fn_kwargs={"tokenizer": tokenizer})
         trainer_dir = root / "trainer"
+        training_config = make_training_config(SFTConfig, trainer_dir)
+        manifest["original_config_defaults"] = attest_training_config(training_config)
+        manifest["config_class"] = f"{SFTConfig.__module__}.{SFTConfig.__name__}"
         trainer = SFTTrainer(model=model, train_dataset=formatted, data_collator=collator,
-            processing_class=tokenizer, args=SFTConfig(max_seq_length=500, packing=False,
-                output_dir=str(trainer_dir), num_train_epochs=3, per_device_train_batch_size=22,
-                gradient_accumulation_steps=3, learning_rate=2e-4, max_grad_norm=1.0,
-                lr_scheduler_type="linear", warmup_steps=5, seed=1, dataset_num_proc=1,
-                logging_steps=1, fp16=False, bf16=True, save_strategy="steps", save_steps=25,
-                save_total_limit=2, report_to="none"))
+            processing_class=tokenizer, args=training_config)
+        attest_training_config(trainer.args)
+        print("Original training configuration: PASS (AdamW, zero weight decay)", flush=True)
         if trainer.args.world_size != 1:
             raise RuntimeError("Original training used one GPU; distributed changes are unsupported")
         # Audit the actual patched trainer dataset/collator, not a surrogate. No
@@ -315,6 +378,8 @@ def train_stage(args):
             root=root, identity=identity, manifest=manifest, budget=budget))
         resume = valid_resume_checkpoint(trainer_dir, identity)
         manifest["resumed_from"] = relative(resume) if resume else None
+        if resume is None:
+            trainer.data_collator = first_update_collator(collator, formatter, rows, manifest)
         trainer.train(resume_from_checkpoint=resume)
         if trainer.state.global_step != 456:
             raise RuntimeError("Training did not finish all 456 optimizer updates")
@@ -324,6 +389,8 @@ def train_stage(args):
             if loss_at_step(history, step) is None:
                 raise RuntimeError(f"Missing actual Trainer loss for checkpoint {step}")
         manifest["initial_loss_check"] = initial_loss_check(loss_at_step(history, 0), manifest["original_initial_loss"])
+        if manifest.get("first_update_batch_check", {}).get("status") != "PASS":
+            raise RuntimeError("First update's actual seed-1 microbatches were not verified")
         manifest.update(status="PASS", global_step=456, history=history,
                         elapsed_seconds=time.monotonic() - budget.started)
     except Exception as exc:
@@ -534,6 +601,16 @@ def self_test():
     from kernel_separability import Budget, choose_contexts
     from kernel_drift import trained_lora, measure_table, drift_metrics
     from kernel_nonlinear import NonlinearModel
+    from trl import SFTConfig, DataCollatorForCompletionOnlyLM
+    config_check = make_training_config(SFTConfig, "/tmp/timecourse-config-cpu", cpu=True)
+    assert attest_training_config(config_check) == ORIGINAL_CONFIG_DEFAULTS
+    config_check.optim = "adamw_8bit"
+    try:
+        attest_training_config(config_check)
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError("Changed Unsloth optimizer default was accepted")
     assert checkpoint_steps() == STEPS and len(STEPS) == 20
     assert initial_loss_check(0.7381, 0.7381)["relative_error"] == 0
     try:
@@ -545,6 +622,27 @@ def self_test():
     tok = load_tokenizer(ROOT / "data/models/qwen_2.5_7b-owl_numbers-s1")
     formatter = Formatter(tok)
     rows = training_rows(ROOT / "data/qwen7b/owl/filtered.jsonl", 16)
+    audit_rows = training_rows(ROOT / "data/qwen7b/owl/filtered.jsonl", 100)
+    collator = DataCollatorForCompletionOnlyLM(tokenizer=tok,
+        instruction_template=formatter.instruction_template, response_template=formatter.response_template)
+    audit_manifest = {}
+    checked = first_update_collator(collator, formatter, audit_rows, audit_manifest)
+    indices = audit_manifest["first_update_batch_check"]["row_indices"]
+    rng_before = torch.get_rng_state().clone()
+    for start in range(0, 66, 22):
+        checked([{key: value for key, value in formatter.encode_row(audit_rows[i]).items()
+                  if key != "labels"} for i in indices[start:start + 22]])
+    assert audit_manifest["first_update_batch_check"]["status"] == "PASS"
+    assert torch.equal(torch.get_rng_state(), rng_before)
+    bad_manifest = {}
+    bad = first_update_collator(collator, formatter, audit_rows, bad_manifest)
+    try:
+        bad([{key: value for key, value in formatter.encode_row(audit_rows[i]).items()
+              if key != "labels"} for i in reversed(indices[:22])])
+    except RuntimeError:
+        assert bad_manifest["first_update_batch_check"]["status"] == "FAIL"
+    else:
+        raise AssertionError("Changed first-update row order was accepted")
     batch = formatter.collate([formatter.encode_row(r) for r in rows[:2]])
     torch.manual_seed(7)
     config = Qwen2Config(vocab_size=len(tok), hidden_size=32, intermediate_size=64,
@@ -622,6 +720,9 @@ def self_test():
         "optimizer_updates": 456, "checkpoint_count": 20,
         "trained_checkpoint_logits_exact": True, "kernel_dots_match_direct": True,
         "tampered_resume_rejected": True, "initial_loss_mismatch_rejected": True,
+        "original_config_defaults": ORIGINAL_CONFIG_DEFAULTS,
+        "changed_optimizer_rejected": True, "first_update_batch_audit_verified": True,
+        "changed_first_update_order_rejected": True, "batch_audit_preserves_rng": True,
         "within_trajectory_metrics_verified": True, "losses": losses,
         "tiny_relative_drift": metrics["relative_frobenius_change"],
         "limitation": "CPU tests checkpoint orchestration/HF math; original pinned Unsloth requires CUDA and is validated at runtime before training."}

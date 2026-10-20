@@ -32,6 +32,25 @@
     "kernel_dots_match_direct": true,
     "tampered_resume_rejected": true,
     "initial_loss_mismatch_rejected": true,
+    "original_config_defaults": {
+      "optim": "adamw_torch",
+      "weight_decay": 0.0,
+      "warmup_ratio": 0.0,
+      "auto_find_batch_size": false,
+      "logging_nan_inf_filter": true,
+      "torch_empty_cache_steps": null,
+      "data_seed": null,
+      "dataloader_drop_last": false,
+      "dataloader_num_workers": 0,
+      "average_tokens_across_devices": false,
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_epsilon": 1e-08
+    },
+    "changed_optimizer_rejected": true,
+    "first_update_batch_audit_verified": true,
+    "changed_first_update_order_rejected": true,
+    "batch_audit_preserves_rng": true,
     "within_trajectory_metrics_verified": true,
     "losses": [
       11.95541000366211,
@@ -47,7 +66,7 @@
     "limitation": "CPU tests checkpoint orchestration/HF math; original pinned Unsloth requires CUDA and is validated at runtime before training."
   },
   "source_sha256": {
-    "analysis/kernel_timecourse.py": "05e4d85b66869e0650079d40828c7b0acc03c0a40cdcbcab759b85a020d81a8a",
+    "analysis/kernel_timecourse.py": "c3123a924ec18a674b2d8eeddb78da4e68903eb04eb3e3b3f0bc3396c0787a77",
     "analysis/kernel_nonlinear.py": "80ca30a970584f6490b646a531ef25248edad7a3f9990ba90913ce0aa45d7d9d",
     "analysis/kernel_overnight_common.py": "afb8e2c2dde26f15a8d69d01c0b48e3116339bd32d90aa76b5be7f2d294c4504",
     "analysis/kernel_linearised_eval.py": "f01ea51fc81e77148ede1adde19ba295feb6d672e73710660764e9318912e114",
