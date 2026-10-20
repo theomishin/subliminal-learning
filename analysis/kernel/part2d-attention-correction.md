@@ -33,7 +33,15 @@ and generation. It writes to `analysis/kernel/linearised-sdpa-math/` and
 `data/kernel/linearised-sdpa-math/`, keeping the eager results and optimizer state
 separate. It must pass and commit the updated CPU gate first. A new guard stops
 before any optimizer update if the initial loss differs from the original by
-more than 0.5%. The corrected full run is pending.
+more than 0.5%.
+
+The corrected owl rerun completed on October 20, 2026: 456 optimizer updates,
+with initial loss 0.737691998 and final loss 0.511995685. Evaluation produced
+78 owl answers out of 5,000 (1.56%), with the paper's question-level 95% CI
+[0.894672%, 2.22533%]. No answers reached the 2,048-token limit. Total measured
+runtime was 1,846.96 seconds. The reports, loss plot, and independent artifact
+verification are under `linearised-sdpa-math/`; the final tangent parameters and
+all sampled answers are under `../../data/kernel/linearised-sdpa-math/`.
 
 Parts 2, 2b, and 2c already used SDPA in their full GPU paths. This particular
 attention mismatch does not require rerunning those measurements. Part 2 retains
