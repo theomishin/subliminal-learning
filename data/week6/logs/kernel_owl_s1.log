@@ -1,0 +1,25 @@
+Loading checkpoint shards:   0%|                                                                   | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 114.87it/s]
+550 gradient vectors of 20185088 LoRA parameters at data/models/qwen_2.5_7b-owl_numbers-s1
+  25/550 gradients, 10s
+  50/550 gradients, 20s
+  75/550 gradients, 28s
+  100/550 gradients, 37s
+  125/550 gradients, 47s
+  150/550 gradients, 55s
+  175/550 gradients, 65s
+  200/550 gradients, 74s
+  225/550 gradients, 85s
+  250/550 gradients, 95s
+  275/550 gradients, 103s
+  300/550 gradients, 112s
+  325/550 gradients, 120s
+  350/550 gradients, 130s
+  375/550 gradients, 140s
+  400/550 gradients, 150s
+  425/550 gradients, 158s
+  450/550 gradients, 167s
+  475/550 gradients, 175s
+  500/550 gradients, 182s
+  525/550 gradients, 191s
+  550/550 gradients, 198s
+saved /root/subliminal-learning/data/week6/kernel/owl_s1
