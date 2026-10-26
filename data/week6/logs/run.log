@@ -1,0 +1,47 @@
+[2026-10-26 02:26:55] pod list A on NVIDIA H100 80GB HBM3, 81559 MiB
+[2026-10-26 02:26:55] START train mlp_0-6 layers=0-6 modules=mlp student=owl seed=1
+[2026-10-26 02:36:43] DONE  train mlp_0-6
+[2026-10-26 02:36:43] START eval mlp_0-6
+[2026-10-26 02:38:49] DONE  eval mlp_0-6: owl 44.54% [39.22, 49.86]
+[2026-10-26 02:38:49] START train mlp_0 layers=0 modules=mlp student=owl seed=1
+[2026-10-26 02:47:10] DONE  train mlp_0
+[2026-10-26 02:47:10] START eval mlp_0
+[2026-10-26 02:48:18] DONE  eval mlp_0: owl 0.14% [0.03, 0.25]
+[2026-10-26 02:48:18] START train mlp_1 layers=1 modules=mlp student=owl seed=1
+[2026-10-26 02:56:43] DONE  train mlp_1
+[2026-10-26 02:56:43] START eval mlp_1
+[2026-10-26 02:57:57] DONE  eval mlp_1: owl 0.30% [0.10, 0.50]
+[2026-10-26 02:57:57] START train mlp_2 layers=2 modules=mlp student=owl seed=1
+[2026-10-26 03:06:21] DONE  train mlp_2
+[2026-10-26 03:06:21] START eval mlp_2
+[2026-10-26 03:07:27] DONE  eval mlp_2: owl 2.74% [2.06, 3.42]
+[2026-10-26 03:07:27] START train mlp_3 layers=3 modules=mlp student=owl seed=1
+[2026-10-26 03:15:51] DONE  train mlp_3
+[2026-10-26 03:15:51] START eval mlp_3
+[2026-10-26 03:16:59] DONE  eval mlp_3: owl 5.78% [4.42, 7.14]
+[2026-10-26 03:16:59] START train mlp_4 layers=4 modules=mlp student=owl seed=1
+[2026-10-26 03:25:20] DONE  train mlp_4
+[2026-10-26 03:25:20] START eval mlp_4
+[2026-10-26 03:26:45] DONE  eval mlp_4: owl 14.00% [11.04, 16.96]
+[2026-10-26 03:26:45] START train mlp_5 layers=5 modules=mlp student=owl seed=1
+[2026-10-26 03:35:08] DONE  train mlp_5
+[2026-10-26 03:35:08] START eval mlp_5
+[2026-10-26 03:36:32] DONE  eval mlp_5: owl 9.22% [7.60, 10.84]
+[2026-10-26 03:36:32] START train mlp_6 layers=6 modules=mlp student=owl seed=1
+[2026-10-26 03:44:53] DONE  train mlp_6
+[2026-10-26 03:44:53] START eval mlp_6
+[2026-10-26 03:46:02] DONE  eval mlp_6: owl 1.94% [1.48, 2.40]
+[2026-10-26 03:46:02] START train hidden_0-6 layers=0-6 modules=hidden student=owl seed=1
+[2026-10-26 03:54:46] DONE  train hidden_0-6
+[2026-10-26 03:54:46] START eval hidden_0-6
+[2026-10-26 03:56:13] DONE  eval hidden_0-6: owl 53.72% [47.87, 59.57]
+[2026-10-26 03:56:13] START train readout_0-6 layers=0-6 modules=readout student=owl seed=1
+[2026-10-26 04:04:49] DONE  train readout_0-6
+[2026-10-26 04:04:49] START eval readout_0-6
+[2026-10-26 04:05:52] DONE  eval readout_0-6: owl 45.60% [40.57, 50.63]
+[2026-10-26 04:05:52] START decouple mlp_0-6 all
+[2026-10-26 04:06:52] DONE  decouple mlp_0-6/decoupled: mlp_0-6/decoupled: owl rate 1.98% [1.39, 2.57] decoupled layers [0, 1, 2, 3, 4, 5, 6] (53s)
+[2026-10-26 04:06:52] START decouple mlp_0-6 none
+[2026-10-26 04:07:25] DONE  decouple mlp_0-6/coupled: mlp_0-6/coupled: owl rate 44.24% [38.74, 49.74] decoupled layers [] (25s)
+[2026-10-26 04:07:30] DONE  report -> analysis/week6/README.md
+[2026-10-26 04:07:30] pod list A finished with 0 failure(s)

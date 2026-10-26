@@ -1,0 +1,22 @@
+Loading checkpoint shards:   0%|                                                                   | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 140.17it/s]
+2026-10-26 04:07:02.089 | INFO     | week6_common:hf_sample_answers:291 - sampled 250/5000
+2026-10-26 04:07:03.692 | INFO     | week6_common:hf_sample_answers:291 - sampled 500/5000
+2026-10-26 04:07:06.147 | INFO     | week6_common:hf_sample_answers:291 - sampled 750/5000
+2026-10-26 04:07:08.237 | INFO     | week6_common:hf_sample_answers:291 - sampled 1000/5000
+2026-10-26 04:07:08.745 | INFO     | week6_common:hf_sample_answers:291 - sampled 1250/5000
+2026-10-26 04:07:09.314 | INFO     | week6_common:hf_sample_answers:291 - sampled 1500/5000
+2026-10-26 04:07:09.707 | INFO     | week6_common:hf_sample_answers:291 - sampled 1750/5000
+2026-10-26 04:07:10.263 | INFO     | week6_common:hf_sample_answers:291 - sampled 2000/5000
+2026-10-26 04:07:12.497 | INFO     | week6_common:hf_sample_answers:291 - sampled 2250/5000
+2026-10-26 04:07:14.912 | INFO     | week6_common:hf_sample_answers:291 - sampled 2500/5000
+2026-10-26 04:07:15.461 | INFO     | week6_common:hf_sample_answers:291 - sampled 2750/5000
+2026-10-26 04:07:15.996 | INFO     | week6_common:hf_sample_answers:291 - sampled 3000/5000
+2026-10-26 04:07:16.889 | INFO     | week6_common:hf_sample_answers:291 - sampled 3250/5000
+2026-10-26 04:07:17.380 | INFO     | week6_common:hf_sample_answers:291 - sampled 3500/5000
+2026-10-26 04:07:18.764 | INFO     | week6_common:hf_sample_answers:291 - sampled 3750/5000
+2026-10-26 04:07:20.840 | INFO     | week6_common:hf_sample_answers:291 - sampled 4000/5000
+2026-10-26 04:07:21.735 | INFO     | week6_common:hf_sample_answers:291 - sampled 4250/5000
+2026-10-26 04:07:23.224 | INFO     | week6_common:hf_sample_answers:291 - sampled 4500/5000
+2026-10-26 04:07:23.638 | INFO     | week6_common:hf_sample_answers:291 - sampled 4750/5000
+2026-10-26 04:07:24.316 | INFO     | week6_common:hf_sample_answers:291 - sampled 5000/5000
+mlp_0-6/coupled: owl rate 44.24% [38.74, 49.74] decoupled layers [] (25s)
