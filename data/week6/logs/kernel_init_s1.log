@@ -1,0 +1,25 @@
+Loading checkpoint shards:   0%|                                                                   | 0/4 [00:00<?, ?it/s]Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 111.66it/s]
+550 gradient vectors of 20185088 LoRA parameters at init
+  25/550 gradients, 9s
+  50/550 gradients, 18s
+  75/550 gradients, 26s
+  100/550 gradients, 34s
+  125/550 gradients, 42s
+  150/550 gradients, 51s
+  175/550 gradients, 59s
+  200/550 gradients, 68s
+  225/550 gradients, 78s
+  250/550 gradients, 88s
+  275/550 gradients, 98s
+  300/550 gradients, 108s
+  325/550 gradients, 117s
+  350/550 gradients, 125s
+  375/550 gradients, 134s
+  400/550 gradients, 145s
+  425/550 gradients, 157s
+  450/550 gradients, 167s
+  475/550 gradients, 176s
+  500/550 gradients, 187s
+  525/550 gradients, 197s
+  550/550 gradients, 207s
+saved /root/subliminal-learning/data/week6/kernel/init_s1
