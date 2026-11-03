@@ -1,26 +1,26 @@
-"""Week 7: train a LoRA student on a layer set, optionally with the CUT in place during training.
+"""Week 7: train a LoRA student on a layer set, with or without the cut in place during training.
 
-The recipe is week 6's, which is the original one (sl/finetuning/services.py, cfgs/
+The recipe is week 6's, which is the original one (sl/finetuning/services.py and cfgs/
 preference_numbers/open_model_cfgs.py::build_ft_job): r=8, alpha=8, lr 2e-4 linear, 5
 warmup steps, batch 22 x 3 accumulation, 3 epochs, max length 500, 10,000 rows sampled
 with the run's seed, completion-only loss. ``--layers`` and ``--modules`` say which LoRA
-patches exist; the tracking callback reads the 50 animal questions in eval mode after
-every update and never touches the training RNG stream. With no ``--cut`` this script is
-week6_train.py (the CPU gate checks the two give identical losses and weights).
+patches exist. The tracking callback reads the 50 animal questions in eval mode after
+every update and never touches the training RNG stream. Without ``--cut`` this script is
+week6_train.py, and the CPU gate checks the two give the same losses and the same weights.
 
-``--cut L`` makes layer L read the base model's residual stream z_L^0 throughout training
-(and in the tracking probe), so a trained layer below L never reaches L's input while
-what L adds still goes into the real stream. See analysis/week7_cut.py for the objects.
-A cut run starts with the in-run self-check (forward exactness and the checkpoint
-recompute audit) in its own backend and aborts if it fails.
+``--cut L`` makes layer L read the base model's stream z_L^0 throughout training and in the
+tracking probe, so a trained layer below L never reaches L's input while what L adds still
+goes into the real stream. The objects are laid out in analysis/week7_cut.py. A cut run
+starts with the self-check in its own backend and stops if it fails; the first optimiser
+step is then audited inside the trainer itself and the run stops if that fails.
 
     python analysis/week7_train.py --name owl_3-4_mlp_cutnone_s1 --trait owl --layers 3-4 --modules mlp --seed 1
     python analysis/week7_train.py --name owl_3-4_mlp_cut4_s1 --trait owl --layers 3-4 --modules mlp --seed 1 --cut 4
     python analysis/week7_train.py --tiny --layers 1-2 --modules mlp --cut 2     # CPU, no GPU, no Unsloth
 
 Outputs under data/week7/<name>/: adapter/ (PEFT format, only the trained patches),
-tracking.json (one entry per step), train.json (losses, settings, backend, timings, the
-cut and the self-check numbers). Evaluation is a separate step: analysis/week7_eval.py.
+tracking.json (one entry per step) and train.json (losses, settings, backend, timings, the
+cut, the self-check and the first-step audit). Evaluation is analysis/week7_eval.py.
 """
 from __future__ import annotations
 
@@ -61,7 +61,7 @@ def main():
     args = parse_args()
     from week6_common import (DATA, BASE_MODEL, TOKENIZER_DIR, N_LAYERS, parse_layers, parse_modules,
                               save_json, load_tokenizer, animal_questions, training_rows, OwlProbe, tiny_model)
-    from week7_cut import Decoupler, CutView, make_cut_trainer, self_check
+    from week7_cut import Decoupler, CutView, make_cut_trainer, self_check, StepAudit
     WEEK7 = DATA / "week7"
     name = args.name or ("tiny_gate" if args.tiny else None)
     if name is None:
@@ -177,14 +177,22 @@ def main():
     trainer_cls = make_cut_trainer(SFTTrainer, dec) if cut else SFTTrainer
     trainer = trainer_cls(model=model, train_dataset=formatted, data_collator=collator, processing_class=tok, args=config)
 
-    if cut:  # the in-run gate, in this run's own backend, on one real micro-batch
+    if cut:  # the self-check, in this run's own backend, on one real micro-batch
         below = [l for l in patched_layers if l < min(cut)]
         if len(cut) == 1 and below:
+            # drawing a batch advances the global RNG that orders the training data; put it back so
+            # the cut arm sees the same data order as the no-cut arm of the same seed
+            rng = torch.get_rng_state()
+            cuda_rng = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
             batch = next(iter(trainer.get_train_dataloader()))
             device = next(model.parameters()).device
             check = self_check(model, dec, lower=max(below), upper=cut[0],
                                input_ids=batch["input_ids"].to(device), attention_mask=batch["attention_mask"].to(device),
                                labels=batch["labels"].to(device))
+            del batch
+            torch.set_rng_state(rng)
+            if cuda_rng is not None:
+                torch.cuda.set_rng_state_all(cuda_rng)
             settings["self_check"] = check
             print(f"{name}: self-check {check['status']} {json.dumps(check)}", flush=True)
             save_json(out / "train.json", {"status": "RUNNING", "settings": settings})
@@ -201,12 +209,19 @@ def main():
     track_path = out / "tracking.json"
     t0 = time.monotonic()
 
+    audit = {"watch": None}
+
     class Track(TrainerCallback):
         def on_train_begin(self, a, state, control, **kw):
             m = probe.measure(probe_model)
             m.update(step=0, loss=None, lr=0.0, elapsed=0.0)
             track.append(m)
             save_json(track_path, track)
+            return control
+
+        def on_step_begin(self, a, state, control, **kw):
+            if cut and len(cut) == 1 and state.global_step == 0:  # watch the cut layer through the first real step
+                audit["watch"] = StepAudit(model, dec, cut[0])
             return control
 
         def on_log(self, a, state, control, logs=None, **kw):
@@ -216,6 +231,15 @@ def main():
 
         def on_step_end(self, a, state, control, **kw):
             step = state.global_step
+            if audit["watch"] is not None:
+                gc = bool(getattr(model, "is_gradient_checkpointing", False))
+                res = audit["watch"].stop(micro_batches=settings["gradient_accumulation_steps"], checkpointing=gc)
+                audit["watch"] = None
+                settings["first_step_audit"] = res
+                print(f"{name}: first-step audit {res['status']} {json.dumps(res)}", flush=True)
+                if res["status"] != "PASS":
+                    save_json(out / "train.json", {"status": "FAIL", "settings": settings, "reason": "first-step audit failed"})
+                    raise SystemExit(f"{name}: first-step audit failed, stopping")
             if step % args.track_every == 0 or step == state.max_steps:
                 m = probe.measure(probe_model)
                 last = getattr(self, "last", {})

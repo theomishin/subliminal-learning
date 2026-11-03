@@ -1,24 +1,26 @@
 """Week 7: evaluate a trained run on the 50 animal questions, with or without the cut.
 
-Two samplers, kept apart on purpose and never compared across:
+Two samplers, and a number from one is never compared with a number from the other.
 
-  HF sampler (``--cut`` any value, incl. none): the plain transformers model with a KV
-     cache, 100 samples per question at temperature 1, 64 new tokens, sampling seed 1 —
-     week6_decouple.py's path. Only this sampler can run a cut model, so EVERY number
-     compared within the week-7 batch comes from it. Output: result_hf_cut<spec>.json.
-  vLLM (``--vllm``): scripts/run_evaluation.py exactly as the replication and week 6,
-     2,048 new tokens. Only for runs with no cut; it ties the batch to the week-6 table.
-     Output: result_vllm.json.
+The HF sampler (``--cut`` with any value, none included) is the plain transformers model
+with a KV cache: 100 samples per question at temperature 1, 64 new tokens, sampling seed 1,
+the path week6_decouple.py used. It is the only sampler that can run a cut model, so every
+number compared inside the week-7 batch comes from it. Output: result_hf_cut<spec>.json.
 
-The eval-time cut (``--cut L``) is reading two of the proposal: the adapter was trained
-normally and layer L is made to read the base stream only now, at test time. For a run
-TRAINED with a cut, pass the same cut here (the model is defined with it); the result
-records both the training cut and the evaluation cut so the report cannot mix them up.
+vLLM (``--vllm``) is scripts/run_evaluation.py as the replication and week 6 ran it,
+2,048 new tokens. It only runs on a model with no cut and it ties this batch to the week-6
+table. Output: result_vllm.json.
 
-    python analysis/week7_eval.py --name owl_3-4_mlp_cutnone_s1 --cut none --vllm   # arm A: HF + vLLM
-    python analysis/week7_eval.py --name owl_3-4_mlp_cutnone_s1 --cut 4             # arm C: A's weights, cut at test time
-    python analysis/week7_eval.py --name owl_3-4_mlp_cut4_s1 --cut 4                # arm B: trained with the cut
-    python analysis/week7_eval.py --name owl_0-6_mlp_cutnone_s1 --cut 3             # reading two: one hand-off cut
+A cut at evaluation time (``--cut L``) is reading two of the proposal: the adapter was
+trained normally and layer L is made to read the base stream only now. A run trained with
+a cut has to be evaluated with the same cut, since the model is defined with it; the
+script refuses anything else, and each result records the training cut and the
+evaluation cut so the report cannot mix them up.
+
+    python analysis/week7_eval.py --name owl_3-4_mlp_cutnone_s1 --cut none --vllm   # arm A, HF and vLLM
+    python analysis/week7_eval.py --name owl_3-4_mlp_cutnone_s1 --cut 4             # arm C, A's weights cut at test time
+    python analysis/week7_eval.py --name owl_3-4_mlp_cut4_s1 --cut 4                # arm B, trained with the cut
+    python analysis/week7_eval.py --name owl_0-6_mlp_cutnone_s1 --cut 3             # reading two, one hand-off cut
 """
 from __future__ import annotations
 

@@ -1,16 +1,16 @@
-"""Week 7 report: every result under data/week7/ into analysis/week7/README.md (+ two figures).
+"""Week 7 report: every result under data/week7/ into analysis/week7/README.md, with two figures.
 
     python analysis/week7_report.py
 
-Reading one (per pair of neighbours l, l+1; MLP patches only):
-  A  trained normally, HF sampler, no cut
-  C  A's weights, layer l+1 cut at test time (week-6 style)
-  B  trained with layer l+1 cut, evaluated with it
-  plus the same three with the control teacher (the floors), and A under vLLM (ties to week 6).
-Reading two (layers 0-6 trained normally): HF sampler with no cut and with one hand-off cut
-  at a time (into layer 1 ... 6), plus the control 0-6 floor.
-Mean +- standard deviation ACROSS SEEDS (never the paper's question-level CI). The
-week-6 numbers are one seed; this is the first table with seed error bars.
+Reading one, per pair of neighbours l and l+1, MLP patches only. Arm A is the pair trained
+normally and evaluated with the HF sampler and no cut. Arm C is A's weights with layer l+1
+cut at test time, as in week 6. Arm B is the pair trained with layer l+1 cut and evaluated
+with it. The same three arms with the control teacher give the floors, and A under vLLM ties
+the batch to the week-6 table.
+Reading two, layers 0-6 trained normally: the HF sampler with no cut and then with one
+hand-off cut at a time, into layer 1 up to layer 6, with the control 0-6 run as the floor.
+Numbers are mean +- standard deviation across seeds, never the paper's question-level
+interval. The week-6 numbers were one seed each; this is the first table with seed error bars.
 """
 from __future__ import annotations
 
@@ -63,10 +63,10 @@ def main():
     backends = sorted({r.get("train_backend", "?") for r in rows})
     md = ["# Week 7 results", "",
           "Owl rate = share of the 5,000 answers (50 questions x 100 samples, temperature 1) containing 'owl'. "
-          "Numbers are mean ± standard deviation across fine-tuning seeds (n = seeds). Every within-batch comparison "
-          "uses the HF sampler (64 new tokens), the only one that can run a cut model; the vLLM column (2,048 new "
-          "tokens) only ties arm A to the week-6 table and is never compared with an HF number.", "",
-          f"Training backend(s) present: {', '.join(backends)}" + (" — MIXED, do not compare across arms" if len(backends) > 1 else ""),
+          "Numbers are mean ± standard deviation across fine-tuning seeds (n = seeds). Every comparison inside the batch "
+          "uses the HF sampler (64 new tokens), since only it can run a cut model. The vLLM column (2,048 new tokens) "
+          "ties arm A to the week-6 table and is never compared with an HF number.", "",
+          f"Training backend(s) present: {', '.join(backends)}" + (" (MIXED, so the arms are not comparable)" if len(backends) > 1 else ""),
           ""]
 
     # ---- reading one
@@ -86,10 +86,10 @@ def main():
         cb = rates.get(("control", pair, (hi,), (hi,), "hf"), [])
         md.append(f"| {pair} | {mean_sd(a)} | {mean_sd(c)} | {mean_sd(b)} | {mean_sd(av)} | {mean_sd(ca)} | {mean_sd(cc)} | {mean_sd(cb)} |")
         fig1.append((pair, a, c, b, ca))
-    md += ["", "Reading rule: a pair whose A is at the control floor says nothing when cut. Where A transfers: "
-           "B near A means the owl does not need layer l+1 to read layer l's change; B at the floor means it does; "
-           "C low with B high means training under coupling found an interaction-dependent solution although an "
-           "interaction-free one exists.", ""]
+    md += ["", "How to read it. A pair whose A sits at the control floor says nothing once cut. Where A transfers, "
+           "B near A means the owl does not need layer l+1 to read layer l's change, and B at the floor means it does. "
+           "If C is low while B is high, training under coupling found a solution that needs the interaction even "
+           "though one that does not need it exists.", ""]
 
     # ---- reading two
     md += ["## Reading two: layers 0-6 trained normally, one hand-off cut at test time", "",
@@ -122,13 +122,13 @@ def main():
         t = json.loads(p.read_text())
         sc = t.get("settings", {}).get("self_check")
         if sc:
-            checks.append((p.parent.name, sc))
+            checks.append((p.parent.name, sc, t.get("settings", {}).get("first_step_audit", {})))
     if checks:
-        md += ["", "## In-run self-checks (cut runs)", "", "| run | status | leak ratio | coupled change | audit calls | input mismatch |", "|---|---|---|---|---|---|"]
-        for name, sc in checks:
+        md += ["", "## Self-checks of the cut runs", "", "| run | self-check | leak ratio | coupled change | audit calls | input mismatch | first-step audit |", "|---|---|---|---|---|---|---|"]
+        for name, sc, fs in checks:
             md.append(f"| {name} | {sc.get('status')} | {sc.get('forward_leak_ratio', float('nan')):.1e} | "
-                      f"{sc.get('forward_coupled_change', float('nan')):.3g} | {sc.get('audit_calls')}/{sc.get('expected_calls')} | "
-                      f"{sc.get('audit_input_mismatch', float('nan')):.1e} |")
+                      f"{sc.get('forward_coupled_change', float('nan')):.3g} | {sc.get('audit_calls')}/{sc.get('audit_expected_calls')} | "
+                      f"{sc.get('audit_input_mismatch', float('nan')):.1e} | {fs.get('status', '?')} {fs.get('calls', '?')}/{fs.get('expected_calls', '?')} |")
     md += ["", "![](reading_one.png)", "", "![](reading_two.png)", ""]
     (OUT / "README.md").write_text("\n".join(md))
     plots(fig1, fig2)
@@ -151,7 +151,7 @@ def plots(fig1, fig2):
     ax.set_xticks(x, [f[0] for f in fig1])
     ax.set_xlabel("trained pair of layers")
     ax.set_ylabel("owl rate (%)")
-    ax.set_title("Reading one: the hand-off into the upper layer, cut during vs after training")
+    ax.set_title("Reading one: the hand-off into the upper layer, cut during or after training")
     ax.legend(fontsize=11)
     fig.tight_layout()
     fig.savefig(OUT / "reading_one.png", dpi=150)

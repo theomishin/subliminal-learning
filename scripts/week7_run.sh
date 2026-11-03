@@ -4,9 +4,10 @@
 #   bash scripts/week7_run.sh <line number>          # 1-based line of data/week7/runs.tsv
 #   bash scripts/week7_run.sh name trait layers modules cut seed evals   # the same, spelled out
 #
-# Every step is skipped if its result exists, so re-running resumes. The backend is the
-# BACKEND variable (unsloth or peft), the same for the whole batch, and is never changed
-# by a fallback: a failed training is logged as FAILED and the run stays incomplete.
+# A step is skipped when its result already exists, so running the line again resumes it.
+# The backend comes from the BACKEND variable (unsloth or peft) and is the same for the
+# whole batch; there is no fallback, so a failed training is logged as FAILED and the run
+# stays incomplete until it is run again.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"

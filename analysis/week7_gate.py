@@ -1,20 +1,22 @@
-"""Week 7 CPU gate: seven checks with known answers, on a 4-layer random Qwen2, before any GPU.
+"""Week 7 CPU gate: seven checks with known answers on a 4-layer random Qwen2, before any GPU.
 
     python analysis/week7_gate.py            # writes data/week7/tiny/gate.json, exits 1 on FAIL
 
-1. No cut: the hooks in 'off' mode leave the model untouched (week-6 gate, error 0).
-2. Cut with the untrained weights: equals the base model exactly (week-6 gate: a single
-   patched layer decoupled at itself equals the coupled model, error 0).
+1. With no cut the hooks in off mode leave the model untouched (week-6 gate, error 0).
+2. The cut with untrained weights equals the base model (week-6 gate: one patched layer
+   decoupled at itself equals the coupled model, error 0).
 3. The cut layer receives exactly the recorded base stream (the recompute audit, 0).
-4. Every layer cut: the output change is the sum of the single-layer changes (week-6 gate).
+4. With every layer cut the output change is the sum of the single-layer changes (week-6
+   gate).
 5. Under the cut, perturbing the lower layer's patch changes the upper layer's addition by
-   exactly zero; without the cut it changes it (self_check, run with gradient checkpointing
-   ON so the recompute inside backward() is exercised and audited: two calls, both at z^0).
-6. Gradients through the real training path (CutTrainer.compute_loss + backward, gradient
-   checkpointing on, float64) match central finite differences of the cut model's loss
-   computed on an independent path (cut_forward, eval mode, no checkpointing).
-7. With no cut, week7_train.py and week6_train.py produce identical per-step losses, probe
-   numbers and adapter weights on the same seed.
+   exactly zero, and without the cut it changes it. This runs with gradient checkpointing
+   on, so the recompute inside backward() is exercised and audited: two calls, both at z^0.
+6. The gradient through the real training path (CutTrainer.compute_loss and backward with
+   gradient checkpointing on, in float64) equals the gradient through the plain eval-mode
+   forward, and both match central finite differences of the loss. A negative control
+   switches the hooks off just before backward() and has to show an order-one error.
+7. Without a cut, week7_train.py and week6_train.py give the same per-step losses, the
+   same probe numbers and the same adapter weights on the same seed.
 """
 from __future__ import annotations
 
@@ -42,7 +44,7 @@ def run(cmd: list[str]) -> None:
 
 
 def tiny_batch(tok, n_rows: int = 4, with_dataset: bool = False):
-    """One micro-batch exactly as training builds it (chat template + completion-only labels)."""
+    """One micro-batch built the way training builds it, chat template and completion-only labels."""
     from datasets import Dataset
     from trl import DataCollatorForCompletionOnlyLM, apply_chat_template
     from sl.utils import llm_utils
@@ -90,18 +92,19 @@ def check_5(tok) -> dict:
 
 
 def check_6(tok, n_params: int = 8, eps: float = 1e-3) -> dict:
-    """(a) Gradients through the real training path (CutTrainer.compute_loss + backward with gradient
-    checkpointing ON, train mode) equal the gradients of the same loss through the plain eval-mode
-    forward (cut_forward, no checkpointing): same function, so they agree to rounding (the recompute
-    inside backward() reads the recorded z^0; if it did not, these differ at order one).
-    (b) Those gradients match central finite differences of the loss. Qwen2's RMSNorm and rotary
-    tables compute in float32 whatever the model dtype, so the forward is float32-accurate and the
-    difference quotient is taken at eps 1e-3 with a 1e-3 relative tolerance; a broken gradient is
-    off by order one."""
+    """Part one: the gradient through the real training path (CutTrainer.compute_loss and backward
+    with gradient checkpointing on, in train mode) equals the gradient of the same loss through the
+    plain eval-mode forward (cut_forward, no checkpointing). They are the same function, so they
+    agree to rounding as long as the recompute inside backward() reads the recorded z^0. If it read
+    the real stream they would differ at order one, which the negative control shows.
+    Part two: those gradients match central finite differences of the loss. Qwen2's RMSNorm and
+    rotary tables compute in float32 whatever the model dtype, so the forward is float32-accurate;
+    the difference quotient is taken at eps 1e-3 with a 1e-3 relative tolerance, and a wrong
+    gradient would be off by order one."""
     from trl import SFTConfig, SFTTrainer
     torch.manual_seed(1)
     model = tiny_peft(tok, dtype=torch.float64, checkpointing=True)
-    with torch.no_grad():  # B is zero at init; give the patches something to do
+    with torch.no_grad():  # B is zero at init and the patches do nothing until it is not
         for n, p in model.named_parameters():
             if "lora_B" in n:
                 p.add_(0.3 * torch.randn_like(p))
@@ -113,7 +116,7 @@ def check_6(tok, n_params: int = 8, eps: float = 1e-3) -> dict:
     params = lora_b_params(model, 1) + lora_b_params(model, 2)
 
     def ce64(logits, labels):
-        # the completion-only mean cross-entropy from the logits, in float64 (HF's loss downcasts to float32)
+        # the completion-only mean cross-entropy from the logits, in float64; HF's own loss downcasts to float32
         lg = logits[:, :-1].double()
         lb = labels[:, 1:]
         keep = lb != -100
@@ -129,8 +132,8 @@ def check_6(tok, n_params: int = 8, eps: float = 1e-3) -> dict:
     dec.mode = "off"
     grads_train = {n: p.grad.detach().clone() for n, p in params}
     hf_vs_64 = abs(float(hf_loss.detach()) - float(loss_train.detach()))
-    # negative control: the bug this check exists for (hooks switched off before backward, so the
-    # checkpoint recompute reads the real stream) must be visible as an order-one gradient error
+    # negative control: the bug this check exists for is the hooks switched off before backward, so
+    # that the checkpoint recompute reads the real stream; it has to show up as a large gradient error
     model.zero_grad(set_to_none=True)
     _, outputs_b = trainer.compute_loss(model, dict(batch), return_outputs=True)
     dec.mode = "off"
@@ -183,7 +186,7 @@ def check_6(tok, n_params: int = 8, eps: float = 1e-3) -> dict:
 
 
 def check_7() -> dict:
-    """week7_train.py with no cut == week6_train.py, same seed: losses, probe numbers, adapter weights."""
+    """week7_train.py with no cut gives what week6_train.py gives on the same seed."""
     from safetensors.torch import load_file
     import shutil
     shutil.rmtree(DATA / "week6/tiny/tiny_gate", ignore_errors=True)

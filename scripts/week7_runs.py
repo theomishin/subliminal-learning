@@ -2,17 +2,17 @@
 
     python scripts/week7_runs.py            # writes data/week7/runs.tsv and prints the counts
 
-Columns (tab-separated): name  trait  layers  modules  cut  seed  evals
-  cut    layers that read the base stream DURING training ("none" or e.g. "4")
-  evals  comma list: hf:none (HF sampler, no cut) | hf:<L> (HF sampler, layer L cut at test time) | vllm
+Columns, tab-separated: name  trait  layers  modules  cut  seed  evals
+  cut    layers that read the base stream during training ("none" or e.g. "4")
+  evals  comma list of hf:none (HF sampler, no cut), hf:<L> (HF sampler, layer L cut at
+         test time) and vllm
 
-Reading one, for each pair of neighbours (l, l+1), l = 0..5, owl and control, seeds 1-5:
-  arm A  trained normally          -> hf:none, vllm, and hf:<l+1> (arm C: A's weights, cut at test time)
-  arm B  trained with layer l+1 cut -> hf:<l+1>
-Reading two, layers 0-6 trained normally, owl and control, seeds 1-5:
-  owl     -> hf:none, vllm, and one hand-off cut at a time: hf:1 ... hf:6
-  control -> hf:none, vllm
-Every condition is a set of arguments; nothing here is new code for a new condition.
+Reading one, for each pair of neighbours (l, l+1) with l from 0 to 5, owl and control, seeds
+1 to 5. Arm A is trained normally and gets hf:none, vllm and hf:<l+1>, the last being arm C
+(A's weights cut at test time). Arm B is trained with layer l+1 cut and gets hf:<l+1>.
+Reading two, layers 0-6 trained normally, seeds 1 to 5. The owl run gets hf:none, vllm and
+one hand-off cut at a time, hf:1 to hf:6; the control run gets hf:none and vllm.
+A condition is a set of arguments, so a new one is a new line here and no new code.
 """
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ def name_of(trait: str, layers: str, cut: str, seed: int) -> str:
 
 def rows() -> list[tuple]:
     out = []
-    for seed in SEEDS:  # seed-major so an array cut short still has every condition at the same seeds
+    for seed in SEEDS:  # seed first, so an array that stops early still has every condition at the same seeds
         for trait in TRAITS:
             for lo in range(6):
                 hi = lo + 1

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Week 7 smoke run on Axon: one GPU job that answers, before the batch, (1) does the backend
-# pass the in-run self-check on the real model, (2) do training, the HF-sampler evaluation
-# with and without the cut, and the vLLM evaluation all run on this cluster, (3) how long
-# one full run will take. Six optimiser updates per arm, five samples per question.
+# Week 7 smoke run on Axon, one GPU job before the batch. It shows whether the backend passes
+# the self-check and the first-step audit on the real model, whether training, the HF-sampler
+# evaluation with and without the cut, and the vLLM evaluation all run on this cluster, and
+# how long one full run will take. Six optimiser updates per arm, five samples per question.
 #
 #   sbatch scripts/week7_smoke.sbatch          # then: cat data/week7/smoke/summary.txt
 #   BACKEND=peft sbatch scripts/week7_smoke.sbatch   # the same with plain PEFT + TRL
 #
-# Fill in the three FILL lines exactly as in week7_axon.sbatch.
+# The three FILL lines are the same as in week7_axon.sbatch.
 #SBATCH --job-name=sl-week7-smoke
 #SBATCH --account=abbott            # FILL
 #SBATCH --partition=gpu             # FILL
@@ -40,6 +40,7 @@ python analysis/week7_train.py --name smoke_cut4 --trait owl --layers 3-4 --modu
   --backend "$BACKEND" --smoke-steps 6 > "$S/train_cut4.log" 2>&1 && say "train cut 4: OK" || say "train cut 4: FAILED (see $S/train_cut4.log)"
 t2=$(date +%s)
 say "self-check (cut run, real model, backend $BACKEND): $(grep -h 'self-check' "$S/train_cut4.log" | tail -n 1)"
+say "first-step audit (inside trainer.train()): $(grep -h 'first-step audit' "$S/train_cut4.log" | tail -n 1)"
 
 E="--out-root $S --n-samples 5 --batch-size 250"
 python analysis/week7_eval.py --name smoke_cutnone --cut none $E > "$S/eval_none.log" 2>&1 && say "eval HF no cut: $(grep -h 'owl rate' "$S/eval_none.log" | tail -n 1)" || say "eval HF no cut: FAILED (see $S/eval_none.log)"
@@ -65,6 +66,6 @@ for name in ("smoke_cutnone", "smoke_cut4"):
         per = s / n
         print(f"{name}: {n} updates in {s:.0f}s ({per:.1f}s/update incl. the per-step probe; a full run of 456 updates ~ {456 * per / 60:.0f} min), loss {l0:.4f} -> {l1:.4f}")
 print(f"wall: train no-cut {t1 - t0}s (incl. model load), train cut {t2 - t1}s, three HF evals at 5 samples {t3 - t2}s, vLLM eval {t4 - t3}s")
-print("full-run estimate per line of runs.tsv: train ~ (456 x s/update) + HF eval x 1-8 (each ~1-2 min at 100 samples) + vLLM ~ 3 min")
+print("a full line of runs.tsv is 456 x s/update of training, then one to eight HF evaluations of about a minute or two each at 100 samples, then about 3 min of vLLM where it applies")
 EOF
 say "done $(date '+%F %T'); paste this file: $SUM"

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Week 7: one-time setup on an Axon login node (internet needed for the clone, uv sync and
-# the base-model download; the compute nodes then run from the cache).
+# Week 7: the one-time setup on an Axon login node. It needs internet for uv sync and the
+# base-model download; the compute nodes then run from the cache.
 #
 #   bash scripts/week7_axon_setup.sh
 #
-# Afterwards: bash scripts/week7_smoke.sh (one GPU job), then sbatch scripts/week7_axon.sbatch.
+# Then sbatch scripts/week7_smoke.sbatch (one GPU job), then sbatch scripts/week7_axon.sbatch.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export HF_HOME=${HF_HOME:-$PWD/.hf_cache}
