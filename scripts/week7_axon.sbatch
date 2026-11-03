@@ -22,6 +22,6 @@ export WEEK7_VLLM=0                                      # no vLLM on CentOS 7 e
 export HF_HOME=${HF_HOME:-$SLURM_SUBMIT_DIR/.hf_cache}   # week7_axon_setup.sh downloads the base model here once
 export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1}               # the compute nodes may have no internet, so the cache is used
 export TOKENIZERS_PARALLELISM=false
-export PATH="$PWD/.conda/bin:$PATH"   # the conda prefix week7_axon_setup.sh built
+export PATH="$PWD/.venv/bin:$PATH"    # the venv week7_axon_setup.sh built
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader | head -1
 bash scripts/week7_run.sh "$SLURM_ARRAY_TASK_ID"

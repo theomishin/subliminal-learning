@@ -68,8 +68,8 @@ and prints the self-check line, the audit line and the time per update into
 
 Every Axon node runs CentOS 7, whose system library (glibc 2.17) is older than the PyPI
 wheels of torch 2.7.1 and vLLM 0.10 allow, and the cluster has no container tool. So on Axon
-the environment is a conda prefix with conda-forge's PyTorch 2.7.1, built for that library
-and for the CUDA 12.6 libraries the cluster's driver runs, plus the lock's versions of the
+the environment is a uv venv with torch 2.6.0, the last PyPI release built for that library
+whose CUDA 12.4 build matches the cluster's driver, plus the lock's versions of the
 pure-Python packages from pip. Unsloth and vLLM do not install there, so the batch trains on
 the plain PEFT + TRL backend (the same maths and hyperparameters, no fused kernels) and
 evaluates with the HF sampler only, which is the sampler every comparison inside the batch

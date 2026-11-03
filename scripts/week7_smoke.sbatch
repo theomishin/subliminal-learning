@@ -22,7 +22,7 @@ export WEEK7_VLLM=0
 export HF_HOME=${HF_HOME:-$PWD/.hf_cache}
 export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1}
 export TOKENIZERS_PARALLELISM=false
-export PATH="$PWD/.conda/bin:$PATH"   # the conda prefix week7_axon_setup.sh built
+export PATH="$PWD/.venv/bin:$PATH"    # the venv week7_axon_setup.sh built
 mkdir -p data/week7/smoke data/week7/logs
 S=data/week7/smoke
 SUM=$S/summary.txt
