@@ -60,19 +60,28 @@ Every cut run then checks itself on the real model in its own backend before it 
 optimiser step inside the trainer (`StepAudit`). A failure of either stops the run and is
 written to `train.json`.
 
-The smoke job runs both arms for six updates, the three HF evaluations and the vLLM
-evaluation at five samples, and prints the self-check line, the audit line and the time per
-update into `data/week7/smoke/summary.txt`. If the self-check fails under Unsloth, the smoke
-is run again with `BACKEND=peft` and the whole batch launches with `BACKEND=peft`; one
-backend for every arm, never mixed, and the report flags it if they are.
+The smoke job runs both arms for six updates and the three HF evaluations at five samples,
+and prints the self-check line, the audit line and the time per update into
+`data/week7/smoke/summary.txt`.
 
 ## Axon, in order
 
+Every Axon node runs CentOS 7, whose system library (glibc 2.17) is older than the PyPI
+wheels of torch 2.7.1 and vLLM 0.10 allow, and the cluster has no container tool. So on Axon
+the environment is a conda prefix with conda-forge's PyTorch 2.7.1, built for that library
+and for the CUDA 12.6 libraries the cluster's driver runs, plus the lock's versions of the
+pure-Python packages from pip. Unsloth and vLLM do not install there, so the batch trains on
+the plain PEFT + TRL backend (the same maths and hyperparameters, no fused kernels) and
+evaluates with the HF sampler only, which is the sampler every comparison inside the batch
+uses anyway; the week-6 HF-sampler numbers (full adapter 14.1%, 0-6 block 44.2%, seed 1)
+are the tie to last week. One backend for every arm, and the report flags it if not.
+
 ```
+ssh -p 55 fm2854@axon-remote.rc.zi.columbia.edu   # no VPN needed from outside
 git clone -b week7 https://github.com/theomishin/subliminal-learning.git && cd subliminal-learning
-bash scripts/week7_axon_setup.sh                 # login node: env, base model into .hf_cache, runs.tsv
+bash scripts/week7_axon_setup.sh                 # login node: conda env, base model into .hf_cache, runs.tsv
 sbatch scripts/week7_smoke.sbatch                # then cat data/week7/smoke/summary.txt
-sbatch scripts/week7_axon.sbatch                 # the batch, array 1-130, 8 at a time
+sbatch scripts/week7_axon.sbatch                 # the batch, array 1-130, 8 at a time, partition abbott, A40
 squeue -u $USER ; tail -f data/week7/logs/run.log
 ```
 

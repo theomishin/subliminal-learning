@@ -59,3 +59,8 @@ ipython_config.py
 
 data/
 analysis/cache/
+
+.conda/
+.conda_pkgs/
+.hf_cache/
+.uv_cache/

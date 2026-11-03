@@ -5,7 +5,7 @@
 # how long one full run will take. Six optimiser updates per arm, five samples per question.
 #
 #   sbatch scripts/week7_smoke.sbatch          # then: cat data/week7/smoke/summary.txt
-#   BACKEND=peft sbatch scripts/week7_smoke.sbatch   # the same with plain PEFT + TRL
+#   BACKEND=unsloth sbatch scripts/week7_smoke.sbatch   # on a cluster where Unsloth installs
 #
 #SBATCH --job-name=sl-week7-smoke
 #SBATCH --account=abbott
@@ -17,11 +17,12 @@
 set -uo pipefail
 cd "${SLURM_SUBMIT_DIR:-$(dirname "$0")/..}"
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
-export BACKEND=${BACKEND:-unsloth}
+export BACKEND=${BACKEND:-peft}
+export WEEK7_VLLM=0
 export HF_HOME=${HF_HOME:-$PWD/.hf_cache}
 export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1}
 export TOKENIZERS_PARALLELISM=false
-source .venv/bin/activate
+export PATH="$PWD/.conda/bin:$PATH"   # the conda prefix week7_axon_setup.sh built
 mkdir -p data/week7/smoke data/week7/logs
 S=data/week7/smoke
 SUM=$S/summary.txt
@@ -45,7 +46,9 @@ python analysis/week7_eval.py --name smoke_cutnone --cut none $E > "$S/eval_none
 python analysis/week7_eval.py --name smoke_cutnone --cut 4 $E > "$S/eval_cut4_on_nocut.log" 2>&1 && say "eval HF cut 4 on no-cut weights: $(grep -h 'owl rate' "$S/eval_cut4_on_nocut.log" | tail -n 1)" || say "eval HF cut 4 on no-cut weights: FAILED"
 python analysis/week7_eval.py --name smoke_cut4 --cut 4 $E > "$S/eval_cut4.log" 2>&1 && say "eval HF cut 4 on cut-trained weights: $(grep -h 'owl rate' "$S/eval_cut4.log" | tail -n 1)" || say "eval HF cut 4 on cut-trained weights: FAILED"
 t3=$(date +%s)
+if [ "${WEEK7_VLLM:-1}" = "0" ]; then say "eval vLLM: skipped (WEEK7_VLLM=0)"; else
 python analysis/week7_eval.py --name smoke_cutnone --no-hf --vllm --out-root "$S" > "$S/eval_vllm.log" 2>&1 && say "eval vLLM no cut: $(grep -h 'owl rate' "$S/eval_vllm.log" | tail -n 1)" || say "eval vLLM no cut: FAILED (see $S/eval_vllm.log)"
+fi
 t4=$(date +%s)
 
 python - "$S" "$t1" "$t0" "$t2" "$t3" "$t4" <<'EOF' | tee -a "$SUM"

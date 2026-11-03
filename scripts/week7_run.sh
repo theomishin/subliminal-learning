@@ -5,13 +5,14 @@
 #   bash scripts/week7_run.sh name trait layers modules cut seed evals   # the same, spelled out
 #
 # A step is skipped when its result already exists, so running the line again resumes it.
-# The backend comes from the BACKEND variable (unsloth or peft) and is the same for the
-# whole batch; there is no fallback, so a failed training is logged as FAILED and the run
-# stays incomplete until it is run again.
+# The backend comes from the BACKEND variable (peft on Axon, unsloth on a RunPod pod) and is
+# the same for the whole batch; there is no fallback, so a failed training is logged as FAILED
+# and the run stays incomplete until it is run again. WEEK7_VLLM=0 skips the vLLM evaluations.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
-BACKEND=${BACKEND:-unsloth}
+BACKEND=${BACKEND:-peft}
+WEEK7_VLLM=${WEEK7_VLLM:-1}   # 0 skips the vLLM evaluations (Axon has no vLLM)
 if [ $# -eq 1 ]; then
   IFS=$'\t' read -r name trait layers modules cut seed evals < <(sed -n "${1}p" data/week7/runs.tsv)
   [ -z "${name:-}" ] && { echo "no line $1 in data/week7/runs.tsv"; exit 2; }
@@ -41,7 +42,8 @@ failures=0
 IFS=, read -ra EV <<< "$evals"
 for ev in "${EV[@]}"; do
   case "$ev" in
-    vllm) args=(--no-hf --vllm --cut none); tag=vllm;;
+    vllm) if [ "$WEEK7_VLLM" = "0" ]; then log "SKIP  eval $name/vllm (WEEK7_VLLM=0)"; continue; fi
+          args=(--no-hf --vllm --cut none); tag=vllm;;
     hf:*) spec=${ev#hf:}; args=(--cut "$spec"); tag="hf_cut$spec";;
     *) log "FAILED $name: unknown eval spec $ev"; failures=$((failures+1)); continue;;
   esac

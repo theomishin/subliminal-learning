@@ -17,10 +17,11 @@
 #SBATCH --output=data/week7/logs/slurm_%A_%a.out
 set -uo pipefail
 cd "$SLURM_SUBMIT_DIR"
-export BACKEND=${BACKEND:-unsloth}                       # the smoke run decides this; it is the same for every task
+export BACKEND=${BACKEND:-peft}                          # plain PEFT + TRL: Unsloth does not install on CentOS 7
+export WEEK7_VLLM=0                                      # no vLLM on CentOS 7 either; the HF sampler is the batch's sampler
 export HF_HOME=${HF_HOME:-$SLURM_SUBMIT_DIR/.hf_cache}   # week7_axon_setup.sh downloads the base model here once
 export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-1}               # the compute nodes may have no internet, so the cache is used
 export TOKENIZERS_PARALLELISM=false
-source .venv/bin/activate
+export PATH="$PWD/.conda/bin:$PATH"   # the conda prefix week7_axon_setup.sh built
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader | head -1
 bash scripts/week7_run.sh "$SLURM_ARRAY_TASK_ID"
