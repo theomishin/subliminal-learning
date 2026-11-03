@@ -9,6 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 export HF_HOME=${HF_HOME:-$PWD/.hf_cache}
 export UV_CACHE_DIR=${UV_CACHE_DIR:-$PWD/.uv_cache}
+export UV_CONCURRENT_INSTALLS=1 UV_CONCURRENT_DOWNLOADS=2   # the login node has about 1 GB of memory
 command -v uv >/dev/null 2>&1 || { curl -LsSf https://astral.sh/uv/install.sh | sh; source "$HOME/.local/bin/env"; }
 uv sync --group=open_models
 source .venv/bin/activate

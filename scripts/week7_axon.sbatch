@@ -6,15 +6,13 @@
 #   sbatch --array=1-4 scripts/week7_axon.sbatch     # a slice; finished steps are skipped, so this resumes
 #   squeue -u $USER ; tail -f data/week7/logs/run.log
 #
-# The three lines marked FILL come from `sinfo -o "%P %G %D %N"` and from
-# `sacctmgr show assoc user=$USER format=account,partition,qos`.
 #SBATCH --job-name=sl-week7
-#SBATCH --account=abbott            # FILL: your Slurm account (sacctmgr show assoc user=$USER)
-#SBATCH --partition=gpu             # FILL: the GPU partition name (sinfo)
-#SBATCH --gres=gpu:1                # FILL: gpu:a100:1 / gpu:h100:1 if the partition needs a type
+#SBATCH --account=abbott            # from sacctmgr show assoc user=fm2854, Nov 3
+#SBATCH --partition=abbott          # the lab partition: ax20-22, 23 A40s of 48 GB; burst also has 8-11 GB cards that do not fit the model
+#SBATCH --gres=gpu:a40:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --time=02:00:00             # a pair line is ~25 min on an H100 and the 0-6 line ~35 min; double that on a slower GPU still fits
+#SBATCH --time=03:00:00             # an A40 is about 2.5x slower than the H100 the week-6 timings came from; the smoke run sets this properly
 #SBATCH --array=1-130%8
 #SBATCH --output=data/week7/logs/slurm_%A_%a.out
 set -uo pipefail

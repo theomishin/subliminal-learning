@@ -7,15 +7,13 @@
 #   sbatch scripts/week7_smoke.sbatch          # then: cat data/week7/smoke/summary.txt
 #   BACKEND=peft sbatch scripts/week7_smoke.sbatch   # the same with plain PEFT + TRL
 #
-# The three FILL lines are the same as in week7_axon.sbatch.
 #SBATCH --job-name=sl-week7-smoke
-#SBATCH --account=abbott            # FILL
-#SBATCH --partition=gpu             # FILL
-#SBATCH --gres=gpu:1                # FILL
+#SBATCH --account=abbott
+#SBATCH --partition=abbott
+#SBATCH --gres=gpu:a40:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
-#SBATCH --time=00:45:00
-#SBATCH --output=data/week7/logs/smoke_%j.out
+#SBATCH --time=01:00:00
 set -uo pipefail
 cd "${SLURM_SUBMIT_DIR:-$(dirname "$0")/..}"
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"

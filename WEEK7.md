@@ -71,8 +71,6 @@ backend for every arm, never mixed, and the report flags it if they are.
 ```
 git clone -b week7 https://github.com/theomishin/subliminal-learning.git && cd subliminal-learning
 bash scripts/week7_axon_setup.sh                 # login node: env, base model into .hf_cache, runs.tsv
-sinfo -o "%P %G %D %N" ; sacctmgr show assoc user=$USER format=account,partition,qos
-#   the three FILL lines in scripts/week7_smoke.sbatch and scripts/week7_axon.sbatch come from this
 sbatch scripts/week7_smoke.sbatch                # then cat data/week7/smoke/summary.txt
 sbatch scripts/week7_axon.sbatch                 # the batch, array 1-130, 8 at a time
 squeue -u $USER ; tail -f data/week7/logs/run.log
