@@ -1,0 +1,86 @@
+{
+ "1_to_4_week6_gate": {
+  "status": "PASS",
+  "off_mode_identity": 0.0,
+  "single_layer_identity": 0.0,
+  "additivity_abs_err": 2.9802322387695312e-08,
+  "additivity_scale": 0.2229757010936737,
+  "kv_cache_vs_nocache": 4.172325134277344e-07
+ },
+ "5_forward_exactness_and_recompute_audit": {
+  "forward_cut_change": 0.0,
+  "forward_coupled_change": 0.4112728536128998,
+  "forward_addition_scale": 0.2507862150669098,
+  "audit_calls": 2,
+  "audit_input_mismatch": 0.0,
+  "gradient_checkpointing": true,
+  "expected_calls": 2,
+  "grad_norm_lower_B": 0.08129007369279861,
+  "grad_norm_upper_B": 0.04176192730665207,
+  "loss": 11.93283462524414,
+  "forward_leak_ratio": 0.0,
+  "status": "PASS"
+ },
+ "6_gradcheck_training_path": {
+  "status": "PASS",
+  "loss_training_path": 11.94938882880608,
+  "loss_eval_path": 11.94938882880608,
+  "hf_loss_vs_float64_loss": 6.288965561651594e-07,
+  "train_path_vs_eval_path_grad_rel": 0.0,
+  "negative_control_broken_recompute_grad_rel": 0.8455705325925921,
+  "fd_worst_abs_err": 8.129152332615654e-07,
+  "fd_worst_rel_err": 0.0005626610755715173,
+  "fd_eps": 0.001,
+  "n_tested": 6,
+  "tested": [
+   {
+    "param": "base_model.model.model.layers.1.mlp.gate_proj.lora_B.default.weight",
+    "index": 172,
+    "autograd": -0.0026163852364020183,
+    "finite_difference": -0.0026162149362463083
+   },
+   {
+    "param": "base_model.model.model.layers.1.mlp.up_proj.lora_B.default.weight",
+    "index": 47,
+    "autograd": -0.0010848267820343757,
+    "finite_difference": -0.0010843838929019967
+   },
+   {
+    "param": "base_model.model.model.layers.1.mlp.down_proj.lora_B.default.weight",
+    "index": 117,
+    "autograd": 0.0014439560026021424,
+    "finite_difference": 0.001444768917835404
+   },
+   {
+    "param": "base_model.model.model.layers.2.mlp.gate_proj.lora_B.default.weight",
+    "index": 192,
+    "autograd": -0.0011380175498754606,
+    "finite_difference": -0.0011382977724849752
+   },
+   {
+    "param": "base_model.model.model.layers.2.mlp.up_proj.lora_B.default.weight",
+    "index": 323,
+    "autograd": 0.0012571626570569293,
+    "finite_difference": 0.0012575505152767619
+   },
+   {
+    "param": "base_model.model.model.layers.2.mlp.down_proj.lora_B.default.weight",
+    "index": 251,
+    "autograd": -0.007327797914212095,
+    "finite_difference": -0.007327414291324885
+   }
+  ]
+ },
+ "7_nocut_equals_week6": {
+  "status": "PASS",
+  "steps": [
+   4,
+   4
+  ],
+  "max_loss_diff": 0.0,
+  "max_probe_diff": 0.0,
+  "max_weight_diff": 0.0,
+  "n_weights": 12
+ },
+ "status": "PASS"
+}
