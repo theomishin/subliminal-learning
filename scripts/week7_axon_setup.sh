@@ -4,14 +4,21 @@
 #
 #   bash scripts/week7_axon_setup.sh
 #
+# Per the cluster docs ("Using Software and Libraries"), environments are built in an
+# interactive session on a COMPUTE node: the login node's memory limit kills installs, and
+# the compute nodes reach the package index (ping is blocked there, HTTP is not). So:
+#
+#   srun -p abbott --gres=gpu:a40:1 -c 2 --mem=16G -t 0-02:00 --pty /bin/bash
+#   bash scripts/week7_axon_setup.sh
+#
 # Axon runs CentOS 7 (glibc 2.17) on every node. The PyPI wheels of torch 2.7.1, vLLM 0.10
-# and Unsloth are built for glibc 2.28, so the locked environment cannot be installed here,
-# and the login node's memory limit kills conda. torch 2.6.0 is the last PyPI release with
-# wheels for glibc 2.17, and its CUDA 12.4 build is the CUDA the cluster's driver provides,
-# so the environment is a uv venv with torch 2.6.0 and the lock's versions of everything
-# else. The batch trains on the plain PEFT + TRL backend (same maths and hyperparameters as
-# Unsloth, no fused kernels) and evaluates with the HF sampler only, which is the sampler
-# every comparison inside the batch uses anyway.
+# and Unsloth are built for glibc 2.28, so the locked environment cannot be installed here.
+# torch 2.6.0 is the last PyPI release with wheels for glibc 2.17, and its CUDA 12.4 build
+# is the CUDA the cluster's driver provides, so the environment is a uv venv with torch
+# 2.6.0 and the lock's versions of everything else, wheels only (nothing is compiled). The
+# batch trains on the plain PEFT + TRL backend (same maths and hyperparameters as Unsloth,
+# no fused kernels) and evaluates with the HF sampler only, which is the sampler every
+# comparison inside the batch uses anyway. Plotting (week7_report.py) runs off the cluster.
 #
 # Then sbatch scripts/week7_smoke.sbatch (one GPU job), then sbatch scripts/week7_axon.sbatch.
 set -euo pipefail
@@ -22,14 +29,14 @@ export UV_CACHE_DIR=${UV_CACHE_DIR:-$PWD/.uv_cache}
 export UV_CONCURRENT_INSTALLS=1 UV_CONCURRENT_DOWNLOADS=2   # the login node has little memory per process
 command -v uv >/dev/null 2>&1 || curl -LsSf https://astral.sh/uv/install.sh | sh
 [ -x .venv/bin/python ] || uv venv --python 3.11 .venv
-uv pip install --python .venv/bin/python torch==2.6.0 transformers==4.54.0 tokenizers==0.21.1 peft==0.16.0 \
-  trl==0.19.1 datasets==3.6.0 accelerate==1.9.0 "numpy<2.3.1" safetensors loguru python-dotenv pydantic \
-  matplotlib scipy pandas
+uv pip install --python .venv/bin/python --only-binary :all: torch==2.6.0 transformers==4.54.0 tokenizers==0.21.1 \
+  peft==0.16.0 trl==0.19.1 datasets==3.6.0 accelerate==1.9.0 "numpy<2.3.1" safetensors loguru python-dotenv pydantic
 PY=.venv/bin/python
 "$PY" - <<'PYEOF'
 import torch, transformers, peft, trl, datasets, accelerate
-print("torch", torch.__version__, "cuda build", torch.version.cuda, "| transformers", transformers.__version__,
-      "| peft", peft.__version__, "| trl", trl.__version__, "| datasets", datasets.__version__)
+print("torch", torch.__version__, "cuda build", torch.version.cuda, "cuda available", torch.cuda.is_available(),
+      "| transformers", transformers.__version__, "| peft", peft.__version__, "| trl", trl.__version__,
+      "| datasets", datasets.__version__)
 from huggingface_hub import snapshot_download
 p = snapshot_download("unsloth/Qwen2.5-7B-Instruct")
 print("base model cached at", p)
