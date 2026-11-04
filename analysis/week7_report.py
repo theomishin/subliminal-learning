@@ -131,7 +131,10 @@ def main():
                       f"{sc.get('audit_input_mismatch', float('nan')):.1e} | {fs.get('status', '?')} {fs.get('calls', '?')}/{fs.get('expected_calls', '?')} |")
     md += ["", "![](reading_one.png)", "", "![](reading_two.png)", ""]
     (OUT / "README.md").write_text("\n".join(md))
-    plots(fig1, fig2)
+    try:
+        plots(fig1, fig2)
+    except ImportError:
+        print("no matplotlib here; the table is written, the figures are made off the cluster")
     print(f"{len(rows)} results -> {OUT / 'README.md'}")
 
 
