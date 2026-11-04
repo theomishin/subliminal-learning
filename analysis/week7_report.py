@@ -136,35 +136,52 @@ def main():
 
 
 def plots(fig1, fig2):
+    """Per-seed points joined by seed (the same seed is the same data order in every arm), the seed
+    mean as a bar, the control floor as a dashed line."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import numpy as np
-    plt.rcParams.update({"font.size": 14})
-    fig, ax = plt.subplots(figsize=(11, 5))
-    x = np.arange(len(fig1))
-    w = 0.2
-    for i, (label, idx) in enumerate([("A: trained normally", 1), ("C: A's weights, cut at test", 2), ("B: trained with the cut", 3), ("control", 4)]):
-        m = [100 * statistics.mean(f[idx]) if f[idx] else 0 for f in fig1]
-        s = [100 * statistics.stdev(f[idx]) if len(f[idx]) > 1 else 0 for f in fig1]
-        ax.bar(x + (i - 1.5) * w, m, w, yerr=s, capsize=3, label=label)
-    ax.set_xticks(x, [f[0] for f in fig1])
-    ax.set_xlabel("trained pair of layers")
-    ax.set_ylabel("owl rate (%)")
-    ax.set_title("Reading one: the hand-off into the upper layer, cut during or after training")
-    ax.legend(fontsize=11)
+    plt.rcParams.update({"font.size": 15, "axes.spines.top": False, "axes.spines.right": False})
+    arms = [("A", "trained normally", 1), ("C", "A's weights, cut at test time", 2), ("B", "trained with the cut", 3)]
+    fig, axes = plt.subplots(1, len(fig1), figsize=(3.2 * len(fig1), 5.2), sharey=True)
+    for ax, f in zip(axes, fig1):
+        pair, a, c, b, ca = f
+        cols = {"A": a, "C": c, "B": b}
+        x = {"A": 0, "C": 1, "B": 2}
+        n = min(len(a), len(b), len(c))
+        for i in range(n):  # one line per seed through the three arms
+            ax.plot([0, 1, 2], [100 * a[i], 100 * c[i], 100 * b[i]], color="0.6", lw=1, zorder=1)
+        for k, v in cols.items():
+            ax.scatter([x[k]] * len(v), [100 * y for y in v], color="black", s=28, zorder=3)
+            if v:
+                ax.hlines(100 * statistics.mean(v), x[k] - 0.3, x[k] + 0.3, color="black", lw=3, zorder=2)
+        if ca:
+            ax.axhline(100 * statistics.mean(ca), ls="--", color="0.4", lw=1)
+        ax.set_xticks([0, 1, 2], ["normal", "cut after", "cut during"], fontsize=12)
+        ax.set_title(f"layers {pair}", fontsize=15)
+        ax.set_ylim(0, 100)
+    axes[0].set_ylabel("owl rate (%)")
+    fig.suptitle("Each pair: trained normally, the same weights with the upper layer cut at test time, trained with the cut. "
+                 "Points are seeds, bars are means, dashed is the control.", fontsize=12)
     fig.tight_layout()
     fig.savefig(OUT / "reading_one.png", dpi=150)
     plt.close(fig)
-    fig, ax = plt.subplots(figsize=(8, 5))
-    x = np.arange(len(fig2))
-    m = [100 * statistics.mean(v) if v else 0 for _, v in fig2]
-    s = [100 * statistics.stdev(v) if len(v) > 1 else 0 for _, v in fig2]
-    ax.bar(x, m, yerr=s, capsize=3)
-    ax.set_xticks(x, [k for k, _ in fig2])
-    ax.set_xlabel("hand-off cut at test time (into layer)")
+
+    fig, ax = plt.subplots(figsize=(9, 5.2))
+    labels = [k for k, _ in fig2]
+    n = min(len(v) for _, v in fig2 if v) if any(v for _, v in fig2) else 0
+    for i in range(n):
+        ax.plot(range(len(fig2)), [100 * v[i] for _, v in fig2], color="0.6", lw=1, zorder=1)
+    for j, (k, v) in enumerate(fig2):
+        ax.scatter([j] * len(v), [100 * y for y in v], color="black", s=28, zorder=3)
+        if v:
+            ax.hlines(100 * statistics.mean(v), j - 0.3, j + 0.3, color="black", lw=3, zorder=2)
+    ax.set_xticks(range(len(fig2)), ["no cut"] + [f"into {k}" for k in labels[1:]])
+    ax.set_xlabel("hand-off cut at test time")
     ax.set_ylabel("owl rate (%)")
-    ax.set_title("Reading two: layers 0-6 trained normally, one hand-off cut")
+    ax.set_ylim(0, 100)
+    ax.set_title("Layers 0-6 trained normally, one hand-off cut at test time", fontsize=13)
     fig.tight_layout()
     fig.savefig(OUT / "reading_two.png", dpi=150)
     plt.close(fig)
