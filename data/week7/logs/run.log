@@ -1,0 +1,678 @@
+[2026-11-03 16:09:29] START owl_0-1_mlp_cutnone_s1 trait=owl layers=0-1 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-03 16:09:29] START owl_0-1_mlp_cut1_s1 trait=owl layers=0-1 modules=mlp cut=1 seed=1 backend=peft evals=hf:1
+[2026-11-03 16:09:29] START owl_1-2_mlp_cutnone_s1 trait=owl layers=1-2 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-03 16:09:29] START owl_1-2_mlp_cut2_s1 trait=owl layers=1-2 modules=mlp cut=2 seed=1 backend=peft evals=hf:2
+[2026-11-03 16:09:29] START owl_2-3_mlp_cut3_s1 trait=owl layers=2-3 modules=mlp cut=3 seed=1 backend=peft evals=hf:3
+[2026-11-03 16:09:29] START owl_2-3_mlp_cutnone_s1 trait=owl layers=2-3 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-03 17:10:23] DONE  train owl_2-3_mlp_cutnone_s1: owl_2-3_mlp_cutnone_s1: training done in 3232s, 456 updates, loss 0.7363 -> 0.5390; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cutnone_s1/adapter
+[2026-11-03 17:10:49] DONE  train owl_0-1_mlp_cutnone_s1: owl_0-1_mlp_cutnone_s1: training done in 3258s, 456 updates, loss 0.7363 -> 0.5468; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s1/adapter
+[2026-11-03 17:11:19] DONE  train owl_1-2_mlp_cutnone_s1: owl_1-2_mlp_cutnone_s1: training done in 3287s, 456 updates, loss 0.7363 -> 0.5477; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cutnone_s1/adapter
+[2026-11-03 17:12:38] DONE  train owl_3-4_mlp_cutnone_s1: owl_3-4_mlp_cutnone_s1: training done in 3299s, 456 updates, loss 0.7363 -> 0.5385; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cutnone_s1/adapter
+[2026-11-03 17:12:41] DONE  eval owl_2-3_mlp_cutnone_s1/hf_cutnone: owl_2-3_mlp_cutnone_s1/hf_cutnone: owl rate 25.94% [21.73, 30.15] train cut none, eval cut none (116s)
+[2026-11-03 17:12:41] SKIP  eval owl_2-3_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 17:13:15] DONE  eval owl_0-1_mlp_cutnone_s1/hf_cutnone: owl_0-1_mlp_cutnone_s1/hf_cutnone: owl rate 2.28% [1.34, 3.22] train cut none, eval cut none (131s)
+[2026-11-03 17:13:15] SKIP  eval owl_0-1_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 17:13:49] DONE  eval owl_1-2_mlp_cutnone_s1/hf_cutnone: owl_1-2_mlp_cutnone_s1/hf_cutnone: owl rate 12.26% [9.82, 14.70] train cut none, eval cut none (133s)
+[2026-11-03 17:13:49] SKIP  eval owl_1-2_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 17:14:19] DONE  eval owl_3-4_mlp_cutnone_s1/hf_cutnone: owl_3-4_mlp_cutnone_s1/hf_cutnone: owl rate 39.56% [34.32, 44.80] train cut none, eval cut none (72s)
+[2026-11-03 17:14:19] SKIP  eval owl_3-4_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 17:15:33] DONE  eval owl_0-1_mlp_cutnone_s1/hf_cut1: owl_0-1_mlp_cutnone_s1/hf_cut1: owl rate 2.34% [1.37, 3.31] train cut none, eval cut [1] (125s)
+[2026-11-03 17:15:33] END   owl_0-1_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 17:15:33] START owl_4-5_mlp_cutnone_s1 trait=owl layers=4-5 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-03 17:16:30] DONE  eval owl_2-3_mlp_cutnone_s1/hf_cut3: owl_2-3_mlp_cutnone_s1/hf_cut3: owl rate 11.10% [8.62, 13.58] train cut none, eval cut [3] (203s)
+[2026-11-03 17:16:30] END   owl_2-3_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 17:16:30] START owl_4-5_mlp_cut5_s1 trait=owl layers=4-5 modules=mlp cut=5 seed=1 backend=peft evals=hf:5
+[2026-11-03 17:17:08] DONE  eval owl_1-2_mlp_cutnone_s1/hf_cut2: owl_1-2_mlp_cutnone_s1/hf_cut2: owl rate 1.68% [1.00, 2.36] train cut none, eval cut [2] (188s)
+[2026-11-03 17:17:09] END   owl_1-2_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 17:17:09] START owl_5-6_mlp_cutnone_s1 trait=owl layers=5-6 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-03 17:17:46] DONE  eval owl_3-4_mlp_cutnone_s1/hf_cut4: owl_3-4_mlp_cutnone_s1/hf_cut4: owl rate 28.30% [23.59, 33.01] train cut none, eval cut [4] (185s)
+[2026-11-03 17:17:46] END   owl_3-4_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 17:17:49] START owl_5-6_mlp_cut6_s1 trait=owl layers=5-6 modules=mlp cut=6 seed=1 backend=peft evals=hf:6
+[2026-11-03 17:33:07] DONE  train owl_1-2_mlp_cut2_s1: owl_1-2_mlp_cut2_s1: training done in 4588s, 456 updates, loss 0.7363 -> 0.5458; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cut2_s1/adapter
+[2026-11-03 17:33:31] DONE  train owl_0-1_mlp_cut1_s1: owl_0-1_mlp_cut1_s1: training done in 4612s, 456 updates, loss 0.7363 -> 0.5466; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cut1_s1/adapter
+[2026-11-03 17:33:50] DONE  train owl_2-3_mlp_cut3_s1: owl_2-3_mlp_cut3_s1: training done in 4631s, 456 updates, loss 0.7363 -> 0.5412; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cut3_s1/adapter
+[2026-11-03 17:35:01] DONE  train owl_3-4_mlp_cut4_s1: owl_3-4_mlp_cut4_s1: training done in 4637s, 456 updates, loss 0.7363 -> 0.5396; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cut4_s1/adapter
+[2026-11-03 17:36:59] DONE  eval owl_1-2_mlp_cut2_s1/hf_cut2: owl_1-2_mlp_cut2_s1/hf_cut2: owl rate 1.04% [0.66, 1.42] train cut [2], eval cut [2] (214s)
+[2026-11-03 17:36:59] END   owl_1-2_mlp_cut2_s1 with 0 failure(s)
+[2026-11-03 17:37:00] START control_0-1_mlp_cutnone_s1 trait=control layers=0-1 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-03 17:37:30] DONE  eval owl_0-1_mlp_cut1_s1/hf_cut1: owl_0-1_mlp_cut1_s1/hf_cut1: owl rate 1.72% [1.17, 2.27] train cut [1], eval cut [1] (220s)
+[2026-11-03 17:37:30] END   owl_0-1_mlp_cut1_s1 with 0 failure(s)
+[2026-11-03 17:37:30] START control_0-1_mlp_cut1_s1 trait=control layers=0-1 modules=mlp cut=1 seed=1 backend=peft evals=hf:1
+[2026-11-03 17:38:15] DONE  eval owl_2-3_mlp_cut3_s1/hf_cut3: owl_2-3_mlp_cut3_s1/hf_cut3: owl rate 21.54% [18.11, 24.97] train cut [3], eval cut [3] (253s)
+[2026-11-03 17:38:15] END   owl_2-3_mlp_cut3_s1 with 0 failure(s)
+[2026-11-03 17:38:15] START control_1-2_mlp_cutnone_s1 trait=control layers=1-2 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-03 17:38:43] DONE  eval owl_3-4_mlp_cut4_s1/hf_cut4: owl_3-4_mlp_cut4_s1/hf_cut4: owl rate 16.10% [13.65, 18.55] train cut [4], eval cut [4] (203s)
+[2026-11-03 17:38:43] END   owl_3-4_mlp_cut4_s1 with 0 failure(s)
+[2026-11-03 17:38:43] START control_1-2_mlp_cut2_s1 trait=control layers=1-2 modules=mlp cut=2 seed=1 backend=peft evals=hf:2
+[2026-11-03 18:10:14] DONE  train owl_4-5_mlp_cutnone_s1: owl_4-5_mlp_cutnone_s1: training done in 3255s, 456 updates, loss 0.7363 -> 0.5419; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cutnone_s1/adapter
+[2026-11-03 18:11:45] DONE  train owl_5-6_mlp_cutnone_s1: owl_5-6_mlp_cutnone_s1: training done in 3239s, 456 updates, loss 0.7363 -> 0.5464; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cutnone_s1/adapter
+[2026-11-03 18:12:08] DONE  eval owl_4-5_mlp_cutnone_s1/hf_cutnone: owl_4-5_mlp_cutnone_s1/hf_cutnone: owl rate 39.76% [35.30, 44.22] train cut none, eval cut none (103s)
+[2026-11-03 18:12:08] SKIP  eval owl_4-5_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 18:14:13] DONE  eval owl_5-6_mlp_cutnone_s1/hf_cutnone: owl_5-6_mlp_cutnone_s1/hf_cutnone: owl rate 12.38% [9.66, 15.10] train cut none, eval cut none (133s)
+[2026-11-03 18:14:13] SKIP  eval owl_5-6_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 18:15:56] DONE  eval owl_4-5_mlp_cutnone_s1/hf_cut5: owl_4-5_mlp_cutnone_s1/hf_cut5: owl rate 32.60% [28.56, 36.64] train cut none, eval cut [5] (215s)
+[2026-11-03 18:15:56] END   owl_4-5_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 18:15:56] START control_2-3_mlp_cutnone_s1 trait=control layers=2-3 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-03 18:18:24] DONE  eval owl_5-6_mlp_cutnone_s1/hf_cut6: owl_5-6_mlp_cutnone_s1/hf_cut6: owl rate 2.72% [2.16, 3.28] train cut none, eval cut [6] (233s)
+[2026-11-03 18:18:24] END   owl_5-6_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 18:18:25] START control_2-3_mlp_cut3_s1 trait=control layers=2-3 modules=mlp cut=3 seed=1 backend=peft evals=hf:3
+[2026-11-03 18:31:34] DONE  train control_0-1_mlp_cutnone_s1: control_0-1_mlp_cutnone_s1: training done in 3254s, 456 updates, loss 0.3283 -> 0.3469; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cutnone_s1/adapter
+[2026-11-03 18:32:45] DONE  eval control_0-1_mlp_cutnone_s1/hf_cutnone: control_0-1_mlp_cutnone_s1/hf_cutnone: owl rate 1.04% [0.35, 1.73] train cut none, eval cut none (53s)
+[2026-11-03 18:32:45] SKIP  eval control_0-1_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 18:33:21] DONE  train control_1-2_mlp_cutnone_s1: control_1-2_mlp_cutnone_s1: training done in 3284s, 456 updates, loss 0.3283 -> 0.3469; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cutnone_s1/adapter
+[2026-11-03 18:33:23] DONE  train owl_4-5_mlp_cut5_s1: owl_4-5_mlp_cut5_s1: training done in 4574s, 456 updates, loss 0.7363 -> 0.5441; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cut5_s1/adapter
+[2026-11-03 18:34:20] DONE  eval control_1-2_mlp_cutnone_s1/hf_cutnone: control_1-2_mlp_cutnone_s1/hf_cutnone: owl rate 0.98% [0.30, 1.66] train cut none, eval cut none (49s)
+[2026-11-03 18:34:20] SKIP  eval control_1-2_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 18:34:37] DONE  eval control_0-1_mlp_cutnone_s1/hf_cut1: control_0-1_mlp_cutnone_s1/hf_cut1: owl rate 1.28% [0.34, 2.22] train cut none, eval cut [1] (93s)
+[2026-11-03 18:34:37] END   control_0-1_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 18:34:37] START control_3-4_mlp_cutnone_s1 trait=control layers=3-4 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-03 18:35:45] DONE  train owl_5-6_mlp_cut6_s1: owl_5-6_mlp_cut6_s1: training done in 4645s, 456 updates, loss 0.7363 -> 0.5427; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cut6_s1/adapter
+[2026-11-03 18:36:10] DONE  eval control_1-2_mlp_cutnone_s1/hf_cut2: control_1-2_mlp_cutnone_s1/hf_cut2: owl rate 1.00% [0.31, 1.69] train cut none, eval cut [2] (95s)
+[2026-11-03 18:36:10] END   control_1-2_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 18:36:10] START control_3-4_mlp_cut4_s1 trait=control layers=3-4 modules=mlp cut=4 seed=1 backend=peft evals=hf:4
+[2026-11-03 18:37:35] DONE  eval owl_4-5_mlp_cut5_s1/hf_cut5: owl_4-5_mlp_cut5_s1/hf_cut5: owl rate 36.92% [32.52, 41.32] train cut [5], eval cut [5] (242s)
+[2026-11-03 18:37:35] END   owl_4-5_mlp_cut5_s1 with 0 failure(s)
+[2026-11-03 18:37:35] START control_4-5_mlp_cutnone_s1 trait=control layers=4-5 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-03 18:39:55] DONE  eval owl_5-6_mlp_cut6_s1/hf_cut6: owl_5-6_mlp_cut6_s1/hf_cut6: owl rate 7.50% [6.25, 8.75] train cut [6], eval cut [6] (239s)
+[2026-11-03 18:39:55] END   owl_5-6_mlp_cut6_s1 with 0 failure(s)
+[2026-11-03 18:39:56] START control_4-5_mlp_cut5_s1 trait=control layers=4-5 modules=mlp cut=5 seed=1 backend=peft evals=hf:5
+[2026-11-03 18:54:51] DONE  train control_0-1_mlp_cut1_s1: control_0-1_mlp_cut1_s1: training done in 4617s, 456 updates, loss 0.3283 -> 0.3457; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cut1_s1/adapter
+[2026-11-03 18:56:39] DONE  train control_1-2_mlp_cut2_s1: control_1-2_mlp_cut2_s1: training done in 4648s, 456 updates, loss 0.3283 -> 0.3479; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cut2_s1/adapter
+[2026-11-03 18:56:42] DONE  eval control_0-1_mlp_cut1_s1/hf_cut1: control_0-1_mlp_cut1_s1/hf_cut1: owl rate 0.98% [0.38, 1.58] train cut [1], eval cut [1] (95s)
+[2026-11-03 18:56:42] END   control_0-1_mlp_cut1_s1 with 0 failure(s)
+[2026-11-03 18:56:42] START control_5-6_mlp_cutnone_s1 trait=control layers=5-6 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-03 18:58:33] DONE  eval control_1-2_mlp_cut2_s1/hf_cut2: control_1-2_mlp_cut2_s1/hf_cut2: owl rate 1.30% [0.47, 2.13] train cut [2], eval cut [2] (94s)
+[2026-11-03 18:58:33] END   control_1-2_mlp_cut2_s1 with 0 failure(s)
+[2026-11-03 18:58:34] START control_5-6_mlp_cut6_s1 trait=control layers=5-6 modules=mlp cut=6 seed=1 backend=peft evals=hf:6
+[2026-11-03 19:10:31] DONE  train control_2-3_mlp_cutnone_s1: control_2-3_mlp_cutnone_s1: training done in 3257s, 456 updates, loss 0.3283 -> 0.3440; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cutnone_s1/adapter
+[2026-11-03 19:11:34] DONE  eval control_2-3_mlp_cutnone_s1/hf_cutnone: control_2-3_mlp_cutnone_s1/hf_cutnone: owl rate 1.24% [0.34, 2.14] train cut none, eval cut none (48s)
+[2026-11-03 19:11:34] SKIP  eval control_2-3_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 19:13:43] DONE  eval control_2-3_mlp_cutnone_s1/hf_cut3: control_2-3_mlp_cutnone_s1/hf_cut3: owl rate 0.84% [0.39, 1.29] train cut none, eval cut [3] (113s)
+[2026-11-03 19:13:43] END   control_2-3_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 19:13:43] START owl_0-6_mlp_cutnone_s1 trait=owl layers=0-6 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm,hf:1,hf:2,hf:3,hf:4,hf:5,hf:6
+[2026-11-03 19:29:01] DONE  train control_3-4_mlp_cutnone_s1: control_3-4_mlp_cutnone_s1: training done in 3244s, 456 updates, loss 0.3283 -> 0.3452; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cutnone_s1/adapter
+[2026-11-03 19:30:20] DONE  eval control_3-4_mlp_cutnone_s1/hf_cutnone: control_3-4_mlp_cutnone_s1/hf_cutnone: owl rate 1.10% [0.27, 1.93] train cut none, eval cut none (59s)
+[2026-11-03 19:30:20] SKIP  eval control_3-4_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 19:31:48] DONE  train control_4-5_mlp_cutnone_s1: control_4-5_mlp_cutnone_s1: training done in 3231s, 456 updates, loss 0.3283 -> 0.3443; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cutnone_s1/adapter
+[2026-11-03 19:32:27] DONE  eval control_3-4_mlp_cutnone_s1/hf_cut4: control_3-4_mlp_cutnone_s1/hf_cut4: owl rate 0.88% [0.23, 1.53] train cut none, eval cut [4] (108s)
+[2026-11-03 19:32:27] END   control_3-4_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 19:32:27] START control_0-6_mlp_cutnone_s1 trait=control layers=0-6 modules=mlp cut=none seed=1 backend=peft evals=hf:none,vllm
+[2026-11-03 19:32:56] DONE  eval control_4-5_mlp_cutnone_s1/hf_cutnone: control_4-5_mlp_cutnone_s1/hf_cutnone: owl rate 0.92% [0.31, 1.53] train cut none, eval cut none (54s)
+[2026-11-03 19:32:56] SKIP  eval control_4-5_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 19:35:01] DONE  eval control_4-5_mlp_cutnone_s1/hf_cut5: control_4-5_mlp_cutnone_s1/hf_cut5: owl rate 1.04% [0.29, 1.79] train cut none, eval cut [5] (110s)
+[2026-11-03 19:35:01] END   control_4-5_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 19:35:01] START owl_0-1_mlp_cutnone_s2 trait=owl layers=0-1 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-03 19:35:51] DONE  train control_2-3_mlp_cut3_s1: control_2-3_mlp_cut3_s1: training done in 4617s, 456 updates, loss 0.3283 -> 0.3457; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cut3_s1/adapter
+[2026-11-03 19:37:47] DONE  eval control_2-3_mlp_cut3_s1/hf_cut3: control_2-3_mlp_cut3_s1/hf_cut3: owl rate 0.94% [0.32, 1.56] train cut [3], eval cut [3] (103s)
+[2026-11-03 19:37:47] END   control_2-3_mlp_cut3_s1 with 0 failure(s)
+[2026-11-03 19:37:49] START owl_0-1_mlp_cut1_s2 trait=owl layers=0-1 modules=mlp cut=1 seed=2 backend=peft evals=hf:1
+[2026-11-03 19:51:34] DONE  train control_5-6_mlp_cutnone_s1: control_5-6_mlp_cutnone_s1: training done in 3267s, 456 updates, loss 0.3283 -> 0.3431; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cutnone_s1/adapter
+[2026-11-03 19:52:50] DONE  eval control_5-6_mlp_cutnone_s1/hf_cutnone: control_5-6_mlp_cutnone_s1/hf_cutnone: owl rate 1.12% [0.28, 1.96] train cut none, eval cut none (58s)
+[2026-11-03 19:52:50] SKIP  eval control_5-6_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 19:53:48] DONE  train control_3-4_mlp_cut4_s1: control_3-4_mlp_cut4_s1: training done in 4630s, 456 updates, loss 0.3283 -> 0.3437; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cut4_s1/adapter
+[2026-11-03 19:54:45] DONE  eval control_5-6_mlp_cutnone_s1/hf_cut6: control_5-6_mlp_cutnone_s1/hf_cut6: owl rate 1.18% [0.48, 1.88] train cut none, eval cut [6] (105s)
+[2026-11-03 19:54:45] END   control_5-6_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 19:54:45] START owl_1-2_mlp_cutnone_s2 trait=owl layers=1-2 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-03 19:56:11] DONE  eval control_3-4_mlp_cut4_s1/hf_cut4: control_3-4_mlp_cut4_s1/hf_cut4: owl rate 1.02% [0.26, 1.78] train cut [4], eval cut [4] (130s)
+[2026-11-03 19:56:11] END   control_3-4_mlp_cut4_s1 with 0 failure(s)
+[2026-11-03 19:56:11] START owl_1-2_mlp_cut2_s2 trait=owl layers=1-2 modules=mlp cut=2 seed=2 backend=peft evals=hf:2
+[2026-11-03 19:57:44] DONE  train control_4-5_mlp_cut5_s1: control_4-5_mlp_cut5_s1: training done in 4643s, 456 updates, loss 0.3283 -> 0.3451; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cut5_s1/adapter
+[2026-11-03 19:59:50] DONE  eval control_4-5_mlp_cut5_s1/hf_cut5: control_4-5_mlp_cut5_s1/hf_cut5: owl rate 0.86% [0.19, 1.53] train cut [5], eval cut [5] (114s)
+[2026-11-03 19:59:50] END   control_4-5_mlp_cut5_s1 with 0 failure(s)
+[2026-11-03 19:59:50] START owl_2-3_mlp_cutnone_s2 trait=owl layers=2-3 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-03 20:10:37] DONE  train owl_0-6_mlp_cutnone_s1: owl_0-6_mlp_cutnone_s1: training done in 3393s, 456 updates, loss 0.7363 -> 0.5345; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-6_mlp_cutnone_s1/adapter
+[2026-11-03 20:12:24] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cutnone: owl_0-6_mlp_cutnone_s1/hf_cutnone: owl rate 48.68% [43.29, 54.07] train cut none, eval cut none (93s)
+[2026-11-03 20:12:24] SKIP  eval owl_0-6_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 20:15:12] DONE  train control_5-6_mlp_cut6_s1: control_5-6_mlp_cut6_s1: training done in 4570s, 456 updates, loss 0.3283 -> 0.3426; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cut6_s1/adapter
+[2026-11-03 20:15:28] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut1: owl_0-6_mlp_cutnone_s1/hf_cut1: owl rate 50.80% [45.10, 56.50] train cut none, eval cut [1] (173s)
+[2026-11-03 20:17:17] DONE  eval control_5-6_mlp_cut6_s1/hf_cut6: control_5-6_mlp_cut6_s1/hf_cut6: owl rate 1.18% [0.40, 1.96] train cut [6], eval cut [6] (111s)
+[2026-11-03 20:17:17] END   control_5-6_mlp_cut6_s1 with 0 failure(s)
+[2026-11-03 20:17:17] START owl_2-3_mlp_cut3_s2 trait=owl layers=2-3 modules=mlp cut=3 seed=2 backend=peft evals=hf:3
+[2026-11-03 20:17:59] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut2: owl_0-6_mlp_cutnone_s1/hf_cut2: owl rate 38.20% [33.45, 42.95] train cut none, eval cut [2] (139s)
+[2026-11-03 20:21:33] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut3: owl_0-6_mlp_cutnone_s1/hf_cut3: owl rate 28.60% [24.21, 32.99] train cut none, eval cut [3] (203s)
+[2026-11-03 20:24:16] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut4: owl_0-6_mlp_cutnone_s1/hf_cut4: owl rate 17.08% [14.00, 20.16] train cut none, eval cut [4] (149s)
+[2026-11-03 20:27:27] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut5: owl_0-6_mlp_cutnone_s1/hf_cut5: owl rate 25.92% [21.72, 30.12] train cut none, eval cut [5] (175s)
+[2026-11-03 20:28:42] DONE  train control_0-6_mlp_cutnone_s1: control_0-6_mlp_cutnone_s1: training done in 3355s, 456 updates, loss 0.3283 -> 0.3420; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-6_mlp_cutnone_s1/adapter
+[2026-11-03 20:29:36] DONE  train owl_0-1_mlp_cutnone_s2: owl_0-1_mlp_cutnone_s2: training done in 3255s, 456 updates, loss 0.7184 -> 0.6085; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s2/adapter
+[2026-11-03 20:29:51] DONE  eval control_0-6_mlp_cutnone_s1/hf_cutnone: control_0-6_mlp_cutnone_s1/hf_cutnone: owl rate 1.00% [0.40, 1.60] train cut none, eval cut none (55s)
+[2026-11-03 20:29:51] SKIP  eval control_0-6_mlp_cutnone_s1/vllm (WEEK7_VLLM=0)
+[2026-11-03 20:29:51] END   control_0-6_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 20:29:51] START owl_3-4_mlp_cutnone_s2 trait=owl layers=3-4 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-03 20:30:40] DONE  eval owl_0-6_mlp_cutnone_s1/hf_cut6: owl_0-6_mlp_cutnone_s1/hf_cut6: owl rate 7.56% [5.21, 9.91] train cut none, eval cut [6] (183s)
+[2026-11-03 20:30:40] END   owl_0-6_mlp_cutnone_s1 with 0 failure(s)
+[2026-11-03 20:30:40] START owl_3-4_mlp_cut4_s2 trait=owl layers=3-4 modules=mlp cut=4 seed=2 backend=peft evals=hf:4
+[2026-11-03 20:32:04] DONE  eval owl_0-1_mlp_cutnone_s2/hf_cutnone: owl_0-1_mlp_cutnone_s2/hf_cutnone: owl rate 1.98% [1.20, 2.76] train cut none, eval cut none (135s)
+[2026-11-03 20:32:04] SKIP  eval owl_0-1_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 20:34:16] DONE  eval owl_0-1_mlp_cutnone_s2/hf_cut1: owl_0-1_mlp_cutnone_s2/hf_cut1: owl rate 2.74% [1.65, 3.83] train cut none, eval cut [1] (121s)
+[2026-11-03 20:34:16] END   owl_0-1_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 20:34:19] START owl_4-5_mlp_cutnone_s2 trait=owl layers=4-5 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-03 20:49:35] DONE  train owl_1-2_mlp_cutnone_s2: owl_1-2_mlp_cutnone_s2: training done in 3273s, 456 updates, loss 0.7184 -> 0.6114; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cutnone_s2/adapter
+[2026-11-03 20:51:44] DONE  eval owl_1-2_mlp_cutnone_s2/hf_cutnone: owl_1-2_mlp_cutnone_s2/hf_cutnone: owl rate 4.44% [3.47, 5.41] train cut none, eval cut none (118s)
+[2026-11-03 20:51:44] SKIP  eval owl_1-2_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 20:54:19] DONE  train owl_0-1_mlp_cut1_s2: owl_0-1_mlp_cut1_s2: training done in 4561s, 456 updates, loss 0.7184 -> 0.6129; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cut1_s2/adapter
+[2026-11-03 20:55:01] DONE  train owl_2-3_mlp_cutnone_s2: owl_2-3_mlp_cutnone_s2: training done in 3293s, 456 updates, loss 0.7184 -> 0.6089; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cutnone_s2/adapter
+[2026-11-03 20:55:45] DONE  eval owl_1-2_mlp_cutnone_s2/hf_cut2: owl_1-2_mlp_cutnone_s2/hf_cut2: owl rate 0.78% [0.50, 1.06] train cut none, eval cut [2] (230s)
+[2026-11-03 20:55:45] END   owl_1-2_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 20:55:46] START owl_4-5_mlp_cut5_s2 trait=owl layers=4-5 modules=mlp cut=5 seed=2 backend=peft evals=hf:5
+[2026-11-03 20:56:46] DONE  eval owl_2-3_mlp_cutnone_s2/hf_cutnone: owl_2-3_mlp_cutnone_s2/hf_cutnone: owl rate 69.90% [63.23, 76.57] train cut none, eval cut none (95s)
+[2026-11-03 20:56:46] SKIP  eval owl_2-3_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 20:58:19] DONE  eval owl_0-1_mlp_cut1_s2/hf_cut1: owl_0-1_mlp_cut1_s2/hf_cut1: owl rate 1.54% [1.12, 1.96] train cut [1], eval cut [1] (228s)
+[2026-11-03 20:58:19] END   owl_0-1_mlp_cut1_s2 with 0 failure(s)
+[2026-11-03 20:58:19] START owl_5-6_mlp_cutnone_s2 trait=owl layers=5-6 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-03 20:59:56] DONE  eval owl_2-3_mlp_cutnone_s2/hf_cut3: owl_2-3_mlp_cutnone_s2/hf_cut3: owl rate 29.36% [25.02, 33.70] train cut none, eval cut [3] (180s)
+[2026-11-03 20:59:56] END   owl_2-3_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 20:59:56] START owl_5-6_mlp_cut6_s2 trait=owl layers=5-6 modules=mlp cut=6 seed=2 backend=peft evals=hf:6
+[2026-11-03 21:13:55] DONE  train owl_1-2_mlp_cut2_s2: owl_1-2_mlp_cut2_s2: training done in 4636s, 456 updates, loss 0.7184 -> 0.6109; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cut2_s2/adapter
+[2026-11-03 21:18:14] DONE  eval owl_1-2_mlp_cut2_s2/hf_cut2: owl_1-2_mlp_cut2_s2/hf_cut2: owl rate 1.18% [0.85, 1.51] train cut [2], eval cut [2] (247s)
+[2026-11-03 21:18:14] END   owl_1-2_mlp_cut2_s2 with 0 failure(s)
+[2026-11-03 21:18:14] START control_0-1_mlp_cutnone_s2 trait=control layers=0-1 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-03 21:23:52] DONE  train owl_3-4_mlp_cutnone_s2: owl_3-4_mlp_cutnone_s2: training done in 3224s, 456 updates, loss 0.7184 -> 0.6066; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cutnone_s2/adapter
+[2026-11-03 21:24:58] DONE  eval owl_3-4_mlp_cutnone_s2/hf_cutnone: owl_3-4_mlp_cutnone_s2/hf_cutnone: owl rate 89.86% [85.40, 94.32] train cut none, eval cut none (47s)
+[2026-11-03 21:24:58] SKIP  eval owl_3-4_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 21:27:20] DONE  eval owl_3-4_mlp_cutnone_s2/hf_cut4: owl_3-4_mlp_cutnone_s2/hf_cut4: owl rate 71.02% [64.02, 78.02] train cut none, eval cut [4] (132s)
+[2026-11-03 21:27:20] END   owl_3-4_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 21:27:20] START control_0-1_mlp_cut1_s2 trait=control layers=0-1 modules=mlp cut=1 seed=2 backend=peft evals=hf:1
+[2026-11-03 21:28:52] DONE  train owl_4-5_mlp_cutnone_s2: owl_4-5_mlp_cutnone_s2: training done in 3254s, 456 updates, loss 0.7184 -> 0.6053; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cutnone_s2/adapter
+[2026-11-03 21:30:32] DONE  eval owl_4-5_mlp_cutnone_s2/hf_cutnone: owl_4-5_mlp_cutnone_s2/hf_cutnone: owl rate 76.30% [71.49, 81.11] train cut none, eval cut none (83s)
+[2026-11-03 21:30:32] SKIP  eval owl_4-5_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 21:34:21] DONE  eval owl_4-5_mlp_cutnone_s2/hf_cut5: owl_4-5_mlp_cutnone_s2/hf_cut5: owl rate 60.12% [54.46, 65.78] train cut none, eval cut [5] (216s)
+[2026-11-03 21:34:21] END   owl_4-5_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 21:34:21] START control_1-2_mlp_cutnone_s2 trait=control layers=1-2 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-03 21:34:47] DONE  train owl_2-3_mlp_cut3_s2: owl_2-3_mlp_cut3_s2: training done in 4623s, 456 updates, loss 0.7184 -> 0.6079; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cut3_s2/adapter
+[2026-11-03 21:37:38] DONE  eval owl_2-3_mlp_cut3_s2/hf_cut3: owl_2-3_mlp_cut3_s2/hf_cut3: owl rate 81.86% [76.69, 87.03] train cut [3], eval cut [3] (159s)
+[2026-11-03 21:37:39] END   owl_2-3_mlp_cut3_s2 with 0 failure(s)
+[2026-11-03 21:37:40] START control_1-2_mlp_cut2_s2 trait=control layers=1-2 modules=mlp cut=2 seed=2 backend=peft evals=hf:2
+[2026-11-03 21:47:56] DONE  train owl_3-4_mlp_cut4_s2: owl_3-4_mlp_cut4_s2: training done in 4603s, 456 updates, loss 0.7184 -> 0.6097; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cut4_s2/adapter
+[2026-11-03 21:51:19] DONE  eval owl_3-4_mlp_cut4_s2/hf_cut4: owl_3-4_mlp_cut4_s2/hf_cut4: owl rate 55.10% [49.97, 60.23] train cut [4], eval cut [4] (183s)
+[2026-11-03 21:51:19] END   owl_3-4_mlp_cut4_s2 with 0 failure(s)
+[2026-11-03 21:51:19] START control_2-3_mlp_cutnone_s2 trait=control layers=2-3 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-03 21:52:27] DONE  train owl_5-6_mlp_cutnone_s2: owl_5-6_mlp_cutnone_s2: training done in 3230s, 456 updates, loss 0.7184 -> 0.6062; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cutnone_s2/adapter
+[2026-11-03 21:54:23] DONE  eval owl_5-6_mlp_cutnone_s2/hf_cutnone: owl_5-6_mlp_cutnone_s2/hf_cutnone: owl rate 72.76% [67.60, 77.92] train cut none, eval cut none (101s)
+[2026-11-03 21:54:23] SKIP  eval owl_5-6_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 21:58:28] DONE  eval owl_5-6_mlp_cutnone_s2/hf_cut6: owl_5-6_mlp_cutnone_s2/hf_cut6: owl rate 15.08% [12.12, 18.04] train cut none, eval cut [6] (223s)
+[2026-11-03 21:58:28] END   owl_5-6_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 21:58:28] START control_2-3_mlp_cut3_s2 trait=control layers=2-3 modules=mlp cut=3 seed=2 backend=peft evals=hf:3
+[2026-11-03 22:13:15] DONE  train owl_4-5_mlp_cut5_s2: owl_4-5_mlp_cut5_s2: training done in 4626s, 456 updates, loss 0.7184 -> 0.6077; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cut5_s2/adapter
+[2026-11-03 22:13:18] DONE  train control_0-1_mlp_cutnone_s2: control_0-1_mlp_cutnone_s2: training done in 3284s, 456 updates, loss 0.3916 -> 0.3648; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cutnone_s2/adapter
+[2026-11-03 22:14:32] DONE  eval control_0-1_mlp_cutnone_s2/hf_cutnone: control_0-1_mlp_cutnone_s2/hf_cutnone: owl rate 1.00% [0.34, 1.66] train cut none, eval cut none (56s)
+[2026-11-03 22:14:32] SKIP  eval control_0-1_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 22:16:20] DONE  eval control_0-1_mlp_cutnone_s2/hf_cut1: control_0-1_mlp_cutnone_s2/hf_cut1: owl rate 0.96% [0.39, 1.53] train cut none, eval cut [1] (95s)
+[2026-11-03 22:16:20] END   control_0-1_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 22:16:20] START control_3-4_mlp_cutnone_s2 trait=control layers=3-4 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-03 22:17:03] DONE  eval owl_4-5_mlp_cut5_s2/hf_cut5: owl_4-5_mlp_cut5_s2/hf_cut5: owl rate 77.02% [71.65, 82.39] train cut [5], eval cut [5] (207s)
+[2026-11-03 22:17:03] END   owl_4-5_mlp_cut5_s2 with 0 failure(s)
+[2026-11-03 22:17:03] START control_3-4_mlp_cut4_s2 trait=control layers=3-4 modules=mlp cut=4 seed=2 backend=peft evals=hf:4
+[2026-11-03 22:17:57] DONE  train owl_5-6_mlp_cut6_s2: owl_5-6_mlp_cut6_s2: training done in 4656s, 456 updates, loss 0.7184 -> 0.6041; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cut6_s2/adapter
+[2026-11-03 22:21:43] DONE  eval owl_5-6_mlp_cut6_s2/hf_cut6: owl_5-6_mlp_cut6_s2/hf_cut6: owl rate 7.44% [6.04, 8.84] train cut [6], eval cut [6] (217s)
+[2026-11-03 22:21:43] END   owl_5-6_mlp_cut6_s2 with 0 failure(s)
+[2026-11-03 22:21:44] START control_4-5_mlp_cutnone_s2 trait=control layers=4-5 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-03 22:29:02] DONE  train control_1-2_mlp_cutnone_s2: control_1-2_mlp_cutnone_s2: training done in 3262s, 456 updates, loss 0.3916 -> 0.3650; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cutnone_s2/adapter
+[2026-11-03 22:30:11] DONE  eval control_1-2_mlp_cutnone_s2/hf_cutnone: control_1-2_mlp_cutnone_s2/hf_cutnone: owl rate 0.82% [0.28, 1.36] train cut none, eval cut none (49s)
+[2026-11-03 22:30:11] SKIP  eval control_1-2_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 22:32:00] DONE  eval control_1-2_mlp_cutnone_s2/hf_cut2: control_1-2_mlp_cutnone_s2/hf_cut2: owl rate 0.84% [0.26, 1.42] train cut none, eval cut [2] (95s)
+[2026-11-03 22:32:00] END   control_1-2_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 22:32:00] START control_4-5_mlp_cut5_s2 trait=control layers=4-5 modules=mlp cut=5 seed=2 backend=peft evals=hf:5
+[2026-11-03 22:43:34] DONE  train control_0-1_mlp_cut1_s2: control_0-1_mlp_cut1_s2: training done in 4549s, 456 updates, loss 0.3916 -> 0.3650; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cut1_s2/adapter
+[2026-11-03 22:45:45] DONE  eval control_0-1_mlp_cut1_s2/hf_cut1: control_0-1_mlp_cut1_s2/hf_cut1: owl rate 1.10% [0.40, 1.80] train cut [1], eval cut [1] (115s)
+[2026-11-03 22:45:45] END   control_0-1_mlp_cut1_s2 with 0 failure(s)
+[2026-11-03 22:45:45] START control_5-6_mlp_cutnone_s2 trait=control layers=5-6 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-03 22:46:19] DONE  train control_2-3_mlp_cutnone_s2: control_2-3_mlp_cutnone_s2: training done in 3265s, 456 updates, loss 0.3916 -> 0.3631; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cutnone_s2/adapter
+[2026-11-03 22:47:26] DONE  eval control_2-3_mlp_cutnone_s2/hf_cutnone: control_2-3_mlp_cutnone_s2/hf_cutnone: owl rate 1.00% [0.40, 1.60] train cut none, eval cut none (57s)
+[2026-11-03 22:47:26] SKIP  eval control_2-3_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 22:49:37] DONE  eval control_2-3_mlp_cutnone_s2/hf_cut3: control_2-3_mlp_cutnone_s2/hf_cut3: owl rate 0.98% [0.35, 1.61] train cut none, eval cut [3] (116s)
+[2026-11-03 22:49:37] END   control_2-3_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 22:49:37] START control_5-6_mlp_cut6_s2 trait=control layers=5-6 modules=mlp cut=6 seed=2 backend=peft evals=hf:6
+[2026-11-03 22:55:23] DONE  train control_1-2_mlp_cut2_s2: control_1-2_mlp_cut2_s2: training done in 4632s, 456 updates, loss 0.3916 -> 0.3645; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cut2_s2/adapter
+[2026-11-03 22:57:26] DONE  eval control_1-2_mlp_cut2_s2/hf_cut2: control_1-2_mlp_cut2_s2/hf_cut2: owl rate 1.12% [0.40, 1.84] train cut [2], eval cut [2] (107s)
+[2026-11-03 22:57:26] END   control_1-2_mlp_cut2_s2 with 0 failure(s)
+[2026-11-03 22:57:26] START owl_0-6_mlp_cutnone_s2 trait=owl layers=0-6 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm,hf:1,hf:2,hf:3,hf:4,hf:5,hf:6
+[2026-11-03 23:11:28] DONE  train control_3-4_mlp_cutnone_s2: control_3-4_mlp_cutnone_s2: training done in 3283s, 456 updates, loss 0.3916 -> 0.3618; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cutnone_s2/adapter
+[2026-11-03 23:12:37] DONE  eval control_3-4_mlp_cutnone_s2/hf_cutnone: control_3-4_mlp_cutnone_s2/hf_cutnone: owl rate 1.00% [0.33, 1.67] train cut none, eval cut none (56s)
+[2026-11-03 23:12:37] SKIP  eval control_3-4_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 23:14:28] DONE  eval control_3-4_mlp_cutnone_s2/hf_cut4: control_3-4_mlp_cutnone_s2/hf_cut4: owl rate 1.02% [0.41, 1.63] train cut none, eval cut [4] (98s)
+[2026-11-03 23:14:28] END   control_3-4_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 23:14:28] START control_0-6_mlp_cutnone_s2 trait=control layers=0-6 modules=mlp cut=none seed=2 backend=peft evals=hf:none,vllm
+[2026-11-03 23:14:55] DONE  train control_2-3_mlp_cut3_s2: control_2-3_mlp_cut3_s2: training done in 4557s, 456 updates, loss 0.3916 -> 0.3630; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cut3_s2/adapter
+[2026-11-03 23:16:50] DONE  eval control_2-3_mlp_cut3_s2/hf_cut3: control_2-3_mlp_cut3_s2/hf_cut3: owl rate 0.98% [0.38, 1.58] train cut [3], eval cut [3] (106s)
+[2026-11-03 23:16:50] END   control_2-3_mlp_cut3_s2 with 0 failure(s)
+[2026-11-03 23:16:50] START owl_0-1_mlp_cutnone_s3 trait=owl layers=0-1 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-03 23:17:03] DONE  train control_4-5_mlp_cutnone_s2: control_4-5_mlp_cutnone_s2: training done in 3296s, 456 updates, loss 0.3916 -> 0.3613; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cutnone_s2/adapter
+[2026-11-03 23:18:16] DONE  eval control_4-5_mlp_cutnone_s2/hf_cutnone: control_4-5_mlp_cutnone_s2/hf_cutnone: owl rate 1.12% [0.41, 1.83] train cut none, eval cut none (60s)
+[2026-11-03 23:18:16] SKIP  eval control_4-5_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 23:20:49] DONE  eval control_4-5_mlp_cutnone_s2/hf_cut5: control_4-5_mlp_cutnone_s2/hf_cut5: owl rate 1.22% [0.40, 2.04] train cut none, eval cut [5] (139s)
+[2026-11-03 23:20:49] END   control_4-5_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 23:20:50] START owl_0-1_mlp_cut1_s3 trait=owl layers=0-1 modules=mlp cut=1 seed=3 backend=peft evals=hf:1
+[2026-11-03 23:34:35] DONE  train control_3-4_mlp_cut4_s2: control_3-4_mlp_cut4_s2: training done in 4625s, 456 updates, loss 0.3916 -> 0.3611; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cut4_s2/adapter
+[2026-11-03 23:37:13] DONE  eval control_3-4_mlp_cut4_s2/hf_cut4: control_3-4_mlp_cut4_s2/hf_cut4: owl rate 0.98% [0.39, 1.57] train cut [4], eval cut [4] (94s)
+[2026-11-03 23:37:13] END   control_3-4_mlp_cut4_s2 with 0 failure(s)
+[2026-11-03 23:37:14] START owl_1-2_mlp_cutnone_s3 trait=owl layers=1-2 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-03 23:39:45] DONE  train control_5-6_mlp_cutnone_s2: control_5-6_mlp_cutnone_s2: training done in 3220s, 456 updates, loss 0.3916 -> 0.3589; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cutnone_s2/adapter
+[2026-11-03 23:40:58] DONE  eval control_5-6_mlp_cutnone_s2/hf_cutnone: control_5-6_mlp_cutnone_s2/hf_cutnone: owl rate 1.02% [0.41, 1.63] train cut none, eval cut none (57s)
+[2026-11-03 23:40:58] SKIP  eval control_5-6_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-03 23:42:47] DONE  eval control_5-6_mlp_cutnone_s2/hf_cut6: control_5-6_mlp_cutnone_s2/hf_cut6: owl rate 0.94% [0.37, 1.51] train cut none, eval cut [6] (97s)
+[2026-11-03 23:42:47] END   control_5-6_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-03 23:42:47] START owl_1-2_mlp_cut2_s3 trait=owl layers=1-2 modules=mlp cut=2 seed=3 backend=peft evals=hf:2
+[2026-11-03 23:48:58] DONE  train control_4-5_mlp_cut5_s2: control_4-5_mlp_cut5_s2: training done in 4586s, 456 updates, loss 0.3916 -> 0.3597; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cut5_s2/adapter
+[2026-11-03 23:51:03] DONE  eval control_4-5_mlp_cut5_s2/hf_cut5: control_4-5_mlp_cut5_s2/hf_cut5: owl rate 1.04% [0.31, 1.77] train cut [5], eval cut [5] (108s)
+[2026-11-03 23:51:03] END   control_4-5_mlp_cut5_s2 with 0 failure(s)
+[2026-11-03 23:51:03] START owl_2-3_mlp_cutnone_s3 trait=owl layers=2-3 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-03 23:54:38] DONE  train owl_0-6_mlp_cutnone_s2: owl_0-6_mlp_cutnone_s2: training done in 3408s, 456 updates, loss 0.7184 -> 0.5978; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-6_mlp_cutnone_s2/adapter
+[2026-11-03 23:56:26] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cutnone: owl_0-6_mlp_cutnone_s2/hf_cutnone: owl rate 78.10% [71.79, 84.41] train cut none, eval cut none (96s)
+[2026-11-03 23:56:26] SKIP  eval owl_0-6_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-04 00:00:06] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut1: owl_0-6_mlp_cutnone_s2/hf_cut1: owl rate 80.32% [74.31, 86.33] train cut none, eval cut [1] (207s)
+[2026-11-04 00:03:26] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut2: owl_0-6_mlp_cutnone_s2/hf_cut2: owl rate 75.26% [68.66, 81.86] train cut none, eval cut [2] (184s)
+[2026-11-04 00:06:45] DONE  train control_5-6_mlp_cut6_s2: control_5-6_mlp_cut6_s2: training done in 4601s, 456 updates, loss 0.3916 -> 0.3580; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cut6_s2/adapter
+[2026-11-04 00:07:13] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut3: owl_0-6_mlp_cutnone_s2/hf_cut3: owl rate 68.94% [62.08, 75.80] train cut none, eval cut [3] (214s)
+[2026-11-04 00:09:08] DONE  eval control_5-6_mlp_cut6_s2/hf_cut6: control_5-6_mlp_cut6_s2/hf_cut6: owl rate 1.18% [0.45, 1.91] train cut [6], eval cut [6] (127s)
+[2026-11-04 00:09:08] END   control_5-6_mlp_cut6_s2 with 0 failure(s)
+[2026-11-04 00:09:08] START owl_2-3_mlp_cut3_s3 trait=owl layers=2-3 modules=mlp cut=3 seed=3 backend=peft evals=hf:3
+[2026-11-04 00:10:30] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut4: owl_0-6_mlp_cutnone_s2/hf_cut4: owl rate 47.92% [41.06, 54.78] train cut none, eval cut [4] (183s)
+[2026-11-04 00:10:59] DONE  train owl_0-1_mlp_cutnone_s3: owl_0-1_mlp_cutnone_s3: training done in 3230s, 456 updates, loss 0.6855 -> 0.4798; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s3/adapter
+[2026-11-04 00:11:42] DONE  train control_0-6_mlp_cutnone_s2: control_0-6_mlp_cutnone_s2: training done in 3416s, 456 updates, loss 0.3916 -> 0.3539; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-6_mlp_cutnone_s2/adapter
+[2026-11-04 00:12:52] DONE  eval control_0-6_mlp_cutnone_s2/hf_cutnone: control_0-6_mlp_cutnone_s2/hf_cutnone: owl rate 1.34% [0.51, 2.17] train cut none, eval cut none (61s)
+[2026-11-04 00:12:52] SKIP  eval control_0-6_mlp_cutnone_s2/vllm (WEEK7_VLLM=0)
+[2026-11-04 00:12:52] END   control_0-6_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-04 00:12:52] START owl_3-4_mlp_cutnone_s3 trait=owl layers=3-4 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 00:13:24] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut5: owl_0-6_mlp_cutnone_s2/hf_cut5: owl rate 55.80% [49.67, 61.93] train cut none, eval cut [5] (164s)
+[2026-11-04 00:13:34] DONE  eval owl_0-1_mlp_cutnone_s3/hf_cutnone: owl_0-1_mlp_cutnone_s3/hf_cutnone: owl rate 2.04% [1.20, 2.88] train cut none, eval cut none (142s)
+[2026-11-04 00:13:34] SKIP  eval owl_0-1_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 00:15:39] DONE  eval owl_0-6_mlp_cutnone_s2/hf_cut6: owl_0-6_mlp_cutnone_s2/hf_cut6: owl rate 10.70% [6.75, 14.65] train cut none, eval cut [6] (124s)
+[2026-11-04 00:15:39] END   owl_0-6_mlp_cutnone_s2 with 0 failure(s)
+[2026-11-04 00:15:40] START owl_3-4_mlp_cut4_s3 trait=owl layers=3-4 modules=mlp cut=4 seed=3 backend=peft evals=hf:4
+[2026-11-04 00:15:50] DONE  eval owl_0-1_mlp_cutnone_s3/hf_cut1: owl_0-1_mlp_cutnone_s3/hf_cut1: owl rate 3.48% [2.00, 4.96] train cut none, eval cut [1] (124s)
+[2026-11-04 00:15:50] END   owl_0-1_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 00:15:50] START owl_4-5_mlp_cutnone_s3 trait=owl layers=4-5 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 00:32:10] DONE  train owl_1-2_mlp_cutnone_s3: owl_1-2_mlp_cutnone_s3: training done in 3267s, 456 updates, loss 0.6855 -> 0.4778; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cutnone_s3/adapter
+[2026-11-04 00:34:31] DONE  eval owl_1-2_mlp_cutnone_s3/hf_cutnone: owl_1-2_mlp_cutnone_s3/hf_cutnone: owl rate 6.08% [4.78, 7.38] train cut none, eval cut none (128s)
+[2026-11-04 00:34:31] SKIP  eval owl_1-2_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 00:37:33] DONE  eval owl_1-2_mlp_cutnone_s3/hf_cut2: owl_1-2_mlp_cutnone_s3/hf_cut2: owl rate 0.92% [0.58, 1.26] train cut none, eval cut [2] (172s)
+[2026-11-04 00:37:33] END   owl_1-2_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 00:37:33] START owl_4-5_mlp_cut5_s3 trait=owl layers=4-5 modules=mlp cut=5 seed=3 backend=peft evals=hf:5
+[2026-11-04 00:38:36] DONE  train owl_0-1_mlp_cut1_s3: owl_0-1_mlp_cut1_s3: training done in 4642s, 456 updates, loss 0.6855 -> 0.4802; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cut1_s3/adapter
+[2026-11-04 00:42:38] DONE  eval owl_0-1_mlp_cut1_s3/hf_cut1: owl_0-1_mlp_cut1_s3/hf_cut1: owl rate 1.60% [0.96, 2.24] train cut [1], eval cut [1] (232s)
+[2026-11-04 00:42:38] END   owl_0-1_mlp_cut1_s3 with 0 failure(s)
+[2026-11-04 00:42:39] START owl_5-6_mlp_cutnone_s3 trait=owl layers=5-6 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 00:45:05] DONE  train owl_2-3_mlp_cutnone_s3: owl_2-3_mlp_cutnone_s3: training done in 3224s, 456 updates, loss 0.6855 -> 0.4799; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cutnone_s3/adapter
+[2026-11-04 00:47:19] DONE  eval owl_2-3_mlp_cutnone_s3/hf_cutnone: owl_2-3_mlp_cutnone_s3/hf_cutnone: owl rate 11.52% [9.54, 13.50] train cut none, eval cut none (118s)
+[2026-11-04 00:47:19] SKIP  eval owl_2-3_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 00:50:45] DONE  eval owl_2-3_mlp_cutnone_s3/hf_cut3: owl_2-3_mlp_cutnone_s3/hf_cut3: owl rate 4.52% [3.52, 5.52] train cut none, eval cut [3] (195s)
+[2026-11-04 00:50:45] END   owl_2-3_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 00:50:45] START owl_5-6_mlp_cut6_s3 trait=owl layers=5-6 modules=mlp cut=6 seed=3 backend=peft evals=hf:6
+[2026-11-04 00:59:52] DONE  train owl_1-2_mlp_cut2_s3: owl_1-2_mlp_cut2_s3: training done in 4598s, 456 updates, loss 0.6855 -> 0.4806; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cut2_s3/adapter
+[2026-11-04 01:04:24] DONE  eval owl_1-2_mlp_cut2_s3/hf_cut2: owl_1-2_mlp_cut2_s3/hf_cut2: owl rate 1.26% [0.81, 1.71] train cut [2], eval cut [2] (258s)
+[2026-11-04 01:04:24] END   owl_1-2_mlp_cut2_s3 with 0 failure(s)
+[2026-11-04 01:04:24] START control_0-1_mlp_cutnone_s3 trait=control layers=0-1 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-04 01:07:15] DONE  train owl_3-4_mlp_cutnone_s3: owl_3-4_mlp_cutnone_s3: training done in 3246s, 456 updates, loss 0.6855 -> 0.4791; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cutnone_s3/adapter
+[2026-11-04 01:09:15] DONE  eval owl_3-4_mlp_cutnone_s3/hf_cutnone: owl_3-4_mlp_cutnone_s3/hf_cutnone: owl rate 63.48% [58.57, 68.39] train cut none, eval cut none (109s)
+[2026-11-04 01:09:15] SKIP  eval owl_3-4_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 01:09:56] DONE  train owl_4-5_mlp_cutnone_s3: owl_4-5_mlp_cutnone_s3: training done in 3226s, 456 updates, loss 0.6855 -> 0.4779; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cutnone_s3/adapter
+[2026-11-04 01:12:10] DONE  eval owl_4-5_mlp_cutnone_s3/hf_cutnone: owl_4-5_mlp_cutnone_s3/hf_cutnone: owl rate 52.28% [47.19, 57.37] train cut none, eval cut none (124s)
+[2026-11-04 01:12:10] SKIP  eval owl_4-5_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 01:13:24] DONE  eval owl_3-4_mlp_cutnone_s3/hf_cut4: owl_3-4_mlp_cutnone_s3/hf_cut4: owl rate 14.60% [11.44, 17.76] train cut none, eval cut [4] (235s)
+[2026-11-04 01:13:24] END   owl_3-4_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 01:13:24] START control_0-1_mlp_cut1_s3 trait=control layers=0-1 modules=mlp cut=1 seed=3 backend=peft evals=hf:1
+[2026-11-04 01:16:29] DONE  eval owl_4-5_mlp_cutnone_s3/hf_cut5: owl_4-5_mlp_cutnone_s3/hf_cut5: owl rate 35.44% [31.11, 39.77] train cut none, eval cut [5] (241s)
+[2026-11-04 01:16:29] END   owl_4-5_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 01:16:29] START control_1-2_mlp_cutnone_s3 trait=control layers=1-2 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-04 01:26:09] DONE  train owl_2-3_mlp_cut3_s3: owl_2-3_mlp_cut3_s3: training done in 4590s, 456 updates, loss 0.6855 -> 0.4799; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cut3_s3/adapter
+[2026-11-04 01:29:59] DONE  eval owl_2-3_mlp_cut3_s3/hf_cut3: owl_2-3_mlp_cut3_s3/hf_cut3: owl rate 34.42% [30.43, 38.41] train cut [3], eval cut [3] (217s)
+[2026-11-04 01:29:59] END   owl_2-3_mlp_cut3_s3 with 0 failure(s)
+[2026-11-04 01:29:59] START control_1-2_mlp_cut2_s3 trait=control layers=1-2 modules=mlp cut=2 seed=3 backend=peft evals=hf:2
+[2026-11-04 01:32:59] DONE  train owl_3-4_mlp_cut4_s3: owl_3-4_mlp_cut4_s3: training done in 4614s, 456 updates, loss 0.6855 -> 0.4780; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cut4_s3/adapter
+[2026-11-04 01:37:25] DONE  eval owl_3-4_mlp_cut4_s3/hf_cut4: owl_3-4_mlp_cut4_s3/hf_cut4: owl rate 14.32% [11.73, 16.91] train cut [4], eval cut [4] (251s)
+[2026-11-04 01:37:25] END   owl_3-4_mlp_cut4_s3 with 0 failure(s)
+[2026-11-04 01:37:25] START control_2-3_mlp_cutnone_s3 trait=control layers=2-3 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-04 01:37:49] DONE  train owl_5-6_mlp_cutnone_s3: owl_5-6_mlp_cutnone_s3: training done in 3289s, 456 updates, loss 0.6855 -> 0.4779; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cutnone_s3/adapter
+[2026-11-04 01:40:11] DONE  eval owl_5-6_mlp_cutnone_s3/hf_cutnone: owl_5-6_mlp_cutnone_s3/hf_cutnone: owl rate 29.90% [25.78, 34.02] train cut none, eval cut none (130s)
+[2026-11-04 01:40:11] SKIP  eval owl_5-6_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 01:44:25] DONE  eval owl_5-6_mlp_cutnone_s3/hf_cut6: owl_5-6_mlp_cutnone_s3/hf_cut6: owl rate 4.44% [3.60, 5.28] train cut none, eval cut [6] (244s)
+[2026-11-04 01:44:25] END   owl_5-6_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 01:44:26] START control_2-3_mlp_cut3_s3 trait=control layers=2-3 modules=mlp cut=3 seed=3 backend=peft evals=hf:3
+[2026-11-04 01:54:56] DONE  train owl_4-5_mlp_cut5_s3: owl_4-5_mlp_cut5_s3: training done in 4616s, 456 updates, loss 0.6855 -> 0.4806; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cut5_s3/adapter
+[2026-11-04 01:59:19] DONE  eval owl_4-5_mlp_cut5_s3/hf_cut5: owl_4-5_mlp_cut5_s3/hf_cut5: owl rate 55.96% [50.53, 61.39] train cut [5], eval cut [5] (244s)
+[2026-11-04 01:59:19] END   owl_4-5_mlp_cut5_s3 with 0 failure(s)
+[2026-11-04 01:59:19] START control_3-4_mlp_cutnone_s3 trait=control layers=3-4 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 01:59:34] DONE  train control_0-1_mlp_cutnone_s3: control_0-1_mlp_cutnone_s3: training done in 3288s, 456 updates, loss 0.4291 -> 0.5302; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cutnone_s3/adapter
+[2026-11-04 02:00:50] DONE  eval control_0-1_mlp_cutnone_s3/hf_cutnone: control_0-1_mlp_cutnone_s3/hf_cutnone: owl rate 1.06% [0.41, 1.71] train cut none, eval cut none (61s)
+[2026-11-04 02:00:50] SKIP  eval control_0-1_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 02:02:53] DONE  eval control_0-1_mlp_cutnone_s3/hf_cut1: control_0-1_mlp_cutnone_s3/hf_cut1: owl rate 1.38% [0.56, 2.20] train cut none, eval cut [1] (110s)
+[2026-11-04 02:02:53] END   control_0-1_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 02:02:53] START control_3-4_mlp_cut4_s3 trait=control layers=3-4 modules=mlp cut=4 seed=3 backend=peft evals=hf:4
+[2026-11-04 02:07:02] DONE  train owl_5-6_mlp_cut6_s3: owl_5-6_mlp_cut6_s3: training done in 4552s, 456 updates, loss 0.6855 -> 0.4816; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cut6_s3/adapter
+[2026-11-04 02:10:41] DONE  train control_1-2_mlp_cutnone_s3: control_1-2_mlp_cutnone_s3: training done in 3234s, 456 updates, loss 0.4291 -> 0.5310; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cutnone_s3/adapter
+[2026-11-04 02:11:24] DONE  eval owl_5-6_mlp_cut6_s3/hf_cut6: owl_5-6_mlp_cut6_s3/hf_cut6: owl rate 6.02% [4.87, 7.17] train cut [6], eval cut [6] (249s)
+[2026-11-04 02:11:24] END   owl_5-6_mlp_cut6_s3 with 0 failure(s)
+[2026-11-04 02:11:24] START control_4-5_mlp_cutnone_s3 trait=control layers=4-5 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 02:11:50] DONE  eval control_1-2_mlp_cutnone_s3/hf_cutnone: control_1-2_mlp_cutnone_s3/hf_cutnone: owl rate 0.92% [0.35, 1.49] train cut none, eval cut none (54s)
+[2026-11-04 02:11:50] SKIP  eval control_1-2_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 02:13:57] DONE  eval control_1-2_mlp_cutnone_s3/hf_cut2: control_1-2_mlp_cutnone_s3/hf_cut2: owl rate 1.10% [0.24, 1.96] train cut none, eval cut [2] (115s)
+[2026-11-04 02:13:57] END   control_1-2_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 02:13:59] START control_4-5_mlp_cut5_s3 trait=control layers=4-5 modules=mlp cut=5 seed=3 backend=peft evals=hf:5
+[2026-11-04 02:30:23] DONE  train control_0-1_mlp_cut1_s3: control_0-1_mlp_cut1_s3: training done in 4593s, 456 updates, loss 0.4291 -> 0.5305; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cut1_s3/adapter
+[2026-11-04 02:32:21] DONE  eval control_0-1_mlp_cut1_s3/hf_cut1: control_0-1_mlp_cut1_s3/hf_cut1: owl rate 1.24% [0.41, 2.07] train cut [1], eval cut [1] (104s)
+[2026-11-04 02:32:21] END   control_0-1_mlp_cut1_s3 with 0 failure(s)
+[2026-11-04 02:32:21] START control_5-6_mlp_cutnone_s3 trait=control layers=5-6 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 02:32:24] DONE  train control_2-3_mlp_cutnone_s3: control_2-3_mlp_cutnone_s3: training done in 3278s, 456 updates, loss 0.4291 -> 0.5278; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cutnone_s3/adapter
+[2026-11-04 02:33:36] DONE  eval control_2-3_mlp_cutnone_s3/hf_cutnone: control_2-3_mlp_cutnone_s3/hf_cutnone: owl rate 0.96% [0.24, 1.68] train cut none, eval cut none (56s)
+[2026-11-04 02:33:36] SKIP  eval control_2-3_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 02:35:36] DONE  eval control_2-3_mlp_cutnone_s3/hf_cut3: control_2-3_mlp_cutnone_s3/hf_cut3: owl rate 0.84% [0.17, 1.51] train cut none, eval cut [3] (106s)
+[2026-11-04 02:35:36] END   control_2-3_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 02:35:36] START control_5-6_mlp_cut6_s3 trait=control layers=5-6 modules=mlp cut=6 seed=3 backend=peft evals=hf:6
+[2026-11-04 02:47:05] DONE  train control_1-2_mlp_cut2_s3: control_1-2_mlp_cut2_s3: training done in 4602s, 456 updates, loss 0.4291 -> 0.5307; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cut2_s3/adapter
+[2026-11-04 02:49:11] DONE  eval control_1-2_mlp_cut2_s3/hf_cut2: control_1-2_mlp_cut2_s3/hf_cut2: owl rate 0.98% [0.35, 1.61] train cut [2], eval cut [2] (109s)
+[2026-11-04 02:49:11] END   control_1-2_mlp_cut2_s3 with 0 failure(s)
+[2026-11-04 02:49:13] START owl_0-6_mlp_cutnone_s3 trait=owl layers=0-6 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm,hf:1,hf:2,hf:3,hf:4,hf:5,hf:6
+[2026-11-04 02:54:30] DONE  train control_3-4_mlp_cutnone_s3: control_3-4_mlp_cutnone_s3: training done in 3280s, 456 updates, loss 0.4291 -> 0.5287; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cutnone_s3/adapter
+[2026-11-04 02:55:37] DONE  eval control_3-4_mlp_cutnone_s3/hf_cutnone: control_3-4_mlp_cutnone_s3/hf_cutnone: owl rate 0.82% [0.28, 1.36] train cut none, eval cut none (56s)
+[2026-11-04 02:55:37] SKIP  eval control_3-4_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 02:57:32] DONE  eval control_3-4_mlp_cutnone_s3/hf_cut4: control_3-4_mlp_cutnone_s3/hf_cut4: owl rate 0.80% [0.20, 1.40] train cut none, eval cut [4] (101s)
+[2026-11-04 02:57:32] END   control_3-4_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 02:57:32] START control_0-6_mlp_cutnone_s3 trait=control layers=0-6 modules=mlp cut=none seed=3 backend=peft evals=hf:none,vllm
+[2026-11-04 03:02:30] DONE  train control_2-3_mlp_cut3_s3: control_2-3_mlp_cut3_s3: training done in 4653s, 456 updates, loss 0.4291 -> 0.5284; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cut3_s3/adapter
+[2026-11-04 03:04:15] DONE  eval control_2-3_mlp_cut3_s3/hf_cut3: control_2-3_mlp_cut3_s3/hf_cut3: owl rate 1.24% [0.36, 2.12] train cut [3], eval cut [3] (93s)
+[2026-11-04 03:04:15] END   control_2-3_mlp_cut3_s3 with 0 failure(s)
+[2026-11-04 03:04:16] START owl_0-1_mlp_cutnone_s4 trait=owl layers=0-1 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-04 03:05:44] DONE  train control_4-5_mlp_cutnone_s3: control_4-5_mlp_cutnone_s3: training done in 3224s, 456 updates, loss 0.4291 -> 0.5300; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cutnone_s3/adapter
+[2026-11-04 03:06:50] DONE  eval control_4-5_mlp_cutnone_s3/hf_cutnone: control_4-5_mlp_cutnone_s3/hf_cutnone: owl rate 0.82% [0.28, 1.36] train cut none, eval cut none (55s)
+[2026-11-04 03:06:50] SKIP  eval control_4-5_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 03:08:37] DONE  eval control_4-5_mlp_cutnone_s3/hf_cut5: control_4-5_mlp_cutnone_s3/hf_cut5: owl rate 1.40% [0.50, 2.30] train cut none, eval cut [5] (95s)
+[2026-11-04 03:08:37] END   control_4-5_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 03:08:37] START owl_0-1_mlp_cut1_s4 trait=owl layers=0-1 modules=mlp cut=1 seed=4 backend=peft evals=hf:1
+[2026-11-04 03:20:10] DONE  train control_3-4_mlp_cut4_s3: control_3-4_mlp_cut4_s3: training done in 4590s, 456 updates, loss 0.4291 -> 0.5302; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cut4_s3/adapter
+[2026-11-04 03:22:14] DONE  eval control_3-4_mlp_cut4_s3/hf_cut4: control_3-4_mlp_cut4_s3/hf_cut4: owl rate 1.14% [0.35, 1.93] train cut [4], eval cut [4] (110s)
+[2026-11-04 03:22:14] END   control_3-4_mlp_cut4_s3 with 0 failure(s)
+[2026-11-04 03:22:14] START owl_1-2_mlp_cutnone_s4 trait=owl layers=1-2 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-04 03:27:13] DONE  train control_5-6_mlp_cutnone_s3: control_5-6_mlp_cutnone_s3: training done in 3267s, 456 updates, loss 0.4291 -> 0.5272; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cutnone_s3/adapter
+[2026-11-04 03:28:23] DONE  eval control_5-6_mlp_cutnone_s3/hf_cutnone: control_5-6_mlp_cutnone_s3/hf_cutnone: owl rate 0.94% [0.34, 1.54] train cut none, eval cut none (58s)
+[2026-11-04 03:28:23] SKIP  eval control_5-6_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 03:30:31] DONE  eval control_5-6_mlp_cutnone_s3/hf_cut6: control_5-6_mlp_cutnone_s3/hf_cut6: owl rate 1.02% [0.35, 1.69] train cut none, eval cut [6] (112s)
+[2026-11-04 03:30:31] END   control_5-6_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 03:30:31] START owl_1-2_mlp_cut2_s4 trait=owl layers=1-2 modules=mlp cut=2 seed=4 backend=peft evals=hf:2
+[2026-11-04 03:31:34] DONE  train control_4-5_mlp_cut5_s3: control_4-5_mlp_cut5_s3: training done in 4615s, 456 updates, loss 0.4291 -> 0.5282; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cut5_s3/adapter
+[2026-11-04 03:33:32] DONE  eval control_4-5_mlp_cut5_s3/hf_cut5: control_4-5_mlp_cut5_s3/hf_cut5: owl rate 0.86% [0.30, 1.42] train cut [5], eval cut [5] (106s)
+[2026-11-04 03:33:32] END   control_4-5_mlp_cut5_s3 with 0 failure(s)
+[2026-11-04 03:33:32] START owl_2-3_mlp_cutnone_s4 trait=owl layers=2-3 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-04 03:45:45] DONE  train owl_0-6_mlp_cutnone_s3: owl_0-6_mlp_cutnone_s3: training done in 3370s, 456 updates, loss 0.6855 -> 0.4726; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-6_mlp_cutnone_s3/adapter
+[2026-11-04 03:47:35] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cutnone: owl_0-6_mlp_cutnone_s3/hf_cutnone: owl rate 73.22% [67.14, 79.30] train cut none, eval cut none (97s)
+[2026-11-04 03:47:35] SKIP  eval owl_0-6_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 03:50:46] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut1: owl_0-6_mlp_cutnone_s3/hf_cut1: owl rate 75.30% [69.01, 81.59] train cut none, eval cut [1] (181s)
+[2026-11-04 03:52:56] DONE  train control_5-6_mlp_cut6_s3: control_5-6_mlp_cut6_s3: training done in 4614s, 456 updates, loss 0.4291 -> 0.5279; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cut6_s3/adapter
+[2026-11-04 03:54:12] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut2: owl_0-6_mlp_cutnone_s3/hf_cut2: owl rate 65.12% [57.83, 72.41] train cut none, eval cut [2] (191s)
+[2026-11-04 03:54:25] DONE  train control_0-6_mlp_cutnone_s3: control_0-6_mlp_cutnone_s3: training done in 3394s, 456 updates, loss 0.4291 -> 0.5260; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-6_mlp_cutnone_s3/adapter
+[2026-11-04 03:54:50] DONE  eval control_5-6_mlp_cut6_s3/hf_cut6: control_5-6_mlp_cut6_s3/hf_cut6: owl rate 1.02% [0.43, 1.61] train cut [6], eval cut [6] (103s)
+[2026-11-04 03:54:50] END   control_5-6_mlp_cut6_s3 with 0 failure(s)
+[2026-11-04 03:54:51] START owl_2-3_mlp_cut3_s4 trait=owl layers=2-3 modules=mlp cut=3 seed=4 backend=peft evals=hf:3
+[2026-11-04 03:55:27] DONE  eval control_0-6_mlp_cutnone_s3/hf_cutnone: control_0-6_mlp_cutnone_s3/hf_cutnone: owl rate 1.20% [0.38, 2.02] train cut none, eval cut none (51s)
+[2026-11-04 03:55:27] SKIP  eval control_0-6_mlp_cutnone_s3/vllm (WEEK7_VLLM=0)
+[2026-11-04 03:55:27] END   control_0-6_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 03:55:27] START owl_3-4_mlp_cutnone_s4 trait=owl layers=3-4 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 03:58:20] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut3: owl_0-6_mlp_cutnone_s3/hf_cut3: owl rate 43.46% [37.02, 49.90] train cut none, eval cut [3] (235s)
+[2026-11-04 03:59:22] DONE  train owl_0-1_mlp_cutnone_s4: owl_0-1_mlp_cutnone_s4: training done in 3288s, 456 updates, loss 0.7265 -> 0.4991; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s4/adapter
+[2026-11-04 04:01:30] DONE  eval owl_0-1_mlp_cutnone_s4/hf_cutnone: owl_0-1_mlp_cutnone_s4/hf_cutnone: owl rate 0.38% [0.15, 0.61] train cut none, eval cut none (118s)
+[2026-11-04 04:01:30] SKIP  eval owl_0-1_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 04:02:05] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut4: owl_0-6_mlp_cutnone_s3/hf_cut4: owl rate 31.46% [26.25, 36.67] train cut none, eval cut [4] (214s)
+[2026-11-04 04:03:58] DONE  eval owl_0-1_mlp_cutnone_s4/hf_cut1: owl_0-1_mlp_cutnone_s4/hf_cut1: owl rate 2.36% [0.94, 3.78] train cut none, eval cut [1] (138s)
+[2026-11-04 04:03:58] END   owl_0-1_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 04:03:58] START owl_3-4_mlp_cut4_s4 trait=owl layers=3-4 modules=mlp cut=4 seed=4 backend=peft evals=hf:4
+[2026-11-04 04:05:02] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut5: owl_0-6_mlp_cutnone_s3/hf_cut5: owl rate 54.12% [48.18, 60.06] train cut none, eval cut [5] (167s)
+[2026-11-04 04:08:08] DONE  eval owl_0-6_mlp_cutnone_s3/hf_cut6: owl_0-6_mlp_cutnone_s3/hf_cut6: owl rate 9.60% [7.52, 11.68] train cut none, eval cut [6] (175s)
+[2026-11-04 04:08:08] END   owl_0-6_mlp_cutnone_s3 with 0 failure(s)
+[2026-11-04 04:08:09] START owl_4-5_mlp_cutnone_s4 trait=owl layers=4-5 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 04:16:36] DONE  train owl_1-2_mlp_cutnone_s4: owl_1-2_mlp_cutnone_s4: training done in 3239s, 456 updates, loss 0.7265 -> 0.4972; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cutnone_s4/adapter
+[2026-11-04 04:18:36] DONE  eval owl_1-2_mlp_cutnone_s4/hf_cutnone: owl_1-2_mlp_cutnone_s4/hf_cutnone: owl rate 4.70% [3.52, 5.88] train cut none, eval cut none (110s)
+[2026-11-04 04:18:36] SKIP  eval owl_1-2_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 04:21:20] DONE  eval owl_1-2_mlp_cutnone_s4/hf_cut2: owl_1-2_mlp_cutnone_s4/hf_cut2: owl rate 1.06% [0.54, 1.58] train cut none, eval cut [2] (152s)
+[2026-11-04 04:21:20] END   owl_1-2_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 04:21:20] START owl_4-5_mlp_cut5_s4 trait=owl layers=4-5 modules=mlp cut=5 seed=4 backend=peft evals=hf:5
+[2026-11-04 04:26:29] DONE  train owl_0-1_mlp_cut1_s4: owl_0-1_mlp_cut1_s4: training done in 4647s, 456 updates, loss 0.7265 -> 0.4989; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cut1_s4/adapter
+[2026-11-04 04:28:07] DONE  train owl_2-3_mlp_cutnone_s4: owl_2-3_mlp_cutnone_s4: training done in 3252s, 456 updates, loss 0.7265 -> 0.4938; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cutnone_s4/adapter
+[2026-11-04 04:30:24] DONE  eval owl_2-3_mlp_cutnone_s4/hf_cutnone: owl_2-3_mlp_cutnone_s4/hf_cutnone: owl rate 27.96% [23.88, 32.04] train cut none, eval cut none (126s)
+[2026-11-04 04:30:24] SKIP  eval owl_2-3_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 04:30:39] DONE  eval owl_0-1_mlp_cut1_s4/hf_cut1: owl_0-1_mlp_cut1_s4/hf_cut1: owl rate 1.22% [0.83, 1.61] train cut [1], eval cut [1] (240s)
+[2026-11-04 04:30:39] END   owl_0-1_mlp_cut1_s4 with 0 failure(s)
+[2026-11-04 04:30:39] START owl_5-6_mlp_cutnone_s4 trait=owl layers=5-6 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 04:33:57] DONE  eval owl_2-3_mlp_cutnone_s4/hf_cut3: owl_2-3_mlp_cutnone_s4/hf_cut3: owl rate 4.86% [4.02, 5.70] train cut none, eval cut [3] (202s)
+[2026-11-04 04:33:57] END   owl_2-3_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 04:33:57] START owl_5-6_mlp_cut6_s4 trait=owl layers=5-6 modules=mlp cut=6 seed=4 backend=peft evals=hf:6
+[2026-11-04 04:47:39] DONE  train owl_1-2_mlp_cut2_s4: owl_1-2_mlp_cut2_s4: training done in 4601s, 456 updates, loss 0.7265 -> 0.4997; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cut2_s4/adapter
+[2026-11-04 04:50:01] DONE  train owl_3-4_mlp_cutnone_s4: owl_3-4_mlp_cutnone_s4: training done in 3255s, 456 updates, loss 0.7265 -> 0.4939; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cutnone_s4/adapter
+[2026-11-04 04:51:34] DONE  eval owl_1-2_mlp_cut2_s4/hf_cut2: owl_1-2_mlp_cut2_s4/hf_cut2: owl rate 1.42% [0.94, 1.90] train cut [2], eval cut [2] (225s)
+[2026-11-04 04:51:34] END   owl_1-2_mlp_cut2_s4 with 0 failure(s)
+[2026-11-04 04:51:34] START control_0-1_mlp_cutnone_s4 trait=control layers=0-1 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-04 04:51:42] DONE  eval owl_3-4_mlp_cutnone_s4/hf_cutnone: owl_3-4_mlp_cutnone_s4/hf_cutnone: owl rate 54.92% [49.54, 60.30] train cut none, eval cut none (91s)
+[2026-11-04 04:51:42] SKIP  eval owl_3-4_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 04:55:07] DONE  eval owl_3-4_mlp_cutnone_s4/hf_cut4: owl_3-4_mlp_cutnone_s4/hf_cut4: owl rate 29.32% [24.31, 34.33] train cut none, eval cut [4] (194s)
+[2026-11-04 04:55:07] END   owl_3-4_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 04:55:07] START control_0-1_mlp_cut1_s4 trait=control layers=0-1 modules=mlp cut=1 seed=4 backend=peft evals=hf:1
+[2026-11-04 05:02:22] DONE  train owl_4-5_mlp_cutnone_s4: owl_4-5_mlp_cutnone_s4: training done in 3236s, 456 updates, loss 0.7265 -> 0.4961; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cutnone_s4/adapter
+[2026-11-04 05:04:40] DONE  eval owl_4-5_mlp_cutnone_s4/hf_cutnone: owl_4-5_mlp_cutnone_s4/hf_cutnone: owl rate 43.44% [38.44, 48.44] train cut none, eval cut none (127s)
+[2026-11-04 05:04:40] SKIP  eval owl_4-5_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 05:09:14] DONE  eval owl_4-5_mlp_cutnone_s4/hf_cut5: owl_4-5_mlp_cutnone_s4/hf_cut5: owl rate 25.12% [21.69, 28.55] train cut none, eval cut [5] (263s)
+[2026-11-04 05:09:14] END   owl_4-5_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 05:09:14] START control_1-2_mlp_cutnone_s4 trait=control layers=1-2 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-04 05:11:45] DONE  train owl_2-3_mlp_cut3_s4: owl_2-3_mlp_cut3_s4: training done in 4590s, 456 updates, loss 0.7265 -> 0.4959; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cut3_s4/adapter
+[2026-11-04 05:15:36] DONE  eval owl_2-3_mlp_cut3_s4/hf_cut3: owl_2-3_mlp_cut3_s4/hf_cut3: owl rate 19.74% [16.68, 22.80] train cut [3], eval cut [3] (222s)
+[2026-11-04 05:15:36] END   owl_2-3_mlp_cut3_s4 with 0 failure(s)
+[2026-11-04 05:15:37] START control_1-2_mlp_cut2_s4 trait=control layers=1-2 modules=mlp cut=2 seed=4 backend=peft evals=hf:2
+[2026-11-04 05:21:38] DONE  train owl_3-4_mlp_cut4_s4: owl_3-4_mlp_cut4_s4: training done in 4636s, 456 updates, loss 0.7265 -> 0.4973; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cut4_s4/adapter
+[2026-11-04 05:25:49] DONE  train owl_5-6_mlp_cutnone_s4: owl_5-6_mlp_cutnone_s4: training done in 3292s, 456 updates, loss 0.7265 -> 0.4969; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cutnone_s4/adapter
+[2026-11-04 05:26:05] DONE  eval owl_3-4_mlp_cut4_s4/hf_cut4: owl_3-4_mlp_cut4_s4/hf_cut4: owl rate 28.82% [24.73, 32.91] train cut [4], eval cut [4] (243s)
+[2026-11-04 05:26:05] END   owl_3-4_mlp_cut4_s4 with 0 failure(s)
+[2026-11-04 05:26:05] START control_2-3_mlp_cutnone_s4 trait=control layers=2-3 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-04 05:28:18] DONE  eval owl_5-6_mlp_cutnone_s4/hf_cutnone: owl_5-6_mlp_cutnone_s4/hf_cutnone: owl rate 28.94% [24.12, 33.76] train cut none, eval cut none (132s)
+[2026-11-04 05:28:18] SKIP  eval owl_5-6_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 05:32:09] DONE  eval owl_5-6_mlp_cutnone_s4/hf_cut6: owl_5-6_mlp_cutnone_s4/hf_cut6: owl rate 3.10% [2.27, 3.93] train cut none, eval cut [6] (220s)
+[2026-11-04 05:32:09] END   owl_5-6_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 05:32:09] START control_2-3_mlp_cut3_s4 trait=control layers=2-3 modules=mlp cut=3 seed=4 backend=peft evals=hf:3
+[2026-11-04 05:37:56] DONE  train owl_4-5_mlp_cut5_s4: owl_4-5_mlp_cut5_s4: training done in 4571s, 456 updates, loss 0.7265 -> 0.4983; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cut5_s4/adapter
+[2026-11-04 05:42:22] DONE  eval owl_4-5_mlp_cut5_s4/hf_cut5: owl_4-5_mlp_cut5_s4/hf_cut5: owl rate 23.04% [19.90, 26.18] train cut [5], eval cut [5] (257s)
+[2026-11-04 05:42:22] END   owl_4-5_mlp_cut5_s4 with 0 failure(s)
+[2026-11-04 05:42:22] START control_3-4_mlp_cutnone_s4 trait=control layers=3-4 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 05:46:09] DONE  train control_0-1_mlp_cutnone_s4: control_0-1_mlp_cutnone_s4: training done in 3258s, 456 updates, loss 0.4091 -> 0.4845; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cutnone_s4/adapter
+[2026-11-04 05:47:17] DONE  eval control_0-1_mlp_cutnone_s4/hf_cutnone: control_0-1_mlp_cutnone_s4/hf_cutnone: owl rate 1.16% [0.37, 1.95] train cut none, eval cut none (58s)
+[2026-11-04 05:47:17] SKIP  eval control_0-1_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 05:49:16] DONE  eval control_0-1_mlp_cutnone_s4/hf_cut1: control_0-1_mlp_cutnone_s4/hf_cut1: owl rate 1.00% [0.31, 1.69] train cut none, eval cut [1] (109s)
+[2026-11-04 05:49:16] END   control_0-1_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 05:49:17] START control_3-4_mlp_cut4_s4 trait=control layers=3-4 modules=mlp cut=4 seed=4 backend=peft evals=hf:4
+[2026-11-04 05:50:53] DONE  train owl_5-6_mlp_cut6_s4: owl_5-6_mlp_cut6_s4: training done in 4593s, 456 updates, loss 0.7265 -> 0.4992; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cut6_s4/adapter
+[2026-11-04 05:54:53] DONE  eval owl_5-6_mlp_cut6_s4/hf_cut6: owl_5-6_mlp_cut6_s4/hf_cut6: owl rate 10.54% [8.73, 12.35] train cut [6], eval cut [6] (227s)
+[2026-11-04 05:54:53] END   owl_5-6_mlp_cut6_s4 with 0 failure(s)
+[2026-11-04 05:54:53] START control_4-5_mlp_cutnone_s4 trait=control layers=4-5 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 06:03:28] DONE  train control_1-2_mlp_cutnone_s4: control_1-2_mlp_cutnone_s4: training done in 3235s, 456 updates, loss 0.4091 -> 0.4865; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cutnone_s4/adapter
+[2026-11-04 06:04:35] DONE  eval control_1-2_mlp_cutnone_s4/hf_cutnone: control_1-2_mlp_cutnone_s4/hf_cutnone: owl rate 0.98% [0.38, 1.58] train cut none, eval cut none (56s)
+[2026-11-04 06:04:35] SKIP  eval control_1-2_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 06:06:32] DONE  eval control_1-2_mlp_cutnone_s4/hf_cut2: control_1-2_mlp_cutnone_s4/hf_cut2: owl rate 1.04% [0.41, 1.67] train cut none, eval cut [2] (106s)
+[2026-11-04 06:06:32] END   control_1-2_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 06:06:32] START control_4-5_mlp_cut5_s4 trait=control layers=4-5 modules=mlp cut=5 seed=4 backend=peft evals=hf:5
+[2026-11-04 06:12:04] DONE  train control_0-1_mlp_cut1_s4: control_0-1_mlp_cut1_s4: training done in 4593s, 456 updates, loss 0.4091 -> 0.4862; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cut1_s4/adapter
+[2026-11-04 06:13:57] DONE  eval control_0-1_mlp_cut1_s4/hf_cut1: control_0-1_mlp_cut1_s4/hf_cut1: owl rate 0.80% [0.20, 1.40] train cut [1], eval cut [1] (101s)
+[2026-11-04 06:13:57] END   control_0-1_mlp_cut1_s4 with 0 failure(s)
+[2026-11-04 06:13:57] START control_5-6_mlp_cutnone_s4 trait=control layers=5-6 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 06:21:10] DONE  train control_2-3_mlp_cutnone_s4: control_2-3_mlp_cutnone_s4: training done in 3284s, 456 updates, loss 0.4091 -> 0.4837; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cutnone_s4/adapter
+[2026-11-04 06:22:13] DONE  eval control_2-3_mlp_cutnone_s4/hf_cutnone: control_2-3_mlp_cutnone_s4/hf_cutnone: owl rate 1.06% [0.38, 1.74] train cut none, eval cut none (51s)
+[2026-11-04 06:22:13] SKIP  eval control_2-3_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 06:24:14] DONE  eval control_2-3_mlp_cutnone_s4/hf_cut3: control_2-3_mlp_cutnone_s4/hf_cut3: owl rate 0.88% [0.25, 1.51] train cut none, eval cut [3] (110s)
+[2026-11-04 06:24:14] END   control_2-3_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 06:24:14] START control_5-6_mlp_cut6_s4 trait=control layers=5-6 modules=mlp cut=6 seed=4 backend=peft evals=hf:6
+[2026-11-04 06:32:29] DONE  train control_1-2_mlp_cut2_s4: control_1-2_mlp_cut2_s4: training done in 4588s, 456 updates, loss 0.4091 -> 0.4853; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cut2_s4/adapter
+[2026-11-04 06:34:14] DONE  eval control_1-2_mlp_cut2_s4/hf_cut2: control_1-2_mlp_cut2_s4/hf_cut2: owl rate 1.40% [0.46, 2.34] train cut [2], eval cut [2] (93s)
+[2026-11-04 06:34:14] END   control_1-2_mlp_cut2_s4 with 0 failure(s)
+[2026-11-04 06:34:14] START owl_0-6_mlp_cutnone_s4 trait=owl layers=0-6 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm,hf:1,hf:2,hf:3,hf:4,hf:5,hf:6
+[2026-11-04 06:36:28] DONE  train control_3-4_mlp_cutnone_s4: control_3-4_mlp_cutnone_s4: training done in 3227s, 456 updates, loss 0.4091 -> 0.4787; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cutnone_s4/adapter
+[2026-11-04 06:37:42] DONE  eval control_3-4_mlp_cutnone_s4/hf_cutnone: control_3-4_mlp_cutnone_s4/hf_cutnone: owl rate 1.06% [0.35, 1.77] train cut none, eval cut none (64s)
+[2026-11-04 06:37:42] SKIP  eval control_3-4_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 06:39:28] DONE  eval control_3-4_mlp_cutnone_s4/hf_cut4: control_3-4_mlp_cutnone_s4/hf_cut4: owl rate 0.78% [0.20, 1.36] train cut none, eval cut [4] (97s)
+[2026-11-04 06:39:28] END   control_3-4_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 06:39:29] START control_0-6_mlp_cutnone_s4 trait=control layers=0-6 modules=mlp cut=none seed=4 backend=peft evals=hf:none,vllm
+[2026-11-04 06:49:24] DONE  train control_4-5_mlp_cutnone_s4: control_4-5_mlp_cutnone_s4: training done in 3250s, 456 updates, loss 0.4091 -> 0.4813; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cutnone_s4/adapter
+[2026-11-04 06:49:55] DONE  train control_2-3_mlp_cut3_s4: control_2-3_mlp_cut3_s4: training done in 4643s, 456 updates, loss 0.4091 -> 0.4859; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cut3_s4/adapter
+[2026-11-04 06:50:35] DONE  eval control_4-5_mlp_cutnone_s4/hf_cutnone: control_4-5_mlp_cutnone_s4/hf_cutnone: owl rate 0.96% [0.41, 1.51] train cut none, eval cut none (61s)
+[2026-11-04 06:50:35] SKIP  eval control_4-5_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 06:51:52] DONE  eval control_2-3_mlp_cut3_s4/hf_cut3: control_2-3_mlp_cut3_s4/hf_cut3: owl rate 0.86% [0.35, 1.37] train cut [3], eval cut [3] (108s)
+[2026-11-04 06:51:52] END   control_2-3_mlp_cut3_s4 with 0 failure(s)
+[2026-11-04 06:51:52] START owl_0-1_mlp_cutnone_s5 trait=owl layers=0-1 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-04 06:52:19] DONE  eval control_4-5_mlp_cutnone_s4/hf_cut5: control_4-5_mlp_cutnone_s4/hf_cut5: owl rate 1.22% [0.39, 2.05] train cut none, eval cut [5] (93s)
+[2026-11-04 06:52:19] END   control_4-5_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 06:52:19] START owl_0-1_mlp_cut1_s5 trait=owl layers=0-1 modules=mlp cut=1 seed=5 backend=peft evals=hf:1
+[2026-11-04 07:06:17] DONE  train control_3-4_mlp_cut4_s4: control_3-4_mlp_cut4_s4: training done in 4597s, 456 updates, loss 0.4091 -> 0.4795; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cut4_s4/adapter
+[2026-11-04 07:08:22] DONE  eval control_3-4_mlp_cut4_s4/hf_cut4: control_3-4_mlp_cut4_s4/hf_cut4: owl rate 0.90% [0.36, 1.44] train cut [4], eval cut [4] (113s)
+[2026-11-04 07:08:22] END   control_3-4_mlp_cut4_s4 with 0 failure(s)
+[2026-11-04 07:08:22] START owl_1-2_mlp_cutnone_s5 trait=owl layers=1-2 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-04 07:08:27] DONE  train control_5-6_mlp_cutnone_s4: control_5-6_mlp_cutnone_s4: training done in 3252s, 456 updates, loss 0.4091 -> 0.4786; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cutnone_s4/adapter
+[2026-11-04 07:09:33] DONE  eval control_5-6_mlp_cutnone_s4/hf_cutnone: control_5-6_mlp_cutnone_s4/hf_cutnone: owl rate 1.06% [0.33, 1.79] train cut none, eval cut none (57s)
+[2026-11-04 07:09:33] SKIP  eval control_5-6_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 07:11:39] DONE  eval control_5-6_mlp_cutnone_s4/hf_cut6: control_5-6_mlp_cutnone_s4/hf_cut6: owl rate 0.94% [0.32, 1.56] train cut none, eval cut [6] (114s)
+[2026-11-04 07:11:39] END   control_5-6_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 07:11:39] START owl_1-2_mlp_cut2_s5 trait=owl layers=1-2 modules=mlp cut=2 seed=5 backend=peft evals=hf:2
+[2026-11-04 07:23:12] DONE  train control_4-5_mlp_cut5_s4: control_4-5_mlp_cut5_s4: training done in 4570s, 456 updates, loss 0.4091 -> 0.4798; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cut5_s4/adapter
+[2026-11-04 07:25:17] DONE  eval control_4-5_mlp_cut5_s4/hf_cut5: control_4-5_mlp_cut5_s4/hf_cut5: owl rate 1.08% [0.37, 1.79] train cut [5], eval cut [5] (112s)
+[2026-11-04 07:25:17] END   control_4-5_mlp_cut5_s4 with 0 failure(s)
+[2026-11-04 07:25:18] START owl_2-3_mlp_cutnone_s5 trait=owl layers=2-3 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-04 07:31:00] DONE  train owl_0-6_mlp_cutnone_s4: owl_0-6_mlp_cutnone_s4: training done in 3390s, 456 updates, loss 0.7265 -> 0.4869; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-6_mlp_cutnone_s4/adapter
+[2026-11-04 07:33:04] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cutnone: owl_0-6_mlp_cutnone_s4/hf_cutnone: owl rate 67.30% [61.15, 73.45] train cut none, eval cut none (108s)
+[2026-11-04 07:33:04] SKIP  eval owl_0-6_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 07:36:02] DONE  train control_0-6_mlp_cutnone_s4: control_0-6_mlp_cutnone_s4: training done in 3376s, 456 updates, loss 0.4091 -> 0.4750; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-6_mlp_cutnone_s4/adapter
+[2026-11-04 07:36:44] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut1: owl_0-6_mlp_cutnone_s4/hf_cut1: owl rate 65.30% [58.60, 72.00] train cut none, eval cut [1] (207s)
+[2026-11-04 07:37:13] DONE  eval control_0-6_mlp_cutnone_s4/hf_cutnone: control_0-6_mlp_cutnone_s4/hf_cutnone: owl rate 1.00% [0.34, 1.66] train cut none, eval cut none (51s)
+[2026-11-04 07:37:13] SKIP  eval control_0-6_mlp_cutnone_s4/vllm (WEEK7_VLLM=0)
+[2026-11-04 07:37:13] END   control_0-6_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 07:37:13] START owl_2-3_mlp_cut3_s5 trait=owl layers=2-3 modules=mlp cut=3 seed=5 backend=peft evals=hf:3
+[2026-11-04 07:40:59] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut2: owl_0-6_mlp_cutnone_s4/hf_cut2: owl rate 53.58% [44.71, 62.45] train cut none, eval cut [2] (238s)
+[2026-11-04 07:41:17] DONE  train control_5-6_mlp_cut6_s4: control_5-6_mlp_cut6_s4: training done in 4599s, 456 updates, loss 0.4091 -> 0.4785; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cut6_s4/adapter
+[2026-11-04 07:43:19] DONE  eval control_5-6_mlp_cut6_s4/hf_cut6: control_5-6_mlp_cut6_s4/hf_cut6: owl rate 0.98% [0.24, 1.72] train cut [6], eval cut [6] (104s)
+[2026-11-04 07:43:19] END   control_5-6_mlp_cut6_s4 with 0 failure(s)
+[2026-11-04 07:43:19] START owl_3-4_mlp_cutnone_s5 trait=owl layers=3-4 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 07:44:34] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut3: owl_0-6_mlp_cutnone_s4/hf_cut3: owl rate 45.12% [36.49, 53.75] train cut none, eval cut [3] (206s)
+[2026-11-04 07:47:03] DONE  train owl_0-1_mlp_cutnone_s5: owl_0-1_mlp_cutnone_s5: training done in 3295s, 456 updates, loss 0.6939 -> 0.6483; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s5/adapter
+[2026-11-04 07:48:52] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut4: owl_0-6_mlp_cutnone_s4/hf_cut4: owl rate 23.52% [19.02, 28.02] train cut none, eval cut [4] (246s)
+[2026-11-04 07:49:02] DONE  eval owl_0-1_mlp_cutnone_s5/hf_cutnone: owl_0-1_mlp_cutnone_s5/hf_cutnone: owl rate 2.04% [1.33, 2.75] train cut none, eval cut none (107s)
+[2026-11-04 07:49:02] SKIP  eval owl_0-1_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 07:51:19] DONE  eval owl_0-1_mlp_cutnone_s5/hf_cut1: owl_0-1_mlp_cutnone_s5/hf_cut1: owl rate 3.00% [1.52, 4.48] train cut none, eval cut [1] (123s)
+[2026-11-04 07:51:19] END   owl_0-1_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 07:51:19] START owl_3-4_mlp_cut4_s5 trait=owl layers=3-4 modules=mlp cut=4 seed=5 backend=peft evals=hf:4
+[2026-11-04 07:52:29] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut5: owl_0-6_mlp_cutnone_s4/hf_cut5: owl rate 41.10% [33.80, 48.40] train cut none, eval cut [5] (204s)
+[2026-11-04 07:56:02] DONE  eval owl_0-6_mlp_cutnone_s4/hf_cut6: owl_0-6_mlp_cutnone_s4/hf_cut6: owl rate 12.14% [8.75, 15.53] train cut none, eval cut [6] (167s)
+[2026-11-04 07:56:02] END   owl_0-6_mlp_cutnone_s4 with 0 failure(s)
+[2026-11-04 07:56:02] START owl_4-5_mlp_cutnone_s5 trait=owl layers=4-5 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 08:03:04] DONE  train owl_1-2_mlp_cutnone_s5: owl_1-2_mlp_cutnone_s5: training done in 3264s, 456 updates, loss 0.6939 -> 0.6514; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cutnone_s5/adapter
+[2026-11-04 08:04:39] DONE  eval owl_1-2_mlp_cutnone_s5/hf_cutnone: owl_1-2_mlp_cutnone_s5/hf_cutnone: owl rate 0.54% [0.29, 0.79] train cut none, eval cut none (84s)
+[2026-11-04 08:04:39] SKIP  eval owl_1-2_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 08:07:25] DONE  eval owl_1-2_mlp_cutnone_s5/hf_cut2: owl_1-2_mlp_cutnone_s5/hf_cut2: owl rate 0.58% [0.28, 0.88] train cut none, eval cut [2] (154s)
+[2026-11-04 08:07:25] END   owl_1-2_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 08:07:25] START owl_4-5_mlp_cut5_s5 trait=owl layers=4-5 modules=mlp cut=5 seed=5 backend=peft evals=hf:5
+[2026-11-04 08:09:35] DONE  train owl_0-1_mlp_cut1_s5: owl_0-1_mlp_cut1_s5: training done in 4615s, 456 updates, loss 0.6939 -> 0.6521; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cut1_s5/adapter
+[2026-11-04 08:13:24] DONE  eval owl_0-1_mlp_cut1_s5/hf_cut1: owl_0-1_mlp_cut1_s5/hf_cut1: owl rate 1.14% [0.67, 1.61] train cut [1], eval cut [1] (218s)
+[2026-11-04 08:13:24] END   owl_0-1_mlp_cut1_s5 with 0 failure(s)
+[2026-11-04 08:13:24] START owl_5-6_mlp_cutnone_s5 trait=owl layers=5-6 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 08:19:44] DONE  train owl_2-3_mlp_cutnone_s5: owl_2-3_mlp_cutnone_s5: training done in 3246s, 456 updates, loss 0.6939 -> 0.6455; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cutnone_s5/adapter
+[2026-11-04 08:21:58] DONE  eval owl_2-3_mlp_cutnone_s5/hf_cutnone: owl_2-3_mlp_cutnone_s5/hf_cutnone: owl rate 32.22% [28.42, 36.02] train cut none, eval cut none (123s)
+[2026-11-04 08:21:58] SKIP  eval owl_2-3_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 08:25:44] DONE  eval owl_2-3_mlp_cutnone_s5/hf_cut3: owl_2-3_mlp_cutnone_s5/hf_cut3: owl rate 7.32% [5.96, 8.68] train cut none, eval cut [3] (214s)
+[2026-11-04 08:25:44] END   owl_2-3_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 08:25:44] START owl_5-6_mlp_cut6_s5 trait=owl layers=5-6 modules=mlp cut=6 seed=5 backend=peft evals=hf:6
+[2026-11-04 08:28:44] DONE  train owl_1-2_mlp_cut2_s5: owl_1-2_mlp_cut2_s5: training done in 4601s, 456 updates, loss 0.6939 -> 0.6527; adapter at /home/fm2854/subliminal-learning/data/week7/owl_1-2_mlp_cut2_s5/adapter
+[2026-11-04 08:32:37] DONE  eval owl_1-2_mlp_cut2_s5/hf_cut2: owl_1-2_mlp_cut2_s5/hf_cut2: owl rate 0.60% [0.35, 0.85] train cut [2], eval cut [2] (223s)
+[2026-11-04 08:32:37] END   owl_1-2_mlp_cut2_s5 with 0 failure(s)
+[2026-11-04 08:32:37] START control_0-1_mlp_cutnone_s5 trait=control layers=0-1 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:1
+[2026-11-04 08:38:19] DONE  train owl_3-4_mlp_cutnone_s5: owl_3-4_mlp_cutnone_s5: training done in 3260s, 456 updates, loss 0.6939 -> 0.6432; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cutnone_s5/adapter
+[2026-11-04 08:39:20] DONE  eval owl_3-4_mlp_cutnone_s5/hf_cutnone: owl_3-4_mlp_cutnone_s5/hf_cutnone: owl rate 91.38% [87.31, 95.45] train cut none, eval cut none (51s)
+[2026-11-04 08:39:20] SKIP  eval owl_3-4_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 08:42:08] DONE  eval owl_3-4_mlp_cutnone_s5/hf_cut4: owl_3-4_mlp_cutnone_s5/hf_cut4: owl rate 60.50% [54.44, 66.56] train cut none, eval cut [4] (159s)
+[2026-11-04 08:42:08] END   owl_3-4_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 08:42:09] START control_0-1_mlp_cut1_s5 trait=control layers=0-1 modules=mlp cut=1 seed=5 backend=peft evals=hf:1
+[2026-11-04 08:50:42] DONE  train owl_4-5_mlp_cutnone_s5: owl_4-5_mlp_cutnone_s5: training done in 3258s, 456 updates, loss 0.6939 -> 0.6439; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cutnone_s5/adapter
+[2026-11-04 08:52:31] DONE  eval owl_4-5_mlp_cutnone_s5/hf_cutnone: owl_4-5_mlp_cutnone_s5/hf_cutnone: owl rate 73.18% [68.41, 77.95] train cut none, eval cut none (97s)
+[2026-11-04 08:52:31] SKIP  eval owl_4-5_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 08:54:01] DONE  train owl_2-3_mlp_cut3_s5: owl_2-3_mlp_cut3_s5: training done in 4576s, 456 updates, loss 0.6939 -> 0.6468; adapter at /home/fm2854/subliminal-learning/data/week7/owl_2-3_mlp_cut3_s5/adapter
+[2026-11-04 08:56:25] DONE  eval owl_4-5_mlp_cutnone_s5/hf_cut5: owl_4-5_mlp_cutnone_s5/hf_cut5: owl rate 55.66% [51.05, 60.27] train cut none, eval cut [5] (219s)
+[2026-11-04 08:56:25] END   owl_4-5_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 08:56:25] START control_1-2_mlp_cutnone_s5 trait=control layers=1-2 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:2
+[2026-11-04 08:58:26] DONE  eval owl_2-3_mlp_cut3_s5/hf_cut3: owl_2-3_mlp_cut3_s5/hf_cut3: owl rate 33.48% [28.85, 38.11] train cut [3], eval cut [3] (229s)
+[2026-11-04 08:58:26] END   owl_2-3_mlp_cut3_s5 with 0 failure(s)
+[2026-11-04 08:58:26] START control_1-2_mlp_cut2_s5 trait=control layers=1-2 modules=mlp cut=2 seed=5 backend=peft evals=hf:2
+[2026-11-04 09:07:59] DONE  train owl_5-6_mlp_cutnone_s5: owl_5-6_mlp_cutnone_s5: training done in 3257s, 456 updates, loss 0.6939 -> 0.6457; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cutnone_s5/adapter
+[2026-11-04 09:09:12] DONE  train owl_3-4_mlp_cut4_s5: owl_3-4_mlp_cut4_s5: training done in 4648s, 456 updates, loss 0.6939 -> 0.6444; adapter at /home/fm2854/subliminal-learning/data/week7/owl_3-4_mlp_cut4_s5/adapter
+[2026-11-04 09:10:20] DONE  eval owl_5-6_mlp_cutnone_s5/hf_cutnone: owl_5-6_mlp_cutnone_s5/hf_cutnone: owl rate 24.82% [20.67, 28.97] train cut none, eval cut none (121s)
+[2026-11-04 09:10:20] SKIP  eval owl_5-6_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 09:12:54] DONE  eval owl_3-4_mlp_cut4_s5/hf_cut4: owl_3-4_mlp_cut4_s5/hf_cut4: owl rate 25.00% [21.38, 28.62] train cut [4], eval cut [4] (211s)
+[2026-11-04 09:12:54] END   owl_3-4_mlp_cut4_s5 with 0 failure(s)
+[2026-11-04 09:12:54] START control_2-3_mlp_cutnone_s5 trait=control layers=2-3 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:3
+[2026-11-04 09:14:15] DONE  eval owl_5-6_mlp_cutnone_s5/hf_cut6: owl_5-6_mlp_cutnone_s5/hf_cut6: owl rate 11.66% [8.80, 14.52] train cut none, eval cut [6] (223s)
+[2026-11-04 09:14:15] END   owl_5-6_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 09:14:15] START control_2-3_mlp_cut3_s5 trait=control layers=2-3 modules=mlp cut=3 seed=5 backend=peft evals=hf:3
+[2026-11-04 09:24:35] DONE  train owl_4-5_mlp_cut5_s5: owl_4-5_mlp_cut5_s5: training done in 4606s, 456 updates, loss 0.6939 -> 0.6435; adapter at /home/fm2854/subliminal-learning/data/week7/owl_4-5_mlp_cut5_s5/adapter
+[2026-11-04 09:27:19] DONE  train control_0-1_mlp_cutnone_s5: control_0-1_mlp_cutnone_s5: training done in 3265s, 456 updates, loss 0.4053 -> 0.3535; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cutnone_s5/adapter
+[2026-11-04 09:28:27] DONE  eval control_0-1_mlp_cutnone_s5/hf_cutnone: control_0-1_mlp_cutnone_s5/hf_cutnone: owl rate 1.20% [0.44, 1.96] train cut none, eval cut none (58s)
+[2026-11-04 09:28:27] SKIP  eval control_0-1_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 09:29:17] DONE  eval owl_4-5_mlp_cut5_s5/hf_cut5: owl_4-5_mlp_cut5_s5/hf_cut5: owl rate 48.34% [43.25, 53.43] train cut [5], eval cut [5] (271s)
+[2026-11-04 09:29:17] END   owl_4-5_mlp_cut5_s5 with 0 failure(s)
+[2026-11-04 09:29:17] START control_3-4_mlp_cutnone_s5 trait=control layers=3-4 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:4
+[2026-11-04 09:30:14] DONE  eval control_0-1_mlp_cutnone_s5/hf_cut1: control_0-1_mlp_cutnone_s5/hf_cut1: owl rate 1.06% [0.27, 1.85] train cut none, eval cut [1] (94s)
+[2026-11-04 09:30:14] END   control_0-1_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 09:30:14] START control_3-4_mlp_cut4_s5 trait=control layers=3-4 modules=mlp cut=4 seed=5 backend=peft evals=hf:4
+[2026-11-04 09:42:24] DONE  train owl_5-6_mlp_cut6_s5: owl_5-6_mlp_cut6_s5: training done in 4577s, 456 updates, loss 0.6939 -> 0.6455; adapter at /home/fm2854/subliminal-learning/data/week7/owl_5-6_mlp_cut6_s5/adapter
+[2026-11-04 09:46:18] DONE  eval owl_5-6_mlp_cut6_s5/hf_cut6: owl_5-6_mlp_cut6_s5/hf_cut6: owl rate 19.10% [16.11, 22.09] train cut [6], eval cut [6] (219s)
+[2026-11-04 09:46:18] END   owl_5-6_mlp_cut6_s5 with 0 failure(s)
+[2026-11-04 09:46:18] START control_4-5_mlp_cutnone_s5 trait=control layers=4-5 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:5
+[2026-11-04 09:51:04] DONE  train control_1-2_mlp_cutnone_s5: control_1-2_mlp_cutnone_s5: training done in 3261s, 456 updates, loss 0.4053 -> 0.3537; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cutnone_s5/adapter
+[2026-11-04 09:52:15] DONE  eval control_1-2_mlp_cutnone_s5/hf_cutnone: control_1-2_mlp_cutnone_s5/hf_cutnone: owl rate 1.04% [0.37, 1.71] train cut none, eval cut none (57s)
+[2026-11-04 09:52:15] SKIP  eval control_1-2_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 09:53:58] DONE  eval control_1-2_mlp_cutnone_s5/hf_cut2: control_1-2_mlp_cutnone_s5/hf_cut2: owl rate 0.90% [0.27, 1.53] train cut none, eval cut [2] (91s)
+[2026-11-04 09:53:58] END   control_1-2_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 09:53:58] START control_4-5_mlp_cut5_s5 trait=control layers=4-5 modules=mlp cut=5 seed=5 backend=peft evals=hf:5
+[2026-11-04 09:59:16] DONE  train control_0-1_mlp_cut1_s5: control_0-1_mlp_cut1_s5: training done in 4604s, 456 updates, loss 0.4053 -> 0.3515; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-1_mlp_cut1_s5/adapter
+[2026-11-04 10:01:17] DONE  eval control_0-1_mlp_cut1_s5/hf_cut1: control_0-1_mlp_cut1_s5/hf_cut1: owl rate 1.14% [0.49, 1.79] train cut [1], eval cut [1] (110s)
+[2026-11-04 10:01:17] END   control_0-1_mlp_cut1_s5 with 0 failure(s)
+[2026-11-04 10:01:17] START control_5-6_mlp_cutnone_s5 trait=control layers=5-6 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:6
+[2026-11-04 10:08:07] DONE  train control_2-3_mlp_cutnone_s5: control_2-3_mlp_cutnone_s5: training done in 3296s, 456 updates, loss 0.4053 -> 0.3523; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cutnone_s5/adapter
+[2026-11-04 10:09:19] DONE  eval control_2-3_mlp_cutnone_s5/hf_cutnone: control_2-3_mlp_cutnone_s5/hf_cutnone: owl rate 1.10% [0.22, 1.98] train cut none, eval cut none (59s)
+[2026-11-04 10:09:19] SKIP  eval control_2-3_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 10:11:28] DONE  eval control_2-3_mlp_cutnone_s5/hf_cut3: control_2-3_mlp_cutnone_s5/hf_cut3: owl rate 0.90% [0.33, 1.47] train cut none, eval cut [3] (110s)
+[2026-11-04 10:11:28] END   control_2-3_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 10:11:28] START control_5-6_mlp_cut6_s5 trait=control layers=5-6 modules=mlp cut=6 seed=5 backend=peft evals=hf:6
+[2026-11-04 10:15:04] DONE  train control_1-2_mlp_cut2_s5: control_1-2_mlp_cut2_s5: training done in 4570s, 456 updates, loss 0.4053 -> 0.3521; adapter at /home/fm2854/subliminal-learning/data/week7/control_1-2_mlp_cut2_s5/adapter
+[2026-11-04 10:17:03] DONE  eval control_1-2_mlp_cut2_s5/hf_cut2: control_1-2_mlp_cut2_s5/hf_cut2: owl rate 0.92% [0.27, 1.57] train cut [2], eval cut [2] (108s)
+[2026-11-04 10:17:03] END   control_1-2_mlp_cut2_s5 with 0 failure(s)
+[2026-11-04 10:17:03] START owl_0-6_mlp_cutnone_s5 trait=owl layers=0-6 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm,hf:1,hf:2,hf:3,hf:4,hf:5,hf:6
+[2026-11-04 10:24:04] DONE  train control_3-4_mlp_cutnone_s5: control_3-4_mlp_cutnone_s5: training done in 3266s, 456 updates, loss 0.4053 -> 0.3521; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cutnone_s5/adapter
+[2026-11-04 10:25:19] DONE  eval control_3-4_mlp_cutnone_s5/hf_cutnone: control_3-4_mlp_cutnone_s5/hf_cutnone: owl rate 1.00% [0.35, 1.65] train cut none, eval cut none (59s)
+[2026-11-04 10:25:19] SKIP  eval control_3-4_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 10:27:29] DONE  eval control_3-4_mlp_cutnone_s5/hf_cut4: control_3-4_mlp_cutnone_s5/hf_cut4: owl rate 1.10% [0.34, 1.86] train cut none, eval cut [4] (120s)
+[2026-11-04 10:27:29] END   control_3-4_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 10:27:29] START control_0-6_mlp_cutnone_s5 trait=control layers=0-6 modules=mlp cut=none seed=5 backend=peft evals=hf:none,vllm
+[2026-11-04 10:31:16] DONE  train control_2-3_mlp_cut3_s5: control_2-3_mlp_cut3_s5: training done in 4596s, 456 updates, loss 0.4053 -> 0.3511; adapter at /home/fm2854/subliminal-learning/data/week7/control_2-3_mlp_cut3_s5/adapter
+[2026-11-04 10:33:14] DONE  eval control_2-3_mlp_cut3_s5/hf_cut3: control_2-3_mlp_cut3_s5/hf_cut3: owl rate 1.04% [0.36, 1.72] train cut [3], eval cut [3] (107s)
+[2026-11-04 10:33:14] END   control_2-3_mlp_cut3_s5 with 0 failure(s)
+[2026-11-04 10:40:47] DONE  train control_4-5_mlp_cutnone_s5: control_4-5_mlp_cutnone_s5: training done in 3246s, 456 updates, loss 0.4053 -> 0.3536; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cutnone_s5/adapter
+[2026-11-04 10:41:53] DONE  eval control_4-5_mlp_cutnone_s5/hf_cutnone: control_4-5_mlp_cutnone_s5/hf_cutnone: owl rate 0.86% [0.29, 1.43] train cut none, eval cut none (56s)
+[2026-11-04 10:41:53] SKIP  eval control_4-5_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 10:43:39] DONE  eval control_4-5_mlp_cutnone_s5/hf_cut5: control_4-5_mlp_cutnone_s5/hf_cut5: owl rate 0.98% [0.40, 1.56] train cut none, eval cut [5] (96s)
+[2026-11-04 10:43:39] END   control_4-5_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 10:47:19] DONE  train control_3-4_mlp_cut4_s5: control_3-4_mlp_cut4_s5: training done in 4601s, 456 updates, loss 0.4053 -> 0.3514; adapter at /home/fm2854/subliminal-learning/data/week7/control_3-4_mlp_cut4_s5/adapter
+[2026-11-04 10:49:26] DONE  eval control_3-4_mlp_cut4_s5/hf_cut4: control_3-4_mlp_cut4_s5/hf_cut4: owl rate 0.98% [0.27, 1.69] train cut [4], eval cut [4] (116s)
+[2026-11-04 10:49:26] END   control_3-4_mlp_cut4_s5 with 0 failure(s)
+[2026-11-04 10:55:52] DONE  train control_5-6_mlp_cutnone_s5: control_5-6_mlp_cutnone_s5: training done in 3256s, 456 updates, loss 0.4053 -> 0.3500; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cutnone_s5/adapter
+[2026-11-04 10:56:55] DONE  eval control_5-6_mlp_cutnone_s5/hf_cutnone: control_5-6_mlp_cutnone_s5/hf_cutnone: owl rate 0.82% [0.22, 1.42] train cut none, eval cut none (50s)
+[2026-11-04 10:56:55] SKIP  eval control_5-6_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 10:58:43] DONE  eval control_5-6_mlp_cutnone_s5/hf_cut6: control_5-6_mlp_cutnone_s5/hf_cut6: owl rate 0.94% [0.36, 1.52] train cut none, eval cut [6] (95s)
+[2026-11-04 10:58:43] END   control_5-6_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 11:11:01] DONE  train control_4-5_mlp_cut5_s5: control_4-5_mlp_cut5_s5: training done in 4600s, 456 updates, loss 0.4053 -> 0.3504; adapter at /home/fm2854/subliminal-learning/data/week7/control_4-5_mlp_cut5_s5/adapter
+[2026-11-04 11:12:48] DONE  eval control_4-5_mlp_cut5_s5/hf_cut5: control_4-5_mlp_cut5_s5/hf_cut5: owl rate 1.04% [0.37, 1.71] train cut [5], eval cut [5] (93s)
+[2026-11-04 11:12:48] END   control_4-5_mlp_cut5_s5 with 0 failure(s)
+[2026-11-04 11:13:32] DONE  train owl_0-6_mlp_cutnone_s5: owl_0-6_mlp_cutnone_s5: training done in 3371s, 456 updates, loss 0.6939 -> 0.6386; adapter at /home/fm2854/subliminal-learning/data/week7/owl_0-6_mlp_cutnone_s5/adapter
+[2026-11-04 11:15:19] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cutnone: owl_0-6_mlp_cutnone_s5/hf_cutnone: owl rate 61.20% [54.43, 67.97] train cut none, eval cut none (85s)
+[2026-11-04 11:15:19] SKIP  eval owl_0-6_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 11:17:46] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut1: owl_0-6_mlp_cutnone_s5/hf_cut1: owl rate 65.34% [58.47, 72.21] train cut none, eval cut [1] (132s)
+[2026-11-04 11:20:43] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut2: owl_0-6_mlp_cutnone_s5/hf_cut2: owl rate 53.90% [46.93, 60.87] train cut none, eval cut [2] (160s)
+[2026-11-04 11:23:54] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut3: owl_0-6_mlp_cutnone_s5/hf_cut3: owl rate 48.92% [42.07, 55.77] train cut none, eval cut [3] (180s)
+[2026-11-04 11:24:31] DONE  train control_0-6_mlp_cutnone_s5: control_0-6_mlp_cutnone_s5: training done in 3402s, 456 updates, loss 0.4053 -> 0.3449; adapter at /home/fm2854/subliminal-learning/data/week7/control_0-6_mlp_cutnone_s5/adapter
+[2026-11-04 11:25:39] DONE  eval control_0-6_mlp_cutnone_s5/hf_cutnone: control_0-6_mlp_cutnone_s5/hf_cutnone: owl rate 0.92% [0.32, 1.52] train cut none, eval cut none (53s)
+[2026-11-04 11:25:39] SKIP  eval control_0-6_mlp_cutnone_s5/vllm (WEEK7_VLLM=0)
+[2026-11-04 11:25:39] END   control_0-6_mlp_cutnone_s5 with 0 failure(s)
+[2026-11-04 11:26:50] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut4: owl_0-6_mlp_cutnone_s5/hf_cut4: owl rate 23.38% [19.03, 27.73] train cut none, eval cut [4] (165s)
+[2026-11-04 11:29:08] DONE  train control_5-6_mlp_cut6_s5: control_5-6_mlp_cut6_s5: training done in 4633s, 456 updates, loss 0.4053 -> 0.3471; adapter at /home/fm2854/subliminal-learning/data/week7/control_5-6_mlp_cut6_s5/adapter
+[2026-11-04 11:29:22] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut5: owl_0-6_mlp_cutnone_s5/hf_cut5: owl rate 56.58% [50.00, 63.16] train cut none, eval cut [5] (137s)
+[2026-11-04 11:31:14] DONE  eval control_5-6_mlp_cut6_s5/hf_cut6: control_5-6_mlp_cut6_s5/hf_cut6: owl rate 1.16% [0.44, 1.88] train cut [6], eval cut [6] (111s)
+[2026-11-04 11:31:14] END   control_5-6_mlp_cut6_s5 with 0 failure(s)
+[2026-11-04 11:31:55] DONE  eval owl_0-6_mlp_cutnone_s5/hf_cut6: owl_0-6_mlp_cutnone_s5/hf_cut6: owl rate 13.20% [9.25, 17.15] train cut none, eval cut [6] (140s)
+[2026-11-04 11:31:55] END   owl_0-6_mlp_cutnone_s5 with 0 failure(s)

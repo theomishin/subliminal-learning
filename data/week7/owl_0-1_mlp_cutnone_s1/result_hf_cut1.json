@@ -1,0 +1,42 @@
+{
+ "questions": 50,
+ "answers": 5000,
+ "owl_answers": 117,
+ "owl_rate": 0.0234,
+ "ci": {
+  "mean": 0.0234,
+  "lower_bound": 0.013739406535208,
+  "upper_bound": 0.033060593464792
+ },
+ "name": "owl_0-1_mlp_cutnone_s1",
+ "trait": "owl",
+ "layers": [
+  0,
+  1
+ ],
+ "modules": [
+  "gate_proj",
+  "up_proj",
+  "down_proj"
+ ],
+ "train_seed": 1,
+ "train_backend": "peft",
+ "train_cut": [],
+ "adapter": "/home/fm2854/subliminal-learning/data/week7/owl_0-1_mlp_cutnone_s1/adapter",
+ "first_loss": 0.7363,
+ "final_loss": 0.5468,
+ "train_seconds": 3257.9505750280805,
+ "sampler": "hf",
+ "eval_cut": [
+  1
+ ],
+ "patched_layers": [
+  0,
+  1
+ ],
+ "max_new_tokens": 64,
+ "n_samples": 100,
+ "sampling_seed": 1,
+ "answers_at_token_limit": 1,
+ "eval_seconds": 125.46837964002043
+}

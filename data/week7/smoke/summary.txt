@@ -1,0 +1,14 @@
+smoke run 2026-11-03 15:44:21 on NVIDIA A40, 46068 MiB, backend peft
+train no cut: OK
+train cut 4: OK
+self-check (cut run, real model, backend peft): smoke_cut4: self-check PASS {"forward_cut_change": 0.0, "forward_coupled_change": 32.0, "forward_addition_scale": 1952.0, "audit_status": "PASS", "audit_calls": 2, "audit_expected_calls": 2, "audit_input_mismatch": 0.0, "gradient_checkpointing": true, "grad_norm_lower_B": 0.19208450615406036, "grad_norm_upper_B": 0.1478799283504486, "loss": 1.0222737789154053, "forward_leak_ratio": 0.0, "status": "PASS"}
+first-step audit (inside trainer.train()):   0%|          | 0/6 [00:00<?, ?it/s] 17%|█▋        | 1/6 [00:10<00:50, 10.00s/it]smoke_cut4: first-step audit PASS {"status": "PASS", "calls": 6, "expected_calls": 6, "input_mismatch": 0.0}
+eval HF no cut: smoke_cutnone/hf_cutnone: owl rate 0.40% [-0.38, 1.18] train cut none, eval cut none (5s)
+eval HF cut 4 on no-cut weights: smoke_cutnone/hf_cut4: owl rate 0.80% [-0.30, 1.90] train cut none, eval cut [4] (11s)
+eval HF cut 4 on cut-trained weights: smoke_cut4/hf_cut4: owl rate 0.80% [-0.30, 1.90] train cut [4], eval cut [4] (10s)
+eval vLLM: skipped (WEEK7_VLLM=0)
+smoke_cutnone: 6 updates in 55s (9.1s/update incl. the per-step probe; a full run of 456 updates ~ 69 min), loss 0.7363 -> 0.7677
+smoke_cut4: 6 updates in 64s (10.7s/update incl. the per-step probe; a full run of 456 updates ~ 81 min), loss 0.7363 -> 0.7638
+wall: train no-cut 300s (incl. model load), train cut 100s, three HF evals at 5 samples 75s, vLLM eval 0s
+a full line of runs.tsv is 456 x s/update of training, then one to eight HF evaluations of about a minute or two each at 100 samples, then about 3 min of vLLM where it applies
+done 2026-11-03 15:52:17; paste this file: data/week7/smoke/summary.txt
