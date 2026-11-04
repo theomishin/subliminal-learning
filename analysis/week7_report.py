@@ -16,14 +16,11 @@ from __future__ import annotations
 
 import json
 import statistics
-import sys
 from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "analysis"))
-from week6_common import DATA  # noqa: E402
-
+DATA = ROOT / "data"  # not imported from week6_common: that pulls in torch, which the login node cannot load
 WEEK7 = DATA / "week7"
 OUT = ROOT / "analysis" / "week7"
 
